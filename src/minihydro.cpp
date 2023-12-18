@@ -15,18 +15,18 @@ double maxSpeed = 0.;
 
 // Grid
 int nx = 100, nGhost = 1, nCons = 3;
-double xmin = 0., xmax = 1.;
-double dx = 0., xMidpoint, minXIndex, maxXIndex;
-std::vector<std::vector<double> > quantities;
-std::vector<std::vector<double> > fluxes;
+double xmin = 0., xmax = 1., dx = 0.;
+double xMidpoint = 0.;
+int minXIndex = 0, maxXIndex = 0;
 
-void createGrid(int nx, double dx, double xMidpoint, double minXIndex, double maxXIndex){
+std::vector<std::vector<double> > quantities(nx + 2*nGhost, std::vector<double>(nCons, 0.0));
+std::vector<std::vector<double> > fluxes(nx + 2*nGhost + 1, std::vector<double>(nCons, 0.0));
+
+void createGrid(int nx, double &dx, double &xMidpoint, int &minXIndex, int &maxXIndex){
 	dx = (xmax - xmin)/nx;
 	xMidpoint = (xmax + xmin)/2;
 	minXIndex = nGhost;
 	maxXIndex = nGhost + nx - 1;
-
-	return;
 }
 
 double getX(int cellIndex){
@@ -111,7 +111,7 @@ void setFluxes(){
 	double* flux_j;
 	std::vector<double> flux_vector(nCons);
 
-	for(int i = minXIndex; i == maxXIndex; i++)
+	for(int i = minXIndex; i <= maxXIndex; i++)
 	{
 		flux_i = getFlux(i);
 		flux_j = getFlux(i + 1);
@@ -135,33 +135,29 @@ void setFluxes(){
 }
 
 void update(double dt){
-
-	for(int i = minXIndex; i == maxXIndex; i++)
+	for(int i = minXIndex; i <= maxXIndex; i++)
 		for(int k = 0; k < nCons; k++)
 			quantities[i][k]  = quantities[i][k] - dt/dx * (fluxes[i + 1][k] - fluxes[i][k]);
 
-	return;
 }
 
 void output(){
-	for(int i = minXIndex; i == maxXIndex; i++){
-		std::cout << quantities[i][DENS];
-	}
-
-	return;
+	for(int i = minXIndex; i <= maxXIndex; i++)
+		std::cout << quantities[i][DENS] << ", ";
 }
 
 int main(){
-
-	double CFL = 0.4;
+	double CFL = 0.3;
 	double maxTime = 1.0;
 	double outputTimeInterval = 0.1;
 
 	double time = 0., dt = 0.;
 	double timeSinceLastOutput = 0.0;
 
-	createGrid(nx,dx,xMidpoint, minXIndex, maxXIndex);
+	createGrid(nx,dx,xMidpoint,minXIndex,maxXIndex);
 	setInitialData();
+
+	std::cout << "Begin hydro computation...\n";
 
 	while(time <= maxTime){
 
@@ -176,16 +172,15 @@ int main(){
 		update(dt);
 
 		if((time == 0.) || (timeSinceLastOutput > outputTimeInterval)){
-			output();
+			//output();
 			timeSinceLastOutput = 0.;
 		}
 
+		std::cout << "time = " << time <<"\n" << std::endl;
 		timeSinceLastOutput += dt;
 		time += dt;
-		std::cout << 'time = ' << time << '\n';
 	}
 
 	output();
-
 	return 0;
 }
