@@ -109,6 +109,7 @@ void setFluxes(){
 	double u_i, u_j, cs_i, cs_j;
 	double* flux_i;
 	double* flux_j;
+	std::vector<double> flux_vector(nCons);
 
 	for(int i = minXIndex; i == maxXIndex; i++)
 	{
@@ -121,7 +122,10 @@ void setFluxes(){
 
 		lambda = std::max(abs(u_i)+abs(cs_i), abs(u_j)+abs(cs_j));
 
-		fluxes[i] = 0.5 * (quantities[i + 1] - quantities[i]) * lambda;
+		for(int k = 0; k < nCons; k++)
+			flux_vector[k] = 0.5 * (flux_i[k] + flux_j[k]) - 0.5 * (quantities[i + 1][k] - quantities[i][k]) * lambda;
+
+		fluxes[i] = flux_vector;
 
 		if(maxSpeed < lambda)
 			maxSpeed = lambda;
@@ -133,7 +137,8 @@ void setFluxes(){
 void update(double dt){
 
 	for(int i = minXIndex; i == maxXIndex; i++)
-		quantities[i]  = quantities[i] - dt/dx * (fluxes[i + 1] - fluxes[i]);
+		for(int k = 0; k < nCons; k++)
+			quantities[i][k]  = quantities[i][k] - dt/dx * (fluxes[i + 1][k] - fluxes[i][k]);
 
 	return;
 }
