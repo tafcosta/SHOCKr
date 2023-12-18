@@ -16,7 +16,7 @@ double maxSpeed = 0.;
 // Grid
 int nx = 100, nGhost = 1, nCons = 3;
 double xmin = 0., xmax = 1.;
-double dx, xMidpoint, minXIndex, maxXIndex;
+double dx = 0., xMidpoint, minXIndex, maxXIndex;
 std::vector<std::vector<double> > quantities;
 std::vector<std::vector<double> > fluxes;
 
@@ -35,22 +35,22 @@ double getX(int cellIndex){
 }
 
 double totalEnergy(double p, double rhoV2){
-	double totalEnergy = p / (gamma - 1) + 1./2 * rhoV2;
+	double totalEnergy = p / (gamma - 1) + 0.5 * rhoV2;
 	return totalEnergy;
 }
 
 double pressure(double e, double rhoV2){
-	double p = (gamma - 1) * (e - 1./2 * rhoV2);
+	double p = (gamma - 1) * (e - 0.5 * rhoV2);
 	return p;
 }
 
-double flux(int cellIndex){
-	double flux[nCons];
+double* getFlux(int cellIndex){
+	double* flux = new double[nCons];
 	double rhoV2 = quantities[cellIndex][XMOM] * quantities[cellIndex][XMOM] / quantities[cellIndex][DENS];
-	double p = pressure(quantities[cellIndex][ENERGY], rhoV2);
+	double p     = pressure(quantities[cellIndex][ENERGY], rhoV2);
 
-	flux[DENS] = quantities[cellIndex][XMOM];
-	flux[XMOM] = rhoV2 + p;
+	flux[DENS]   = quantities[cellIndex][XMOM];
+	flux[XMOM]   = rhoV2 + p;
 	flux[ENERGY] = (p + quantities[cellIndex][ENERGY]) * quantities[cellIndex][XMOM] / quantities[cellIndex][DENS];
 
 	return flux;
@@ -65,8 +65,8 @@ double getSoundSpeed(int cellIndex){
 	return sqrt(gamma * p / rho);
 }
 
-double initialDataSodShock(double x){
-	double quantities_tmp[nCons];
+void initialDataSodShock(int i){
+	double x = getX(i);
 	double p, rho;
 
 	if(x < xMidpoint){
@@ -78,18 +78,18 @@ double initialDataSodShock(double x){
 		p = 0.1;
 	}
 
-	quantities_tmp[DENS] = rho;
-	quantities_tmp[XMOM] = 0.;
-	quantities_tmp[ENERGY] = totalEnergy(p, 0.);
+	quantities[i][DENS]   = rho;
+	quantities[i][XMOM]   = 0.;
+	quantities[i][ENERGY] = totalEnergy(p, 0.);
 
-	return quantities_tmp;
+	return;
 }
 
-double setInitialData(){
+void setInitialData(){
 	for(int i = minXIndex; i <= maxXIndex; i++)
-		quantities[i] = initialDataSodShock(getX(i));
+		initialDataSodShock(i);
 
-	return quantities;
+	return;
 }
 
 void setBoundaries(){
@@ -105,19 +105,23 @@ void setBoundaries(){
 }
 
 void setFluxes(){
-	double lambda {0.};
+	double lambda = 0.;
 	double u_i, u_j, cs_i, cs_j;
+	double* flux_i;
+	double* flux_j;
 
 	for(int i = minXIndex; i == maxXIndex; i++)
 	{
+		flux_i = getFlux(i);
+		flux_j = getFlux(i + 1);
 		u_i  = quantities[i][XMOM]/quantities[i][DENS];
 		u_j  = quantities[i + 1][XMOM]/quantities[i + 1][DENS];
 		cs_i = getSoundSpeed(i);
 		cs_j = getSoundSpeed(i + 1);
 
-		lambda = std::max(abs(u_i)+abs(cs_i),abs(u_j)+abs(cs_j));
+		lambda = std::max(abs(u_i)+abs(cs_i), abs(u_j)+abs(cs_j));
 
-		fluxes[i] = 1/2. * (flux[i] + flux[i + 1]) - 1./2 * (quantities[i + 1] - quantities[i]) * lambda;
+		fluxes[i] = 0.5 * (quantities[i + 1] - quantities[i]) * lambda;
 
 		if(maxSpeed < lambda)
 			maxSpeed = lambda;
@@ -149,7 +153,7 @@ int main(){
 	double outputTimeInterval = 0.1;
 
 	double time = 0., dt = 0.;
-	double timeSinceLastOutput {0.0};
+	double timeSinceLastOutput = 0.0;
 
 	createGrid(nx,dx,xMidpoint, minXIndex, maxXIndex);
 	setInitialData();
