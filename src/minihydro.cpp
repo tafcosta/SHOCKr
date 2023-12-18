@@ -39,7 +39,7 @@ double totalEnergy(double p, double rhoV2){
 	return totalEnergy;
 }
 
-double pressure(double e, double rhoV2){
+double getPressure(double e, double rhoV2){
 	double p = (gamma - 1) * (e - 0.5 * rhoV2);
 	return p;
 }
@@ -47,7 +47,7 @@ double pressure(double e, double rhoV2){
 double* getFlux(int cellIndex){
 	double* flux = new double[nCons];
 	double rhoV2 = quantities[cellIndex][XMOM] * quantities[cellIndex][XMOM] / quantities[cellIndex][DENS];
-	double p     = pressure(quantities[cellIndex][ENERGY], rhoV2);
+	double p     = getPressure(quantities[cellIndex][ENERGY], rhoV2);
 
 	flux[DENS]   = quantities[cellIndex][XMOM];
 	flux[XMOM]   = rhoV2 + p;
@@ -57,9 +57,8 @@ double* getFlux(int cellIndex){
 }
 
 double getSoundSpeed(int cellIndex){
-
 	double rhoV2 = quantities[cellIndex][XMOM] * quantities[cellIndex][XMOM] / quantities[cellIndex][DENS];
-	double p = pressure(quantities[cellIndex][ENERGY], rhoV2);
+	double p = getPressure(quantities[cellIndex][ENERGY], rhoV2);
 	double rho = quantities[cellIndex][DENS];
 
 	return sqrt(gamma * p / rho);
@@ -81,15 +80,11 @@ void initialDataSodShock(int i){
 	quantities[i][DENS]   = rho;
 	quantities[i][XMOM]   = 0.;
 	quantities[i][ENERGY] = totalEnergy(p, 0.);
-
-	return;
 }
 
 void setInitialData(){
 	for(int i = minXIndex; i <= maxXIndex; i++)
 		initialDataSodShock(i);
-
-	return;
 }
 
 void setBoundaries(){
@@ -100,8 +95,6 @@ void setBoundaries(){
 		else if(i > maxXIndex)
 			quantities[i] = quantities[i - nx];
 	}
-
-	return;
 }
 
 void setFluxes(){
@@ -115,10 +108,10 @@ void setFluxes(){
 	{
 		flux_i = getFlux(i);
 		flux_j = getFlux(i + 1);
-		u_i  = quantities[i][XMOM]/quantities[i][DENS];
-		u_j  = quantities[i + 1][XMOM]/quantities[i + 1][DENS];
-		cs_i = getSoundSpeed(i);
-		cs_j = getSoundSpeed(i + 1);
+		cs_i   = getSoundSpeed(i);
+		cs_j   = getSoundSpeed(i + 1);
+		u_i    = quantities[i][XMOM]/quantities[i][DENS];
+		u_j    = quantities[i + 1][XMOM]/quantities[i + 1][DENS];
 
 		lambda = std::max(abs(u_i)+abs(cs_i), abs(u_j)+abs(cs_j));
 
@@ -130,8 +123,6 @@ void setFluxes(){
 		if(maxSpeed < lambda)
 			maxSpeed = lambda;
 	}
-
-	return;
 }
 
 void update(double dt){
@@ -147,8 +138,8 @@ void output(){
 }
 
 int main(){
-	double CFL = 0.3;
-	double maxTime = 1.0;
+	double CFL = 0.4;
+	double maxTime = 0.01;
 	double outputTimeInterval = 0.1;
 
 	double time = 0., dt = 0.;
@@ -165,18 +156,19 @@ int main(){
 		setFluxes();
 
 		if(maxSpeed > 0)
-			dt = CFL / maxSpeed;
+			dt = CFL * dx / maxSpeed;
 		else
 			throw std::runtime_error("Error: maxSpeed must be greater than zero.");
 
 		update(dt);
+		output();
 
 		if((time == 0.) || (timeSinceLastOutput > outputTimeInterval)){
-			//output();
+			output();
 			timeSinceLastOutput = 0.;
 		}
 
-		std::cout << "time = " << time <<"\n" << std::endl;
+		std::cout << "time = " << time << std::endl;
 		timeSinceLastOutput += dt;
 		time += dt;
 	}
