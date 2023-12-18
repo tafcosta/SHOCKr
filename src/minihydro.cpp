@@ -5,6 +5,7 @@
  *      Author: Tiago Costa
  */
 #include <iostream>
+#include <fstream>
 
 // Physics
 int DENS = 0, XMOM = 1, ENERGY = 2;
@@ -14,7 +15,7 @@ double gamma = 5./3;
 double maxSpeed = 0.;
 
 // Grid
-int nx = 100, nGhost = 1, nCons = 3;
+int nx = 10000, nGhost = 1, nCons = 3;
 double xmin = 0., xmax = 1., dx = 0.;
 double xMidpoint = 0.;
 int minXIndex = 0, maxXIndex = 0;
@@ -98,25 +99,26 @@ void setBoundaries(){
 }
 
 void setFluxes(){
+	int i = 0;
 	double lambda = 0.;
 	double u_i, u_j, cs_i, cs_j;
 	double* flux_i;
 	double* flux_j;
 	std::vector<double> flux_vector(nCons);
 
-	for(int i = minXIndex; i <= maxXIndex; i++)
+	for(int i = minXIndex; i <= (maxXIndex + 1); i++)
 	{
-		flux_i = getFlux(i);
-		flux_j = getFlux(i + 1);
-		cs_i   = getSoundSpeed(i);
-		cs_j   = getSoundSpeed(i + 1);
-		u_i    = quantities[i][XMOM]/quantities[i][DENS];
-		u_j    = quantities[i + 1][XMOM]/quantities[i + 1][DENS];
+		flux_i = getFlux(i - 1);
+		flux_j = getFlux(i);
+		cs_i   = getSoundSpeed(i - 1);
+		cs_j   = getSoundSpeed(i);
+		u_i    = quantities[i - 1][XMOM]/quantities[i - 1][DENS];
+		u_j    = quantities[i][XMOM]/quantities[i][DENS];
 
 		lambda = std::max(abs(u_i)+abs(cs_i), abs(u_j)+abs(cs_j));
 
 		for(int k = 0; k < nCons; k++)
-			flux_vector[k] = 0.5 * (flux_i[k] + flux_j[k]) - 0.5 * (quantities[i + 1][k] - quantities[i][k]) * lambda;
+			flux_vector[k] = 0.5 * (flux_i[k] + flux_j[k]) - 0.5 * (quantities[i][k] - quantities[i - 1][k]) * lambda;
 
 		fluxes[i] = flux_vector;
 
@@ -129,18 +131,28 @@ void update(double dt){
 	for(int i = minXIndex; i <= maxXIndex; i++)
 		for(int k = 0; k < nCons; k++)
 			quantities[i][k]  = quantities[i][k] - dt/dx * (fluxes[i + 1][k] - fluxes[i][k]);
-
 }
 
-void output(){
-	for(int i = minXIndex; i <= maxXIndex; i++)
-		std::cout << quantities[i][DENS] << ", ";
+void output(const std::string& filename){
+    std::ofstream outputFile(filename);
+
+    if (!outputFile.is_open()) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
+    }
+
+    for (int i = minXIndex; i <= maxXIndex; i++) {
+        outputFile << i + 1 << " " << quantities[i][DENS] << std::endl;
+    }
+
+    outputFile.close();
 }
 
 int main(){
-	double CFL = 0.4;
-	double maxTime = 0.01;
-	double outputTimeInterval = 0.1;
+	double CFL = 0.3;
+	double maxTime = 0.1;
+	double outputTimeInterval = 0.01;
+    std::string outputFilename = "output.txt";
 
 	double time = 0., dt = 0.;
 	double timeSinceLastOutput = 0.0;
@@ -161,10 +173,9 @@ int main(){
 			throw std::runtime_error("Error: maxSpeed must be greater than zero.");
 
 		update(dt);
-		output();
 
 		if((time == 0.) || (timeSinceLastOutput > outputTimeInterval)){
-			output();
+			output(outputFilename);
 			timeSinceLastOutput = 0.;
 		}
 
@@ -173,6 +184,6 @@ int main(){
 		time += dt;
 	}
 
-	output();
+	output(outputFilename);
 	return 0;
 }
