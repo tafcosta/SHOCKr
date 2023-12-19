@@ -6,34 +6,18 @@
  */
 #include <iostream>
 #include <fstream>
+#include <string>
+#include "Grid.h"
+
+// Grid
+Grid *grid = new Grid(0., 1., 1, 10000);
 
 // Physics
 int DENS = 0, XMOM = 1, ENERGY = 2;
-double gamma = 5./3;
+double gamma = 1.4;
 
 // Main Loop
 double maxSpeed = 0.;
-
-// Grid
-int nx = 10000, nGhost = 1, nCons = 3;
-double xmin = 0., xmax = 1., dx = 0.;
-double xMidpoint = 0.;
-int minXIndex = 0, maxXIndex = 0;
-
-std::vector<std::vector<double> > quantities(nx + 2*nGhost, std::vector<double>(nCons, 0.0));
-std::vector<std::vector<double> > fluxes(nx + 2*nGhost + 1, std::vector<double>(nCons, 0.0));
-
-void createGrid(int nx, double &dx, double &xMidpoint, int &minXIndex, int &maxXIndex){
-	dx = (xmax - xmin)/nx;
-	xMidpoint = (xmax + xmin)/2;
-	minXIndex = nGhost;
-	maxXIndex = nGhost + nx - 1;
-}
-
-double getX(int cellIndex){
-	double cellCentre = xmin + (cellIndex - minXIndex) * dx + dx/2.;
-	return cellCentre;
-}
 
 double totalEnergy(double p, double rhoV2){
 	double totalEnergy = p / (gamma - 1) + 0.5 * rhoV2;
@@ -46,30 +30,30 @@ double getPressure(double e, double rhoV2){
 }
 
 double* getFlux(int cellIndex){
-	double* flux = new double[nCons];
-	double rhoV2 = quantities[cellIndex][XMOM] * quantities[cellIndex][XMOM] / quantities[cellIndex][DENS];
-	double p     = getPressure(quantities[cellIndex][ENERGY], rhoV2);
+	double* flux = new double[grid->nCons];
+	double rhoV2 = grid->quantities[cellIndex][XMOM] * grid->quantities[cellIndex][XMOM] / grid->quantities[cellIndex][DENS];
+	double p     = getPressure(grid->quantities[cellIndex][ENERGY], rhoV2);
 
-	flux[DENS]   = quantities[cellIndex][XMOM];
+	flux[DENS]   = grid->quantities[cellIndex][XMOM];
 	flux[XMOM]   = rhoV2 + p;
-	flux[ENERGY] = (p + quantities[cellIndex][ENERGY]) * quantities[cellIndex][XMOM] / quantities[cellIndex][DENS];
+	flux[ENERGY] = (p + grid->quantities[cellIndex][ENERGY]) * grid->quantities[cellIndex][XMOM] / grid->quantities[cellIndex][DENS];
 
 	return flux;
 }
 
 double getSoundSpeed(int cellIndex){
-	double rhoV2 = quantities[cellIndex][XMOM] * quantities[cellIndex][XMOM] / quantities[cellIndex][DENS];
-	double p = getPressure(quantities[cellIndex][ENERGY], rhoV2);
-	double rho = quantities[cellIndex][DENS];
+	double rhoV2 = grid->quantities[cellIndex][XMOM] * grid->quantities[cellIndex][XMOM] / grid->quantities[cellIndex][DENS];
+	double p = getPressure(grid->quantities[cellIndex][ENERGY], rhoV2);
+	double rho = grid->quantities[cellIndex][DENS];
 
 	return sqrt(gamma * p / rho);
 }
 
 void initialDataSodShock(int i){
-	double x = getX(i);
+	double x = grid->getX(i);
 	double p, rho;
 
-	if(x < xMidpoint){
+	if(x < grid->xMidpoint){
 		rho = 1.;
 		p = 1;
 	}
@@ -78,23 +62,23 @@ void initialDataSodShock(int i){
 		p = 0.1;
 	}
 
-	quantities[i][DENS]   = rho;
-	quantities[i][XMOM]   = 0.;
-	quantities[i][ENERGY] = totalEnergy(p, 0.);
+	grid->quantities[i][DENS]   = rho;
+	grid->quantities[i][XMOM]   = 0.;
+	grid->quantities[i][ENERGY] = totalEnergy(p, 0.);
 }
 
 void setInitialData(){
-	for(int i = minXIndex; i <= maxXIndex; i++)
+	for(int i = grid->minXIndex; i <= grid->maxXIndex; i++)
 		initialDataSodShock(i);
 }
 
 void setBoundaries(){
-	for(int i = 0; i < nx + 2*nGhost; i++)
+	for(int i = 0; i < grid->nx + 2*grid->nGhost; i++)
 	{
-		if(i < minXIndex)
-			quantities[i] = quantities[i + nx];
-		else if(i > maxXIndex)
-			quantities[i] = quantities[i - nx];
+		if(i < grid->minXIndex)
+			grid->quantities[i] = grid->quantities[grid->minXIndex];
+		else if(i > grid->maxXIndex)
+			grid->quantities[i] = grid->quantities[grid->maxXIndex];
 	}
 }
 
@@ -104,23 +88,23 @@ void setFluxes(){
 	double u_i, u_j, cs_i, cs_j;
 	double* flux_i;
 	double* flux_j;
-	std::vector<double> flux_vector(nCons);
+	std::vector<double> flux_vector(grid->nCons);
 
-	for(int i = minXIndex; i <= (maxXIndex + 1); i++)
+	for(int i = grid->minXIndex; i <= (grid->maxXIndex + 1); i++)
 	{
 		flux_i = getFlux(i - 1);
 		flux_j = getFlux(i);
 		cs_i   = getSoundSpeed(i - 1);
 		cs_j   = getSoundSpeed(i);
-		u_i    = quantities[i - 1][XMOM]/quantities[i - 1][DENS];
-		u_j    = quantities[i][XMOM]/quantities[i][DENS];
+		u_i    = grid->quantities[i - 1][XMOM]/grid->quantities[i - 1][DENS];
+		u_j    = grid->quantities[i][XMOM]/grid->quantities[i][DENS];
 
 		lambda = std::max(abs(u_i)+abs(cs_i), abs(u_j)+abs(cs_j));
 
-		for(int k = 0; k < nCons; k++)
-			flux_vector[k] = 0.5 * (flux_i[k] + flux_j[k]) - 0.5 * (quantities[i][k] - quantities[i - 1][k]) * lambda;
+		for(int k = 0; k < grid->nCons; k++)
+			flux_vector[k] = 0.5 * (flux_i[k] + flux_j[k]) - 0.5 * (grid->quantities[i][k] - grid->quantities[i - 1][k]) * lambda;
 
-		fluxes[i] = flux_vector;
+		grid->fluxes[i] = flux_vector;
 
 		if(maxSpeed < lambda)
 			maxSpeed = lambda;
@@ -128,9 +112,9 @@ void setFluxes(){
 }
 
 void update(double dt){
-	for(int i = minXIndex; i <= maxXIndex; i++)
-		for(int k = 0; k < nCons; k++)
-			quantities[i][k]  = quantities[i][k] - dt/dx * (fluxes[i + 1][k] - fluxes[i][k]);
+	for(int i = grid->minXIndex; i <= grid->maxXIndex; i++)
+		for(int k = 0; k < grid->nCons; k++)
+			grid->quantities[i][k]  = grid->quantities[i][k] - dt/grid->dx * (grid->fluxes[i + 1][k] - grid->fluxes[i][k]);
 }
 
 void output(const std::string& filename){
@@ -141,8 +125,8 @@ void output(const std::string& filename){
         return;
     }
 
-    for (int i = minXIndex; i <= maxXIndex; i++) {
-        outputFile << i + 1 << " " << quantities[i][DENS] << std::endl;
+    for (int i = grid->minXIndex; i <= grid->maxXIndex; i++) {
+        outputFile << grid->getX(i) << " " << grid->quantities[i][DENS] << std::endl;
     }
 
     outputFile.close();
@@ -157,18 +141,16 @@ int main(){
 	double time = 0., dt = 0.;
 	double timeSinceLastOutput = 0.0;
 
-	createGrid(nx,dx,xMidpoint,minXIndex,maxXIndex);
 	setInitialData();
 
 	std::cout << "Begin hydro computation...\n";
-
 	while(time <= maxTime){
 
 		setBoundaries();
 		setFluxes();
 
 		if(maxSpeed > 0)
-			dt = CFL * dx / maxSpeed;
+			dt = CFL * grid->dx / maxSpeed;
 		else
 			throw std::runtime_error("Error: maxSpeed must be greater than zero.");
 
@@ -185,5 +167,7 @@ int main(){
 	}
 
 	output(outputFilename);
+	delete grid;
+
 	return 0;
 }
