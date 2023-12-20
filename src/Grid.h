@@ -18,7 +18,7 @@ public:
 	double xmin, xmax;
 	int minXIndex, maxXIndex;
 	int nx, nGhost;
-	int nCons = 3;
+	int nCons;
 
 	std::vector<std::vector<double> > quantities;
 	std::vector<std::vector<double> > fluxes;
@@ -27,6 +27,8 @@ public:
 		double cellCentre = xmin + (cellIndex - minXIndex) * dx + dx/2.;
 		return cellCentre;
 	}
+
+	virtual void update(double dt){};
 
 private:
 };

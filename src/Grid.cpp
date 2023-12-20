@@ -8,6 +8,8 @@
 #include "Grid.h"
 
 Grid::Grid(double xmin, double xmax, int nGhost, int nx) {
+	nCons = 3;
+
 	this->xmin = xmin;
 	this->xmax = xmax;
 	this->nGhost = nGhost;

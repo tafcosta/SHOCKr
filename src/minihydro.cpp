@@ -8,9 +8,10 @@
 #include <fstream>
 #include <string>
 #include "Grid.h"
+#include "Grid1D.h"
 
 // Grid
-Grid *grid = new Grid(0., 1., 1, 10000);
+Grid *grid = new Grid1D(0., 1., 1, 10000);
 
 // Physics
 int DENS = 0, XMOM = 1, ENERGY = 2;
@@ -83,7 +84,6 @@ void setBoundaries(){
 }
 
 void setFluxes(){
-	int i = 0;
 	double lambda = 0.;
 	double u_i, u_j, cs_i, cs_j;
 	double* flux_i;
@@ -109,12 +109,6 @@ void setFluxes(){
 		if(maxSpeed < lambda)
 			maxSpeed = lambda;
 	}
-}
-
-void update(double dt){
-	for(int i = grid->minXIndex; i <= grid->maxXIndex; i++)
-		for(int k = 0; k < grid->nCons; k++)
-			grid->quantities[i][k]  = grid->quantities[i][k] - dt/grid->dx * (grid->fluxes[i + 1][k] - grid->fluxes[i][k]);
 }
 
 void output(const std::string& filename){
@@ -154,7 +148,7 @@ int main(){
 		else
 			throw std::runtime_error("Error: maxSpeed must be greater than zero.");
 
-		update(dt);
+		grid->update(dt);
 
 		if((time == 0.) || (timeSinceLastOutput > outputTimeInterval)){
 			output(outputFilename);
