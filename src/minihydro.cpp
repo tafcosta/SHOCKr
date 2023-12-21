@@ -14,7 +14,7 @@
 
 // Grid
 Equations *equations = new Equations(1.4);
-Grid *grid = new GridRadial(0.1, 1., 1, 1000, *equations);
+Grid *grid = new GridRadial(0.1, 1., 1, 10000, *equations);
 
 // Main Loop
 double maxSpeed = 0.;
@@ -96,8 +96,8 @@ void output(const std::string& filename){
 }
 
 int main(){
-	double CFL = 0.3;
-	double maxTime = 0.1;
+	double CFL = 0.4;
+	double maxTime = 0.15;
 	double outputTimeInterval = 0.01;
     std::string outputFilename = "output.txt";
 
