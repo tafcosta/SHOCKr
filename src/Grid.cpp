@@ -6,22 +6,20 @@
  */
 
 #include "Grid.h"
+#include "Equations.h"
 
-Grid::Grid(double xmin, double xmax, int nGhost, int nx) {
-	nCons = 3;
+Grid::Grid(double xmin, double xmax, int nGhost, int nx, Equations& equations) : xmin(xmin), xmax(xmax), nGhost(nGhost), nx(nx), equations(equations) {
 
-	this->xmin = xmin;
-	this->xmax = xmax;
-	this->nGhost = nGhost;
-	this->nx = nx;
-
-	this->quantities = std::vector<std::vector<double> > (nx + 2*nGhost, std::vector<double>(nCons, 0.0));
-	this->fluxes = std::vector<std::vector<double> > (nx + 2*nGhost + 1, std::vector<double>(nCons, 0.0));
+	this->quantities = std::vector<std::vector<double> > (nx + 2*nGhost, std::vector<double>(Equations::nCons, 0.0));
+	this->fluxes = std::vector<std::vector<double> > (nx + 2*nGhost + 1, std::vector<double>(Equations::nCons, 0.0));
 
 	dx = (xmax - xmin)/nx;
 	xMidpoint = (xmax + xmin)/2;
 	minXIndex = nGhost;
 	maxXIndex = nGhost + nx - 1;
+
+	this->equations = equations;
+
 }
 
 Grid::~Grid() {

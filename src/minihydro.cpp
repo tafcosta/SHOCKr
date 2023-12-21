@@ -7,48 +7,17 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Equations.h"
 #include "Grid.h"
 #include "Grid1D.h"
+#include "GridRadial.h"
 
 // Grid
-Grid *grid = new Grid1D(0., 1., 1, 10000);
-
-// Physics
-int DENS = 0, XMOM = 1, ENERGY = 2;
-double gamma = 1.4;
+Equations *equations = new Equations(1.4);
+Grid *grid = new GridRadial(0.1, 1., 1, 1000, *equations);
 
 // Main Loop
 double maxSpeed = 0.;
-
-double totalEnergy(double p, double rhoV2){
-	double totalEnergy = p / (gamma - 1) + 0.5 * rhoV2;
-	return totalEnergy;
-}
-
-double getPressure(double e, double rhoV2){
-	double p = (gamma - 1) * (e - 0.5 * rhoV2);
-	return p;
-}
-
-double* getFlux(int cellIndex){
-	double* flux = new double[grid->nCons];
-	double rhoV2 = grid->quantities[cellIndex][XMOM] * grid->quantities[cellIndex][XMOM] / grid->quantities[cellIndex][DENS];
-	double p     = getPressure(grid->quantities[cellIndex][ENERGY], rhoV2);
-
-	flux[DENS]   = grid->quantities[cellIndex][XMOM];
-	flux[XMOM]   = rhoV2 + p;
-	flux[ENERGY] = (p + grid->quantities[cellIndex][ENERGY]) * grid->quantities[cellIndex][XMOM] / grid->quantities[cellIndex][DENS];
-
-	return flux;
-}
-
-double getSoundSpeed(int cellIndex){
-	double rhoV2 = grid->quantities[cellIndex][XMOM] * grid->quantities[cellIndex][XMOM] / grid->quantities[cellIndex][DENS];
-	double p = getPressure(grid->quantities[cellIndex][ENERGY], rhoV2);
-	double rho = grid->quantities[cellIndex][DENS];
-
-	return sqrt(gamma * p / rho);
-}
 
 void initialDataSodShock(int i){
 	double x = grid->getX(i);
@@ -63,9 +32,9 @@ void initialDataSodShock(int i){
 		p = 0.1;
 	}
 
-	grid->quantities[i][DENS]   = rho;
-	grid->quantities[i][XMOM]   = 0.;
-	grid->quantities[i][ENERGY] = totalEnergy(p, 0.);
+	grid->quantities[i][Equations::DENS]   = rho;
+	grid->quantities[i][Equations::XMOM]   = 0.;
+	grid->quantities[i][Equations::ENERGY] = equations->totalEnergy(p, 0.);
 }
 
 void setInitialData(){
@@ -88,20 +57,20 @@ void setFluxes(){
 	double u_i, u_j, cs_i, cs_j;
 	double* flux_i;
 	double* flux_j;
-	std::vector<double> flux_vector(grid->nCons);
+	std::vector<double> flux_vector(Equations::nCons);
 
 	for(int i = grid->minXIndex; i <= (grid->maxXIndex + 1); i++)
 	{
-		flux_i = getFlux(i - 1);
-		flux_j = getFlux(i);
-		cs_i   = getSoundSpeed(i - 1);
-		cs_j   = getSoundSpeed(i);
-		u_i    = grid->quantities[i - 1][XMOM]/grid->quantities[i - 1][DENS];
-		u_j    = grid->quantities[i][XMOM]/grid->quantities[i][DENS];
+		flux_i = equations->getFlux(grid->quantities[i - 1]);
+		flux_j = equations->getFlux(grid->quantities[i]);
+		cs_i   = equations->getSoundSpeed(grid->quantities[i - 1]);
+		cs_j   = equations->getSoundSpeed(grid->quantities[i]);
+		u_i    = grid->quantities[i - 1][Equations::XMOM]/grid->quantities[i - 1][Equations::DENS];
+		u_j    = grid->quantities[i][Equations::XMOM]/grid->quantities[i][Equations::DENS];
 
 		lambda = std::max(abs(u_i)+abs(cs_i), abs(u_j)+abs(cs_j));
 
-		for(int k = 0; k < grid->nCons; k++)
+		for(int k = 0; k < Equations::nCons; k++)
 			flux_vector[k] = 0.5 * (flux_i[k] + flux_j[k]) - 0.5 * (grid->quantities[i][k] - grid->quantities[i - 1][k]) * lambda;
 
 		grid->fluxes[i] = flux_vector;
@@ -120,7 +89,7 @@ void output(const std::string& filename){
     }
 
     for (int i = grid->minXIndex; i <= grid->maxXIndex; i++) {
-        outputFile << grid->getX(i) << " " << grid->quantities[i][DENS] << std::endl;
+        outputFile << grid->getX(i) << " " << grid->quantities[i][Equations::DENS] << std::endl;
     }
 
     outputFile.close();

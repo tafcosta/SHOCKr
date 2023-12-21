@@ -12,7 +12,7 @@
 
 class Grid1D: public Grid {
 public:
-	Grid1D(double xmin, double xmax, int nGhost, int nx) : Grid(xmin, xmax, nGhost, nx){};
+	Grid1D(double xmin, double xmax, int nGhost, int nx, Equations& equations) : Grid(xmin, xmax, nGhost, nx, equations){};
 	void update(double dt) override;
 	virtual ~Grid1D();
 };
