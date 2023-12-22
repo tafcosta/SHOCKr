@@ -31,7 +31,7 @@ public:
 		return p;
 	}
 
-	double* getFlux(std::vector<double> quantities){
+	double* getFlux(std::vector<double>& quantities){
 		double* flux = new double[nCons];
 		double rhoV2 = quantities[XMOM] * quantities[XMOM] / quantities[DENS];
 		double p     = getPressure(quantities[ENERGY], rhoV2);
@@ -43,7 +43,7 @@ public:
 		return flux;
 	}
 
-	double getSoundSpeed(std::vector<double> quantities){
+	double getSoundSpeed(std::vector<double>& quantities){
 		double rhoV2 = quantities[XMOM] * quantities[XMOM] / quantities[DENS];
 		double p = getPressure(quantities[ENERGY], rhoV2);
 		double rho = quantities[DENS];

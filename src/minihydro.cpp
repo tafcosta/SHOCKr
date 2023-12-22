@@ -7,6 +7,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Boundary.h"
+#include "BoundaryWind.h"
+#include "BoundaryZeroGradient.h"
 #include "Equations.h"
 #include "Grid.h"
 #include "Grid1D.h"
@@ -15,42 +18,48 @@
 // Grid
 Equations *equations = new Equations(1.4);
 Grid *grid = new GridRadial(0.1, 1., 1, 10000, *equations);
+Boundary *boundary = new BoundaryWind(*grid, *equations);
 
 // Main Loop
 double maxSpeed = 0.;
 
 void initialDataSodShock(int i){
 	double x = grid->getX(i);
-	double p, rho;
+	double p, rho, u;
 
 	if(x < grid->xMidpoint){
-		rho = 1.;
-		p = 1;
+		rho = 1;
+		p   = 1;
+		u   = 0;
 	}
 	else{
 		rho = 0.125;
-		p = 0.1;
+		p   = 0.1;
+		u   = 0;
 	}
 
 	grid->quantities[i][Equations::DENS]   = rho;
-	grid->quantities[i][Equations::XMOM]   = 0.;
-	grid->quantities[i][Equations::ENERGY] = equations->totalEnergy(p, 0.);
+	grid->quantities[i][Equations::XMOM]   = rho * u;
+	grid->quantities[i][Equations::ENERGY] = equations->totalEnergy(p, rho * u * u);
+}
+
+void initialDataHomogeneous(int i){
+	double p, rho, u;
+
+	rho = 1.;
+	p   = 1.;
+	u   = 0.;
+
+	grid->quantities[i][Equations::DENS]   = rho;
+	grid->quantities[i][Equations::XMOM]   = rho * u;
+	grid->quantities[i][Equations::ENERGY] = equations->totalEnergy(p, rho * u * u);
 }
 
 void setInitialData(){
 	for(int i = grid->minXIndex; i <= grid->maxXIndex; i++)
-		initialDataSodShock(i);
+		initialDataHomogeneous(i);
 }
 
-void setBoundaries(){
-	for(int i = 0; i < grid->nx + 2*grid->nGhost; i++)
-	{
-		if(i < grid->minXIndex)
-			grid->quantities[i] = grid->quantities[grid->minXIndex];
-		else if(i > grid->maxXIndex)
-			grid->quantities[i] = grid->quantities[grid->maxXIndex];
-	}
-}
 
 void setFluxes(){
 	double lambda = 0.;
@@ -109,7 +118,8 @@ int main(){
 	std::cout << "Begin hydro computation...\n";
 	while(time <= maxTime){
 
-		setBoundaries();
+		//setWindBoundaries();
+		boundary->setBoundaries();
 		setFluxes();
 
 		if(maxSpeed > 0)
@@ -130,7 +140,10 @@ int main(){
 	}
 
 	output(outputFilename);
+	delete boundary;
+	delete equations;
 	delete grid;
+
 
 	return 0;
 }
