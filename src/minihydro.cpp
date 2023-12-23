@@ -32,9 +32,9 @@ Output *output = new OutputLinearisedEuler(*grid, *equations);
 RiemannSolver *riemannsolver = new RiemannSolver(*grid, *equations);
 
 int main(){
-	double CFL = 0.4;
-	double maxTime = 1.;
-	double outputTimeInterval = 0.01;
+	double CFL = 0.3;
+	double maxTime = 0.5;
+	double outputTimeInterval = 0.1;
     std::string outputFilename = "output.txt";
 
 	double time = 0., dt = 0.;

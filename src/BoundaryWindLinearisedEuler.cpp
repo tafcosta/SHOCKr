@@ -21,12 +21,14 @@ void BoundaryWindLinearisedEuler::setBoundaries(){
 			u   = 0.3;
 			p   = 1.;
 
-			cs_background = (static_cast<EquationsLinearisedEuler*>(&equations))->BgSoundSpeed;
+
+
+			cs_background   = (static_cast<EquationsLinearisedEuler*>(&equations))->BgSoundSpeed;
 			dens_background = (static_cast<EquationsLinearisedEuler*>(&equations))->BgDensity;
 
 			q0     = rho - p / pow(cs_background, 2.);
 			qplus  = (p + cs_background * dens_background * u) / 2.;
-			qminus = (grid.quantities[grid.minXIndex][EquationsLinearisedEuler::PRESS] - dens_background * grid.quantities[grid.minXIndex][EquationsLinearisedEuler::VEL]) / 2.;
+			qminus = (grid.quantities[grid.minXIndex][EquationsLinearisedEuler::PRESS] - cs_background * dens_background * grid.quantities[grid.minXIndex][EquationsLinearisedEuler::VEL]) / 2.;
 
 			grid.quantities[i][EquationsLinearisedEuler::DENS]  = q0 + (qplus + qminus) / pow(cs_background, 2.);
 			grid.quantities[i][EquationsLinearisedEuler::VEL]   = (qplus - qminus) / (cs_background * dens_background);
