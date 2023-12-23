@@ -8,6 +8,7 @@
 #include "InitialData.h"
 #include "InitialDataSodShock.h"
 #include "Equations.h"
+#include "EquationsEuler.h"
 #include "Grid.h"
 
 void InitialDataSodShock::setInitialData(){
@@ -31,7 +32,7 @@ void InitialDataSodShock::setInitialData(){
 
 		grid.quantities[i][Equations::DENS]   = rho;
 		grid.quantities[i][Equations::XMOM]   = rho * u;
-		grid.quantities[i][Equations::ENERGY] = equations.totalEnergy(p, rho * u * u);
+		grid.quantities[i][Equations::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(p, rho * u * u);
 		}
 }
 

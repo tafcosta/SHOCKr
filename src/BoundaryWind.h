@@ -9,11 +9,12 @@
 #define SRC_BOUNDARYWINDTMP_H_
 
 #include "Boundary.h"
+#include "EquationsEuler.h"
 #include "Grid.h"
 
 class BoundaryWind: public Boundary {
 public:
-	BoundaryWind(Grid& grid,Equations& equations) : Boundary(grid,equations){};
+	BoundaryWind(Grid& grid,EquationsEuler& equations) : Boundary(grid,equations){};
 	virtual ~BoundaryWind();
 	void setBoundaries() override;
 };

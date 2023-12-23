@@ -9,12 +9,13 @@
 #define SRC_INITIALDATASODSHOCK_H_
 
 #include "Equations.h"
+#include "EquationsEuler.h"
 #include "Grid.h"
 #include "InitialData.h"
 
 class InitialDataSodShock: public InitialData {
 public:
-	InitialDataSodShock(Grid& grid, Equations& equations) : InitialData(grid, equations){};
+	InitialDataSodShock(Grid& grid, EquationsEuler& equations) : InitialData(grid, equations){};
 	virtual ~InitialDataSodShock();
 	void setInitialData() override;
 };

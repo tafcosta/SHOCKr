@@ -12,6 +12,7 @@
 #include "BoundaryWind.h"
 #include "BoundaryZeroGradient.h"
 #include "Equations.h"
+#include "EquationsEuler.h"
 #include "Grid.h"
 #include "Grid1D.h"
 #include "GridRadial.h"
@@ -20,13 +21,11 @@
 #include "RiemannSolver.h"
 
 // Grid
-Equations *equations = new Equations(5./3);
-Grid *grid = new GridRadial(0.1, 1., 1, 10000, *equations);
+EquationsEuler *equations = new EquationsEuler(5./3);
+Grid *grid = new GridRadial(0.1, 1., 1, 1000, *equations);
 Boundary *boundary = new BoundaryWind(*grid, *equations);
 InitialData *initialdata = new InitialDataHomogeneous(*grid, *equations);
 RiemannSolver *riemannsolver = new RiemannSolver(*grid, *equations);
-
-// Main Loop
 
 void output(const std::string& filename){
     std::ofstream outputFile(filename);
@@ -36,7 +35,7 @@ void output(const std::string& filename){
         return;
     }
 
-    for (int i = grid->minXIndex; i <= grid->maxXIndex; i++) {
+    for (int i = 0; i <= grid->maxXIndex; i++) {
         outputFile << grid->getX(i) << " " << grid->quantities[i][Equations::DENS] << " " << grid->quantities[i][Equations::XMOM]/grid->quantities[i][Equations::DENS] << std::endl;
     }
 
@@ -59,6 +58,7 @@ int main(){
 		//setWindBoundaries();
 		boundary->setBoundaries();
 		riemannsolver->setFluxes();
+
 
 		if(riemannsolver->maxSpeed > 0)
 			dt = CFL * grid->dx / riemannsolver->maxSpeed;

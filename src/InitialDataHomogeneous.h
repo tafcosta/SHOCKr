@@ -9,12 +9,13 @@
 #define SRC_INITIALDATAHOMOGENEOUS_H_
 
 #include "Equations.h"
+#include "EquationsEuler.h"
 #include "Grid.h"
 #include "InitialData.h"
 
 class InitialDataHomogeneous: public InitialData {
 public:
-	InitialDataHomogeneous(Grid& grid, Equations& equations) : InitialData(grid, equations){};
+	InitialDataHomogeneous(Grid& grid, EquationsEuler& equations) : InitialData(grid, equations){};
 	virtual ~InitialDataHomogeneous();
 	void setInitialData() override;
 };

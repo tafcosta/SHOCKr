@@ -6,12 +6,12 @@
  */
 
 #include "Equations.h"
+#include "EquationsEuler.h"
 #include "Grid.h"
 #include "RiemannSolver.h"
 
 void RiemannSolver::setFluxes(){
 	double lambda = 0.;
-	double u_i, u_j, cs_i, cs_j;
 	double* flux_i;
 	double* flux_j;
 	std::vector<double> flux_vector(Equations::nCons);
@@ -20,12 +20,8 @@ void RiemannSolver::setFluxes(){
 	{
 		flux_i = equations.getFlux(grid.quantities[i - 1]);
 		flux_j = equations.getFlux(grid.quantities[i]);
-		cs_i   = equations.getSoundSpeed(grid.quantities[i - 1]);
-		cs_j   = equations.getSoundSpeed(grid.quantities[i]);
-		u_i    = grid.quantities[i - 1][Equations::XMOM]/grid.quantities[i - 1][Equations::DENS];
-		u_j    = grid.quantities[i][Equations::XMOM]/grid.quantities[i][Equations::DENS];
 
-		lambda = std::max(abs(u_i)+abs(cs_i), abs(u_j)+abs(cs_j));
+		lambda = std::max(equations.getMaxAbsEigenvalue(grid.quantities[i]), equations.getMaxAbsEigenvalue(grid.quantities[i - 1]));
 
 		for(int k = 0; k < Equations::nCons; k++)
 			flux_vector[k] = 0.5 * (flux_i[k] + flux_j[k]) - 0.5 * (grid.quantities[i][k] - grid.quantities[i - 1][k]) * lambda;
