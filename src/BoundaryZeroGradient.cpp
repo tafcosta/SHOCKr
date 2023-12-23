@@ -6,6 +6,7 @@
  */
 
 #include "BoundaryZeroGradient.h"
+#include "Boundary.h"
 #include "Grid.h"
 
 void BoundaryZeroGradient::setBoundaries(){

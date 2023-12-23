@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+
 #include "Boundary.h"
 #include "BoundaryWind.h"
 #include "BoundaryZeroGradient.h"
@@ -14,52 +15,17 @@
 #include "Grid.h"
 #include "Grid1D.h"
 #include "GridRadial.h"
+#include "InitialData.h"
+#include "InitialDataHomogeneous.h"
 
 // Grid
-Equations *equations = new Equations(1.4);
+Equations *equations = new Equations(5./3);
 Grid *grid = new GridRadial(0.1, 1., 1, 10000, *equations);
 Boundary *boundary = new BoundaryWind(*grid, *equations);
+InitialData *initialdata = new InitialDataHomogeneous(*grid, *equations);
 
 // Main Loop
 double maxSpeed = 0.;
-
-void initialDataSodShock(int i){
-	double x = grid->getX(i);
-	double p, rho, u;
-
-	if(x < grid->xMidpoint){
-		rho = 1;
-		p   = 1;
-		u   = 0;
-	}
-	else{
-		rho = 0.125;
-		p   = 0.1;
-		u   = 0;
-	}
-
-	grid->quantities[i][Equations::DENS]   = rho;
-	grid->quantities[i][Equations::XMOM]   = rho * u;
-	grid->quantities[i][Equations::ENERGY] = equations->totalEnergy(p, rho * u * u);
-}
-
-void initialDataHomogeneous(int i){
-	double p, rho, u;
-
-	rho = 1.;
-	p   = 1.;
-	u   = 0.;
-
-	grid->quantities[i][Equations::DENS]   = rho;
-	grid->quantities[i][Equations::XMOM]   = rho * u;
-	grid->quantities[i][Equations::ENERGY] = equations->totalEnergy(p, rho * u * u);
-}
-
-void setInitialData(){
-	for(int i = grid->minXIndex; i <= grid->maxXIndex; i++)
-		initialDataHomogeneous(i);
-}
-
 
 void setFluxes(){
 	double lambda = 0.;
@@ -98,7 +64,7 @@ void output(const std::string& filename){
     }
 
     for (int i = grid->minXIndex; i <= grid->maxXIndex; i++) {
-        outputFile << grid->getX(i) << " " << grid->quantities[i][Equations::DENS] << std::endl;
+        outputFile << grid->getX(i) << " " << grid->quantities[i][Equations::DENS] << " " << grid->quantities[i][Equations::XMOM]/grid->quantities[i][Equations::DENS] << std::endl;
     }
 
     outputFile.close();
@@ -113,7 +79,7 @@ int main(){
 	double time = 0., dt = 0.;
 	double timeSinceLastOutput = 0.0;
 
-	setInitialData();
+	initialdata->setInitialData();
 
 	std::cout << "Begin hydro computation...\n";
 	while(time <= maxTime){

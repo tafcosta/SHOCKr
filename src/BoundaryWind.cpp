@@ -14,9 +14,9 @@ void BoundaryWind::setBoundaries(){
 
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
 		if(i < grid.minXIndex){
-			rho = 1.;
-			p   = 5.;
-			u   = 5.;
+			rho = 0.1;
+			p   = 30;
+			u   = 1;
 
 			grid.quantities[i][Equations::DENS]   = rho;
 			grid.quantities[i][Equations::XMOM]   = rho * u;

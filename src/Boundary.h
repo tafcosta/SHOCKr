@@ -10,7 +10,7 @@
 #ifndef BOUNDARY_H_
 #define BOUNDARY_H_
 
-class Boundary {
+class Boundary{
 public:
 	Boundary(Grid& grid, Equations& equations);
 	virtual ~Boundary();

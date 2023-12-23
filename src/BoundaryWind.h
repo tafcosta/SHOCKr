@@ -5,8 +5,8 @@
  *      Author: ntc132
  */
 
-#ifndef SRC_BOUNDARYWIND_H_
-#define SRC_BOUNDARYWIND_H_
+#ifndef SRC_BOUNDARYWINDTMP_H_
+#define SRC_BOUNDARYWINDTMP_H_
 
 #include "Boundary.h"
 #include "Grid.h"
@@ -18,4 +18,4 @@ public:
 	void setBoundaries() override;
 };
 
-#endif /* SRC_BOUNDARYWIND_H_ */
+#endif /* SRC_BOUNDARYWINDTMP_H_ */
