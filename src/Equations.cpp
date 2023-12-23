@@ -7,7 +7,7 @@
 
 #include "Equations.h"
 
-Equations::Equations(double gamma) : gamma(gamma) {
+Equations::Equations() {
 
 }
 

@@ -14,7 +14,7 @@
 
 class EquationsEuler: public Equations {
 public:
-	EquationsEuler(double gamma) : Equations(gamma){};
+	EquationsEuler(double gamma) : gamma(gamma){};
 	virtual ~EquationsEuler();
 
 	double totalEnergy(double p, double rhoV2){
@@ -35,6 +35,11 @@ public:
 		return sqrt(gamma * p / rho);
 	}
 
+	static const int DENS   = 0;
+	static const int XMOM   = 1;
+	static const int ENERGY = 2;
+
+	double gamma;
 	double* getFlux(std::vector<double>& quantities) override;
 	double getMaxAbsEigenvalue(std::vector<double>& quantities) override;
 };

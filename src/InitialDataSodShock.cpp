@@ -30,9 +30,9 @@ void InitialDataSodShock::setInitialData(){
 				u   = 0;
 			}
 
-		grid.quantities[i][Equations::DENS]   = rho;
-		grid.quantities[i][Equations::XMOM]   = rho * u;
-		grid.quantities[i][Equations::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(p, rho * u * u);
+		grid.quantities[i][EquationsEuler::DENS]   = rho;
+		grid.quantities[i][EquationsEuler::XMOM]   = rho * u;
+		grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(p, rho * u * u);
 		}
 }
 

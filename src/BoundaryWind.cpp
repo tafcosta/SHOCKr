@@ -19,9 +19,9 @@ void BoundaryWind::setBoundaries(){
 			p   = 1.;
 			u   = 0.3;
 
-			grid.quantities[i][Equations::DENS]   = rho;
-			grid.quantities[i][Equations::XMOM]   = rho * u;
-			grid.quantities[i][Equations::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(p, rho * u * u);
+			grid.quantities[i][EquationsEuler::DENS]   = rho;
+			grid.quantities[i][EquationsEuler::XMOM]   = rho * u;
+			grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(p, rho * u * u);
 		}
 		else if(i > grid.maxXIndex)
 			grid.quantities[i] = grid.quantities[grid.maxXIndex];

@@ -14,7 +14,7 @@
 
 class BoundaryWind: public Boundary {
 public:
-	BoundaryWind(Grid& grid,EquationsEuler& equations) : Boundary(grid,equations){};
+	BoundaryWind(Grid& grid, EquationsEuler& equations) : Boundary(grid,equations){};
 	virtual ~BoundaryWind();
 	void setBoundaries() override;
 };

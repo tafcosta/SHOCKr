@@ -7,13 +7,12 @@
 
 #include "EquationsEuler.h"
 #include "Equations.h"
-#include "Grid.h"
 
 double EquationsEuler::getMaxAbsEigenvalue(std::vector<double>& quantities) {
 	double u, cs;
 
 	cs   = getSoundSpeed(quantities);
-	u    = quantities[Equations::XMOM]/quantities[Equations::DENS];
+	u    = quantities[EquationsEuler::XMOM]/quantities[EquationsEuler::DENS];
 
 	return abs(u) + abs(cs);
 }

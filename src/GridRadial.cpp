@@ -27,10 +27,10 @@ void GridRadial::update(double dt) {
 			quantities[i][k]  = quantities[i][k] - dt/dVolume * 3 * (fluxes[i + 1][k] * pow(xRight, 2.) - fluxes[i][k] * pow(xLeft, 2.));
 		}
 
-		rhoV2 = quantities[i][Equations::XMOM] * quantities[i][Equations::XMOM] / quantities[i][Equations::DENS];
-		p = (static_cast<EquationsEuler*>(&equations))->getPressure(quantities[i][Equations::ENERGY], rhoV2);
+		rhoV2 = quantities[i][EquationsEuler::XMOM] * quantities[i][EquationsEuler::XMOM] / quantities[i][EquationsEuler::DENS];
+		p = (static_cast<EquationsEuler*>(&equations))->getPressure(quantities[i][EquationsEuler::ENERGY], rhoV2);
 
-		quantities[i][Equations::XMOM] += dt * 3 * 2./dVolume * dx * getX(i) * p;
+		quantities[i][EquationsEuler::XMOM] += dt * 3 * 2./dVolume * dx * getX(i) * p;
 	}
 }
 
