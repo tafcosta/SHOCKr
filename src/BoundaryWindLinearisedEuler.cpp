@@ -9,30 +9,27 @@
 #include "Equations.h"
 #include "EquationsLinearisedEuler.h"
 #include "Grid.h"
+#include "InitialDataHomogeneousLinearisedEuler.h"
+#include <iostream>
 
 void BoundaryWindLinearisedEuler::setBoundaries(){
-	double rho, u, p;
-	double q0, qplus, qminus;
+	double rho_wind, u_wind, p_wind;
+	double qminus;
 	double cs_background, dens_background;
 
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
 		if(i < grid.minXIndex){
-			rho = 0.1;
-			u   = 0.3;
-			p   = 1.;
-
-
+			rho_wind = 0.1;
+			u_wind   = 0.3;
 
 			cs_background   = (static_cast<EquationsLinearisedEuler*>(&equations))->BgSoundSpeed;
 			dens_background = (static_cast<EquationsLinearisedEuler*>(&equations))->BgDensity;
+			qminus = (initialdata.p - cs_background * dens_background * initialdata.u) / 2.;
+			p_wind = u_wind * dens_background * cs_background + 2 * qminus;
 
-			q0     = rho - p / pow(cs_background, 2.);
-			qplus  = (p + cs_background * dens_background * u) / 2.;
-			qminus = (grid.quantities[grid.minXIndex][EquationsLinearisedEuler::PRESS] - cs_background * dens_background * grid.quantities[grid.minXIndex][EquationsLinearisedEuler::VEL]) / 2.;
-
-			grid.quantities[i][EquationsLinearisedEuler::DENS]  = q0 + (qplus + qminus) / pow(cs_background, 2.);
-			grid.quantities[i][EquationsLinearisedEuler::VEL]   = (qplus - qminus) / (cs_background * dens_background);
-			grid.quantities[i][EquationsLinearisedEuler::PRESS] = qplus + qminus;
+			grid.quantities[i][EquationsLinearisedEuler::DENS]  = rho_wind;
+			grid.quantities[i][EquationsLinearisedEuler::VEL]   = u_wind;
+			grid.quantities[i][EquationsLinearisedEuler::PRESS] = p_wind;
 		}
 		else if(i > grid.maxXIndex)
 			grid.quantities[i] = grid.quantities[grid.maxXIndex];

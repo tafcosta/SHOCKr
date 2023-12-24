@@ -15,9 +15,13 @@
 
 class InitialDataHomogeneousLinearisedEuler: public InitialData {
 public:
-	InitialDataHomogeneousLinearisedEuler(Grid& grid, EquationsLinearisedEuler& equations) : InitialData(grid, equations){};
+	InitialDataHomogeneousLinearisedEuler(Grid& grid, EquationsLinearisedEuler& equations, double rho, double u, double p) : rho(rho), u(u), p(p), InitialData(grid, equations){};
 	virtual ~InitialDataHomogeneousLinearisedEuler();
 	void setInitialData() override;
+
+	double rho;
+	double u;
+	double p;
 };
 
 #endif /* SRC_INITIALDATAHOMOGENEOUSLINEARISEDEULER_H_ */

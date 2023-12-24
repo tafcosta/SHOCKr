@@ -21,7 +21,7 @@ void OutputLinearisedEuler::makeOutput(const std::string& filename){
     }
 
     for (int i = 0; i <= grid.maxXIndex; i++) {
-        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsLinearisedEuler::DENS] << " " << grid.quantities[i][EquationsLinearisedEuler::VEL] << std::endl;
+        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsLinearisedEuler::DENS] << " " << grid.quantities[i][EquationsLinearisedEuler::VEL] << " " << grid.quantities[i][EquationsLinearisedEuler::PRESS] << std::endl;
     }
 
     outputFile.close();

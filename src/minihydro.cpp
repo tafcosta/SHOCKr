@@ -26,14 +26,14 @@
 EquationsLinearisedEuler *equations = new EquationsLinearisedEuler(1.,0.1,1.);
 Grid *grid = new Grid1D(0.1, 1., 1, 1000, *equations);
 
-Boundary *boundary = new BoundaryWindLinearisedEuler(*grid, *equations);
-InitialData *initialdata = new InitialDataHomogeneousLinearisedEuler(*grid, *equations);
+InitialDataHomogeneousLinearisedEuler *initialdata = new InitialDataHomogeneousLinearisedEuler(*grid, *equations, 5., 0., 1.);
+Boundary *boundary = new BoundaryWindLinearisedEuler(*grid, *equations, *initialdata);
 Output *output = new OutputLinearisedEuler(*grid, *equations);
 RiemannSolver *riemannsolver = new RiemannSolver(*grid, *equations);
 
 int main(){
 	double CFL = 0.3;
-	double maxTime = 0.5;
+	double maxTime = 1.;
 	double outputTimeInterval = 0.1;
     std::string outputFilename = "output.txt";
 

@@ -11,13 +11,7 @@
 #include "Grid.h"
 
 void InitialDataHomogeneousLinearisedEuler::setInitialData() {
-	double rho, u, p;
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
-
-		rho = 1;
-		u   = 0.;
-		p   = 1.;
-
 		grid.quantities[i][EquationsLinearisedEuler::DENS]  = rho;
 		grid.quantities[i][EquationsLinearisedEuler::VEL]   = u;
 		grid.quantities[i][EquationsLinearisedEuler::PRESS] = p;
