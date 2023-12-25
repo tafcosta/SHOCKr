@@ -15,7 +15,7 @@
 
 class InitialDataHomogeneousLinearisedEuler: public InitialData {
 public:
-	InitialDataHomogeneousLinearisedEuler(Grid& grid, EquationsLinearisedEuler& equations, double rho, double u, double p) : rho(rho), u(u), p(p), InitialData(grid, equations){};
+	InitialDataHomogeneousLinearisedEuler(Grid& grid, EquationsLinearisedEuler& equations, double rho, double u, double p) :  InitialData(grid, equations), rho(rho), u(u), p(p){};
 	virtual ~InitialDataHomogeneousLinearisedEuler();
 	void setInitialData() override;
 

@@ -10,7 +10,6 @@
 #include "EquationsLinearisedEuler.h"
 #include "Grid.h"
 #include "InitialDataHomogeneousLinearisedEuler.h"
-#include <iostream>
 
 void BoundaryWindLinearisedEuler::setBoundaries(){
 	double rho_wind, u_wind, p_wind;
@@ -20,7 +19,7 @@ void BoundaryWindLinearisedEuler::setBoundaries(){
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
 		if(i < grid.minXIndex){
 			rho_wind = 0.1;
-			u_wind   = 0.3;
+			u_wind   = 0.1;
 
 			cs_background   = (static_cast<EquationsLinearisedEuler*>(&equations))->BgSoundSpeed;
 			dens_background = (static_cast<EquationsLinearisedEuler*>(&equations))->BgDensity;

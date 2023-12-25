@@ -18,6 +18,7 @@ public:
 
 	Grid& grid;
 	Equations& equations;
+
 	double maxSpeed;
 	void setFluxes();
 };

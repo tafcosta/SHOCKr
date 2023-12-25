@@ -8,7 +8,6 @@
 #ifndef SRC_GRIDRADIAL_H_
 #define SRC_GRIDRADIAL_H_
 
-#include "EquationsEuler.h"
 #include "Grid.h"
 
 class GridRadial: public Grid {

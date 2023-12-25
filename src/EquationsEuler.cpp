@@ -8,6 +8,8 @@
 #include "EquationsEuler.h"
 #include "Equations.h"
 
+#include <iostream>
+
 double EquationsEuler::getMaxAbsEigenvalue(std::vector<double>& quantities) {
 	double u, cs;
 
@@ -27,6 +29,22 @@ double* EquationsEuler::getFlux(std::vector<double>& quantities) {
 	flux[ENERGY] = (p + quantities[ENERGY]) * quantities[XMOM] / quantities[DENS];
 
 	return flux;
+}
+
+double EquationsEuler::totalEnergy(double p, double rhoV2){
+	return p / (gamma - 1) + 0.5 * rhoV2;
+}
+
+double EquationsEuler::getPressure(double e, double rhoV2){
+	return (gamma - 1) * (e - 0.5 * rhoV2);
+}
+
+double EquationsEuler::getSoundSpeed(std::vector<double>& quantities){
+	double rhoV2 = quantities[XMOM] * quantities[XMOM] / quantities[DENS];
+	double p = getPressure(quantities[ENERGY], rhoV2);
+	double rho = quantities[DENS];
+
+	return sqrt(gamma * p / rho);
 }
 
 EquationsEuler::~EquationsEuler() {

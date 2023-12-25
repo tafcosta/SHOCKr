@@ -9,7 +9,6 @@
 #include "InitialDataHomogeneous.h"
 #include "Equations.h"
 #include "EquationsEuler.h"
-#include "Grid.h"
 
 void InitialDataHomogeneous::setInitialData() {
 	double p, rho, u;

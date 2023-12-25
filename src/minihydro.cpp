@@ -19,23 +19,24 @@
 #include "InitialData.h"
 #include "InitialDataHomogeneous.h"
 #include "InitialDataHomogeneousLinearisedEuler.h"
+#include "InitialDataSodShock.h"
 #include "Output.h"
+#include "OutputEuler.h"
 #include "OutputLinearisedEuler.h"
 #include "RiemannSolver.h"
 
-EquationsLinearisedEuler *equations = new EquationsLinearisedEuler(1.,0.1,1.);
-Grid *grid = new Grid1D(0.1, 1., 1, 1000, *equations);
-
-InitialDataHomogeneousLinearisedEuler *initialdata = new InitialDataHomogeneousLinearisedEuler(*grid, *equations, 5., 0., 1.);
-Boundary *boundary = new BoundaryWindLinearisedEuler(*grid, *equations, *initialdata);
-Output *output = new OutputLinearisedEuler(*grid, *equations);
+EquationsEuler *equations    = new EquationsEuler(5./3);
+Grid *grid                   = new GridRadial(0.1, 1., 1, 1000, *equations);
+InitialData *initialdata     = new InitialDataHomogeneous(*grid, *equations);
+Boundary *boundary           = new BoundaryWind(*grid, *equations);
+Output *output               = new OutputEuler(*grid, *equations);
 RiemannSolver *riemannsolver = new RiemannSolver(*grid, *equations);
 
 int main(){
 	double CFL = 0.3;
-	double maxTime = 1.;
+	double maxTime = 0.1;
 	double outputTimeInterval = 0.1;
-    std::string outputFilename = "output.txt";
+    std::string outputFilename="output.txt";
 
 	double time = 0., dt = 0.;
 	double timeSinceLastOutput = 0.0;
@@ -44,14 +45,13 @@ int main(){
 
 	while(time <= maxTime){
 
-		//setWindBoundaries();
 		boundary->setBoundaries();
 		riemannsolver->setFluxes();
 
 		if(riemannsolver->maxSpeed > 0)
 			dt = CFL * grid->dx / riemannsolver->maxSpeed;
 		else
-			throw std::runtime_error("Error: maxSpeed must be greater than zero.");
+			throw std::runtime_error("Error: Invalid maxSpeed.");
 
 		grid->update(dt);
 

@@ -20,7 +20,7 @@ void OutputEuler::makeOutput(const std::string& filename){
     }
 
     for (int i = 0; i <= grid.maxXIndex; i++) {
-        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEuler::DENS] << " " << grid.quantities[i][EquationsEuler::XMOM]/grid.quantities[i][EquationsEuler::DENS] << std::endl;
+        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEuler::DENS] << " " << grid.quantities[i][EquationsEuler::XMOM]/grid.quantities[i][EquationsEuler::DENS] << " " << grid.quantities[i][EquationsEuler::ENERGY] << std::endl;
     }
 
     outputFile.close();

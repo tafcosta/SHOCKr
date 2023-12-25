@@ -18,7 +18,8 @@ public:
 	double dx, xMidpoint;
 	double xmin, xmax;
 	int minXIndex, maxXIndex;
-	int nx, nGhost;
+	int nGhost;
+	int nx;
 
 	std::vector<std::vector<double> > quantities;
 	std::vector<std::vector<double> > fluxes;
@@ -30,8 +31,7 @@ public:
 
 	virtual void update(double dt){};
 
-	Equations equations;
-
+	Equations& equations;
 
 private:
 };

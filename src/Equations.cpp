@@ -12,6 +12,5 @@ Equations::Equations() {
 }
 
 Equations::~Equations() {
-	// TODO Auto-generated destructor stub
 }
 

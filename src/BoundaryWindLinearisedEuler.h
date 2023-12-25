@@ -16,7 +16,7 @@
 
 class BoundaryWindLinearisedEuler: public Boundary {
 public:
-	BoundaryWindLinearisedEuler(Grid& grid, EquationsLinearisedEuler& equations, InitialDataHomogeneousLinearisedEuler& initialdata) : initialdata(initialdata), Boundary(grid, equations){};
+	BoundaryWindLinearisedEuler(Grid& grid, EquationsLinearisedEuler& equations, InitialDataHomogeneousLinearisedEuler& initialdata) : Boundary(grid, equations), initialdata(initialdata){};
 	virtual ~BoundaryWindLinearisedEuler();
 
 	void setBoundaries() override;

@@ -5,12 +5,11 @@
  *      Author: ntc132
  */
 
+#include "EquationsLinearisedEuler.h"
 #include "OutputLinearisedEuler.h"
-#include "OutputEuler.h"
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "EquationsLinearisedEuler.h"
 
 void OutputLinearisedEuler::makeOutput(const std::string& filename){
     std::ofstream outputFile(filename);

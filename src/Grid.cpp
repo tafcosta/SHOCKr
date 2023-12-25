@@ -17,9 +17,6 @@ Grid::Grid(double xmin, double xmax, int nGhost, int nx, Equations& equations) :
 	xMidpoint = (xmax + xmin)/2;
 	minXIndex = nGhost;
 	maxXIndex = nGhost + nx - 1;
-
-	this->equations = equations;
-
 }
 
 Grid::~Grid() {
