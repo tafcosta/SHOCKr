@@ -14,8 +14,8 @@ void InitialDataHomogeneous::setInitialData() {
 	double p, rho, u;
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
 
-		rho = 1;
-		p   = 1.;
+		rho = 0.1;
+		p   = 0.01;
 		u   = 0.;
 
 		grid.quantities[i][EquationsEuler::DENS]   = rho;

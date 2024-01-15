@@ -5,6 +5,7 @@
  *      Author: Tiago Costa
  */
 #include <iostream>
+#include <cstdio>
 
 #include "Boundary.h"
 #include "BoundaryWind.h"
@@ -12,6 +13,7 @@
 #include "BoundaryWindLinearisedEuler.h"
 #include "Equations.h"
 #include "EquationsEuler.h"
+#include "EquationsEulerPassiveScalar.h"
 #include "EquationsLinearisedEuler.h"
 #include "Grid.h"
 #include "Grid1D.h"
@@ -19,27 +21,31 @@
 #include "InitialData.h"
 #include "InitialDataHomogeneous.h"
 #include "InitialDataHomogeneousLinearisedEuler.h"
+#include "InitialDataIsothermal.h"
 #include "InitialDataSodShock.h"
 #include "Output.h"
 #include "OutputEuler.h"
+#include "OutputEulerPassiveScalar.h"
 #include "OutputLinearisedEuler.h"
 #include "RiemannSolver.h"
 
 EquationsEuler *equations    = new EquationsEuler(5./3);
-Grid *grid                   = new GridRadial(0.1, 1., 1, 1000, *equations);
-InitialData *initialdata     = new InitialDataHomogeneous(*grid, *equations);
+Grid *grid                   = new GridRadial(0.01, 10., 1, 10000, *equations);
+InitialData *initialdata     = new InitialDataIsothermal(*grid, *equations);
 Boundary *boundary           = new BoundaryWind(*grid, *equations);
 Output *output               = new OutputEuler(*grid, *equations);
 RiemannSolver *riemannsolver = new RiemannSolver(*grid, *equations);
 
 int main(){
 	double CFL = 0.3;
-	double maxTime = 0.1;
-	double outputTimeInterval = 0.1;
+	double maxTime = 5;
+	double outputTimeInterval = 0.01;
     std::string outputFilename="output.txt";
 
 	double time = 0., dt = 0.;
 	double timeSinceLastOutput = 0.0;
+
+	if (std::remove(outputFilename.c_str()) != 0) {}
 
 	initialdata->setInitialData();
 

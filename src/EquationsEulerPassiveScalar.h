@@ -1,23 +1,24 @@
 /*
- * EquationsEuler.h
+ * EquationsEulerPassiveScalar.h
  *
- *  Created on: 23 Dec 2023
+ *  Created on: 15 Jan 2024
  *      Author: ntc132
  */
 
-#ifndef SRC_EQUATIONSEULER_H_
-#define SRC_EQUATIONSEULER_H_
+#ifndef SRC_EQUATIONSEULERPASSIVESCALAR_H_
+#define SRC_EQUATIONSEULERPASSIVESCALAR_H_
 
 #include "Equations.h"
 
-class EquationsEuler: public Equations {
+class EquationsEulerPassiveScalar: public Equations {
 public:
-	EquationsEuler(double gamma) : gamma(gamma) {};
-	virtual ~EquationsEuler();
+	EquationsEulerPassiveScalar(double gamma) : gamma(gamma) {};
+	virtual ~EquationsEulerPassiveScalar();
 
 	static const int DENS   = 0;
 	static const int XMOM   = 1;
 	static const int ENERGY = 2;
+	static const int PASS   = 3;
 
 	double gamma;
 	double* getFlux(std::vector<double>& quantities) override;
@@ -27,4 +28,4 @@ public:
 	double getSoundSpeed(std::vector<double>& quantities);
 };
 
-#endif /* SRC_EQUATIONSEULER_H_ */
+#endif /* SRC_EQUATIONSEULERPASSIVESCALAR_H_ */

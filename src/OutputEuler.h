@@ -14,7 +14,7 @@
 
 class OutputEuler: public Output {
 public:
-	OutputEuler(Grid& grid, Equations& equations) : Output(grid, equations) {};
+	OutputEuler(Grid& grid, EquationsEuler& equations) : Output(grid, equations) {};
 	virtual ~OutputEuler();
 
 	void makeOutput(const std::string& filename) override;
