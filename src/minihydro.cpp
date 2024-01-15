@@ -11,6 +11,7 @@
 #include "BoundaryWind.h"
 #include "BoundaryZeroGradient.h"
 #include "BoundaryWindLinearisedEuler.h"
+#include "BoundaryWindPassiveScalar.h"
 #include "Equations.h"
 #include "EquationsEuler.h"
 #include "EquationsEulerPassiveScalar.h"
@@ -33,7 +34,7 @@
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
 Grid *grid                   = new GridRadial(0.01, 10., 1, 10000, *equations);
 InitialData *initialdata     = new InitialDataHomogeneousPassiveScalar(*grid, *equations);
-Boundary *boundary           = new BoundaryWind(*grid, *equations);
+Boundary *boundary           = new BoundaryWindPassiveScalar(*grid, *equations);
 Output *output               = new OutputEulerPassiveScalar(*grid, *equations);
 RiemannSolver *riemannsolver = new RiemannSolver(*grid, *equations);
 

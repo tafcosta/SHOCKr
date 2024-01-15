@@ -23,7 +23,7 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename){
     for (int i = 0; i <= grid.maxXIndex; i++) {
     	rhoV2 = grid.quantities[i][EquationsEulerPassiveScalar::XMOM] * grid.quantities[i][EquationsEulerPassiveScalar::XMOM] / grid.quantities[i][EquationsEulerPassiveScalar::DENS];
     	p = (static_cast<EquationsEulerPassiveScalar*>(&equations))->getPressure(grid.quantities[i][EquationsEulerPassiveScalar::ENERGY], rhoV2);
-        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEulerPassiveScalar::PASS] << " " << p << std::endl;
+        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << grid.quantities[i][EquationsEulerPassiveScalar::PASS] << std::endl;
     }
 
     outputFile << " " << std::endl;

@@ -16,8 +16,8 @@ public:
 
 	virtual ~EquationsEulerPassiveScalar();
 
+	int nCons(void) override;
 	static const int PASS  = 3;
-	int nCons(){return 4;};
 
 	double* getFlux(std::vector<double>& quantities) override;
 };

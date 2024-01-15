@@ -7,6 +7,10 @@
 
 #include "Equations.h"
 
+int Equations::nCons(void){
+	return 3;
+}
+
 Equations::Equations() {
 
 }

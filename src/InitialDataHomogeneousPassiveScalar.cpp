@@ -21,7 +21,7 @@ void InitialDataHomogeneousPassiveScalar::setInitialData() {
 		grid.quantities[i][EquationsEulerPassiveScalar::DENS]   = rho;
 		grid.quantities[i][EquationsEulerPassiveScalar::XMOM]   = rho * u;
 		grid.quantities[i][EquationsEulerPassiveScalar::ENERGY] = (static_cast<EquationsEulerPassiveScalar*>(&equations))->totalEnergy(p, rho * u * u);
-		grid.quantities[i][EquationsEulerPassiveScalar::PASS]   = 1.0;
+		grid.quantities[i][EquationsEulerPassiveScalar::PASS]   = 0.0001;
 	}
 }
 

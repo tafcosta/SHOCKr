@@ -12,7 +12,6 @@
 #include "Grid.h"
 #include <math.h>
 #include <cmath>
-
 #include <iostream>
 
 void GridRadial::update(double dt) {

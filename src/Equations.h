@@ -15,7 +15,7 @@ public:
 	Equations();
 	virtual ~Equations();
 
-	int nCons(){return 3;};
+	virtual int nCons(void);
 
 	virtual double getMaxAbsEigenvalue(std::vector<double>& quantities){return 0.;};
 	virtual double* getFlux(std::vector<double>& quantities){return 0;};
