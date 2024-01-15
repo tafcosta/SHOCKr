@@ -13,7 +13,7 @@ double EquationsLinearisedEuler::getMaxAbsEigenvalue(std::vector<double>& quanti
 }
 
 double* EquationsLinearisedEuler::getFlux(std::vector<double>& quantities) {
-	double* flux = new double[nCons];
+	double* flux = new double[nCons()];
 
 	flux[DENS]  = BgVel * quantities[DENS] + BgDensity * quantities[VEL];
 	flux[VEL]   = BgVel * quantities[VEL] + quantities[PRESS] / BgDensity;

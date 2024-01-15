@@ -8,24 +8,18 @@
 #ifndef SRC_EQUATIONSEULERPASSIVESCALAR_H_
 #define SRC_EQUATIONSEULERPASSIVESCALAR_H_
 
-#include "Equations.h"
+#include "EquationsEuler.h"
 
-class EquationsEulerPassiveScalar: public Equations {
+class EquationsEulerPassiveScalar: public EquationsEuler {
 public:
-	EquationsEulerPassiveScalar(double gamma) : gamma(gamma) {};
+	EquationsEulerPassiveScalar(double gamma) : EquationsEuler(gamma) {};
+
 	virtual ~EquationsEulerPassiveScalar();
 
-	static const int DENS   = 0;
-	static const int XMOM   = 1;
-	static const int ENERGY = 2;
-	static const int PASS   = 3;
+	static const int PASS  = 3;
+	int nCons(){return 4;};
 
-	double gamma;
 	double* getFlux(std::vector<double>& quantities) override;
-	double getMaxAbsEigenvalue(std::vector<double>& quantities) override;
-	double totalEnergy(double p, double rhoV2);
-	double getPressure(double e, double rhoV2);
-	double getSoundSpeed(std::vector<double>& quantities);
 };
 
 #endif /* SRC_EQUATIONSEULERPASSIVESCALAR_H_ */

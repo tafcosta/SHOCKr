@@ -7,6 +7,7 @@
 
 #include "Equations.h"
 #include "EquationsEuler.h"
+#include "EquationsEulerPassiveScalar.h"
 #include "GridRadial.h"
 #include "Grid.h"
 #include <math.h>
@@ -24,7 +25,7 @@ void GridRadial::update(double dt) {
 		rhoV2 = quantities[i][EquationsEuler::XMOM] * quantities[i][EquationsEuler::XMOM] / quantities[i][EquationsEuler::DENS];
 		p = (static_cast<EquationsEuler*>(&equations))->getPressure(quantities[i][EquationsEuler::ENERGY], rhoV2);
 
-		for(int k = 0; k < Equations::nCons; k++){
+		for(int k = 0; k < equations.nCons(); k++){
 			xLeft   = getX(i)-dx/2.;
 			xRight  = getX(i)+dx/2.;
 			dVolume = pow(xRight, 3) - pow(xLeft, 3);

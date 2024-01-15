@@ -19,7 +19,7 @@ double EquationsEuler::getMaxAbsEigenvalue(std::vector<double>& quantities) {
 }
 
 double* EquationsEuler::getFlux(std::vector<double>& quantities) {
-	double* flux = new double[nCons];
+	double* flux = new double[nCons()];
 	double rhoV2 = quantities[XMOM] * quantities[XMOM] / quantities[DENS];
 	double p     = getPressure(quantities[ENERGY], rhoV2);
 

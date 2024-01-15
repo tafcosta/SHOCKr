@@ -8,9 +8,9 @@
 #ifndef SRC_OUTPUTEULERPASSIVESCALAR_H_
 #define SRC_OUTPUTEULERPASSIVESCALAR_H_
 
-#include "EquationsEulerPassiveScalar.h"
+#include "Equations.h"
 #include "Grid.h"
-#include "Output.h"
+#include "OutputEuler.h"
 
 class OutputEulerPassiveScalar: public Output {
 public:

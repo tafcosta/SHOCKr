@@ -21,6 +21,7 @@
 #include "InitialData.h"
 #include "InitialDataHomogeneous.h"
 #include "InitialDataHomogeneousLinearisedEuler.h"
+#include "InitialDataHomogeneousPassiveScalar.h"
 #include "InitialDataIsothermal.h"
 #include "InitialDataSodShock.h"
 #include "Output.h"
@@ -29,11 +30,11 @@
 #include "OutputLinearisedEuler.h"
 #include "RiemannSolver.h"
 
-EquationsEuler *equations    = new EquationsEuler(5./3);
+EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
 Grid *grid                   = new GridRadial(0.01, 10., 1, 10000, *equations);
-InitialData *initialdata     = new InitialDataIsothermal(*grid, *equations);
+InitialData *initialdata     = new InitialDataHomogeneousPassiveScalar(*grid, *equations);
 Boundary *boundary           = new BoundaryWind(*grid, *equations);
-Output *output               = new OutputEuler(*grid, *equations);
+Output *output               = new OutputEulerPassiveScalar(*grid, *equations);
 RiemannSolver *riemannsolver = new RiemannSolver(*grid, *equations);
 
 int main(){
