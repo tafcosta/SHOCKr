@@ -11,17 +11,19 @@
 #include "EquationsEuler.h"
 
 void InitialDataHomogeneous::setInitialData() {
-	double p, rho, u;
-	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
+    double p, rho, u;
+    for(int i = 0; i < grid.nx + 2*grid.nGhost; i++)
+        initialize(i, rho, p, u);
+}
 
-		rho = 0.1;
-		p   = 0.01;
-		u   = 0.;
+void InitialDataHomogeneous::initialize(int i, double& rho, double& p, double& u) {
+    rho = 0.1;
+    p   = 0.01;
+    u   = 0.;
 
-		grid.quantities[i][EquationsEuler::DENS]   = rho;
-		grid.quantities[i][EquationsEuler::XMOM]   = rho * u;
-		grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(p, rho * u * u);
-	}
+    grid.quantities[i][EquationsEuler::DENS]   = rho;
+    grid.quantities[i][EquationsEuler::XMOM]   = rho * u;
+    grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(p, rho * u * u);
 }
 
 InitialDataHomogeneous::~InitialDataHomogeneous() {

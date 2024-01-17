@@ -18,6 +18,9 @@ public:
 	InitialDataHomogeneous(Grid& grid, EquationsEuler& equations) : InitialData(grid, equations){};
 	virtual ~InitialDataHomogeneous();
 	void setInitialData() override;
+
+protected:
+    void initialize(int i, double& rho, double& p, double& u);
 };
 
 #endif /* SRC_INITIALDATAHOMOGENEOUS_H_ */

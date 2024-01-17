@@ -11,18 +11,10 @@
 #include "EquationsEulerPassiveScalar.h"
 
 void InitialDataHomogeneousPassiveScalar::setInitialData() {
-	double p, rho, u;
-	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
+    InitialDataHomogeneous::setInitialData();
 
-		rho = 0.1;
-		p   = 0.01;
-		u   = 0.;
-
-		grid.quantities[i][EquationsEulerPassiveScalar::DENS]   = rho;
-		grid.quantities[i][EquationsEulerPassiveScalar::XMOM]   = rho * u;
-		grid.quantities[i][EquationsEulerPassiveScalar::ENERGY] = (static_cast<EquationsEulerPassiveScalar*>(&equations))->totalEnergy(p, rho * u * u);
-		grid.quantities[i][EquationsEulerPassiveScalar::PASS]   = 0.;
-	}
+    for(int i = 0; i < grid.nx + 2*grid.nGhost; i++)
+        grid.quantities[i][EquationsEulerPassiveScalar::PASS] = 0.;
 }
 
 InitialDataHomogeneousPassiveScalar::~InitialDataHomogeneousPassiveScalar() {
