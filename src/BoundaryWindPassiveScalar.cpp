@@ -16,7 +16,7 @@ void BoundaryWindPassiveScalar::setBoundaries(){
 		if(i < grid.minXIndex){
 			rho = 1000.;
 			rhoPassiveScalar = 1000.;
-			p   = 0.01;
+			p   = 0.0001;
 			u   = 20.;
 
 			grid.quantities[i][EquationsEulerPassiveScalar::DENS]   = rho;

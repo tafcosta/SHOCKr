@@ -32,7 +32,7 @@
 #include "RiemannSolver.h"
 
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
-Grid *grid                   = new GridRadial(0.01, 10., 1, 10000, *equations);
+Grid *grid                   = new GridRadial(0.01, 10., 1, 1000, *equations);
 InitialData *initialdata     = new InitialDataHomogeneousPassiveScalar(*grid, *equations);
 Boundary *boundary           = new BoundaryWindPassiveScalar(*grid, *equations);
 Output *output               = new OutputEulerPassiveScalar(*grid, *equations);
@@ -43,11 +43,13 @@ int main(){
 	double maxTime = 5;
 	double outputTimeInterval = 0.01;
     std::string outputFilename="output.txt";
+    std::string outputEnergy="energy.txt";
 
 	double time = 0., dt = 0.;
 	double timeSinceLastOutput = 0.0;
 
 	if (std::remove(outputFilename.c_str()) != 0) {}
+	if (std::remove(outputEnergy.c_str()) != 0) {}
 
 	initialdata->setInitialData();
 

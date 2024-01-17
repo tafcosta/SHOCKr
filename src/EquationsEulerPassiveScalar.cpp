@@ -9,19 +9,20 @@
 
 double* EquationsEulerPassiveScalar::getFlux(std::vector<double>& quantities) {
 	double* flux = new double[nCons()];
-	double rhoV2 = quantities[XMOM] * quantities[XMOM] / quantities[DENS];
-	double p     = getPressure(quantities[ENERGY], rhoV2);
+	double* eulerFlux = EquationsEuler::getFlux(quantities);
 
-	flux[DENS]   = quantities[XMOM];
-	flux[XMOM]   = rhoV2 + p;
-	flux[ENERGY] = (p + quantities[ENERGY]) * quantities[XMOM] / quantities[DENS];
+	flux[DENS]   = eulerFlux[DENS];
+	flux[XMOM]   = eulerFlux[XMOM];
+	flux[ENERGY] = eulerFlux[ENERGY];
 	flux[PASS]   = quantities[PASS] * quantities[XMOM] / quantities[DENS];
+
+	delete[] eulerFlux;
 
 	return flux;
 }
 
 int EquationsEulerPassiveScalar::nCons(void){
-	return 4;
+	return EquationsEuler::nCons() + 1;
 }
 
 EquationsEulerPassiveScalar::~EquationsEulerPassiveScalar() {
