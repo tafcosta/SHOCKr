@@ -18,11 +18,15 @@ public:
 	ShockFinderEulerPassiveScalar(Grid& grid, EquationsEulerPassiveScalar& equations) : ShockFinder(grid, equations) {};
 	virtual ~ShockFinderEulerPassiveScalar();
 
-	void calculateGradients(void) override;
-	void findShockZones(void) override;
-	void findShockDirection(void) override;
+	static const int DENS = 0;
+	static const int TEMP = 1;
 
+	std::vector<int> findShockZones(void) override;
 
+private:
+	void detectShockZone(int i, double divV, double gradientDens, double gradientTemp);
+	void calculateDivV(int i);
+	void calculateGradients(int i);
 };
 
 #endif /* SRC_SHOCKFINDEREULERPASSIVESCALAR_H_ */

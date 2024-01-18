@@ -7,8 +7,6 @@
 
 #include "EquationsEuler.h"
 
-#include <iostream>
-
 double EquationsEuler::getMaxAbsEigenvalue(std::vector<double>& quantities) {
 	double u, cs;
 

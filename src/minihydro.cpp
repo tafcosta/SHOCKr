@@ -30,6 +30,8 @@
 #include "OutputEulerPassiveScalar.h"
 #include "OutputLinearisedEuler.h"
 #include "RiemannSolver.h"
+#include "ShockFinder.h"
+#include "ShockFinderEulerPassiveScalar.h"
 
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
 Grid *grid                   = new GridRadial(0.01, 10., 1, 1000, *equations);
@@ -37,6 +39,7 @@ InitialData *initialdata     = new InitialDataHomogeneousPassiveScalar(*grid, *e
 Boundary *boundary           = new BoundaryWindPassiveScalar(*grid, *equations);
 Output *output               = new OutputEulerPassiveScalar(*grid, *equations);
 RiemannSolver *riemannsolver = new RiemannSolver(*grid, *equations);
+ShockFinder *shockfinder     = new ShockFinderEulerPassiveScalar(*grid, *equations);
 
 int main(){
 	double CFL = 0.3;
@@ -67,6 +70,7 @@ int main(){
 
 		if((time == 0.) || (timeSinceLastOutput > outputTimeInterval)){
 			output->makeOutput(outputFilename);
+			shockfinder->findShockZones();
 			timeSinceLastOutput = 0.;
 		}
 
@@ -83,6 +87,7 @@ int main(){
 	delete initialdata;
 	delete output;
 	delete riemannsolver;
+	delete shockfinder;
 
 	return 0;
 }

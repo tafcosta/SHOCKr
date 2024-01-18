@@ -25,15 +25,12 @@ public:
 	std::vector<std::vector<double> > fluxes;
 
 	double getX(int cellIndex){
-		double cellCentre = xmin + (cellIndex - minXIndex) * dx + dx/2.;
-		return cellCentre;
+		return xmin + (cellIndex - minXIndex) * dx + dx/2.;
 	}
 
 	virtual void update(double dt){};
 
 	Equations& equations;
-
-private:
 };
 
 #endif /* SRC_GRID_H_ */
