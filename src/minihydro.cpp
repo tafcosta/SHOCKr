@@ -45,7 +45,7 @@ ShockFinder *shockfinder     = new ShockFinderEulerPassiveScalar(*grid, *equatio
 
 int main(){
 	double CFL = 0.3;
-	double maxTime = 5;
+	double maxTime = 0.1;
 	double outputTimeInterval = 0.01;
     std::string outputFilename="output.txt";
     std::string outputEnergy="energy.txt";

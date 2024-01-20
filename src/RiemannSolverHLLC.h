@@ -17,6 +17,8 @@ public:
 
 	virtual std::vector<double> numericalFlux(std::vector<double>& quantitiesLeft, std::vector<double>& quantitiesRight) override;
 	virtual ~RiemannSolverHLLC();
+protected:
+	void setMaxSpeed(double sLeft, double sRight);
 };
 
 #endif /* SRC_RIEMANNSOLVERHLLC_H_ */
