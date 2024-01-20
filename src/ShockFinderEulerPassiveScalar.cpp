@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 
 #include "ShockFinder.h"
 #include "ShockFinderEulerPassiveScalar.h"
@@ -16,15 +17,22 @@ std::vector<int> ShockFinderEulerPassiveScalar::findShockZones(void){
 	this->divV      = std::vector<double>(grid.nx + 2*grid.nGhost, 0.0);
 	this->shock     = std::vector<int>(grid.nx + 2*grid.nGhost, 0);
 
+    std::ofstream outFile("shock_output.txt");
+    if (!outFile.is_open()) {
+        std::cerr << "Error: Unable to open the file for writing." << std::endl;
+        return shock;
+    }
+
     for (int i = grid.minXIndex; i <= grid.maxXIndex; i++){
 
     	calculateGradients(i);
     	calculateDivV(i);
     	detectShockZone(i, divV[i], gradients[i][DENS], gradients[i][TEMP]);
 
-    	std::cout << shock[i] << std::endl;
+        outFile << grid.getX(i) << " " << shock[i] << std::endl;
     }
 
+    outFile.close();
     return shock;
 }
 

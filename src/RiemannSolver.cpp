@@ -1,3 +1,4 @@
+
 /*
  * RiemannSolver.cpp
  *
@@ -10,29 +11,6 @@
 #include "Grid.h"
 #include "RiemannSolver.h"
 
-void RiemannSolver::setFluxes(){
-	double lambda = 0.;
-	double* flux_i;
-	double* flux_j;
-	std::vector<double> flux_vector(equations.nCons());
-
-	for(int i = grid.minXIndex; i <= (grid.maxXIndex + 1); i++)
-	{
-		flux_i = equations.getFlux(grid.quantities[i - 1]);
-		flux_j = equations.getFlux(grid.quantities[i]);
-
-		lambda = std::max(equations.getMaxAbsEigenvalue(grid.quantities[i]), equations.getMaxAbsEigenvalue(grid.quantities[i - 1]));
-
-		for(int k = 0; k < equations.nCons(); k++)
-			flux_vector[k] = 0.5 * (flux_i[k] + flux_j[k]) - 0.5 * (grid.quantities[i][k] - grid.quantities[i - 1][k]) * lambda;
-
-		grid.fluxes[i] = flux_vector;
-
-		if(maxSpeed < lambda)
-			maxSpeed = lambda;
-	}
-}
-
 RiemannSolver::RiemannSolver(Grid& grid, Equations& equations) : grid(grid), equations(equations), maxSpeed(0.) {
 
 }
@@ -40,4 +18,3 @@ RiemannSolver::RiemannSolver(Grid& grid, Equations& equations) : grid(grid), equ
 RiemannSolver::~RiemannSolver() {
 	// TODO Auto-generated destructor stub
 }
-

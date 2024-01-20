@@ -20,7 +20,7 @@ public:
 	Equations& equations;
 
 	double maxSpeed;
-	void setFluxes();
+	virtual void setFluxes() {};
 };
 
 #endif /* SRC_RIEMANNSOLVER_H_ */

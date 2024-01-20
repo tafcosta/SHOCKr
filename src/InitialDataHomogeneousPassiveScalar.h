@@ -15,7 +15,7 @@
 
 class InitialDataHomogeneousPassiveScalar: public InitialDataHomogeneous {
 public:
-	InitialDataHomogeneousPassiveScalar(Grid& grid, EquationsEulerPassiveScalar& equations) : InitialDataHomogeneous(grid, equations){};;
+	InitialDataHomogeneousPassiveScalar(Grid& grid, EquationsEulerPassiveScalar& equations) : InitialDataHomogeneous(grid, equations){};
 	virtual ~InitialDataHomogeneousPassiveScalar();
 	void setInitialData() override;
 };
