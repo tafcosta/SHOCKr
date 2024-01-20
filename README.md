@@ -1,5 +1,5 @@
-# Spherix1D
-Spherix is a 1D spherical hydro solver designed for studying the shock structure emerging from the interaction between a spherically symmetric wind and an ambient medium with any specified density, velocity and temperature structure.
+# Breeze-1d
+Breeze-1d is a 1D spherical hydro solver designed for studying the shock structure emerging from the interaction between a spherically symmetric wind and an ambient medium with any specified density, velocity and temperature structure.
 
 ## Key Highlights
 
@@ -7,7 +7,7 @@ Spherix is a 1D spherical hydro solver designed for studying the shock structure
 - **Shock Structure Study:** Explore and analyze shock structures resulting from wind and ambient medium interaction.
 
 ## Euler Equations
-SpheriX is based on the spherical symmetric form of the Euler equations, governing fluid dynamics in a 1D radial direction. The set of equations solved by Spherix1D are as follows:
+Breeze-1d is based on the spherical symmetric form of the Euler equations, governing fluid dynamics in a 1D radial direction. The set of equations solved by Breeze-1d are
 
 1. **Continuity Equation:**
    $$\ \frac{\partial \rho}{\partial t} + \frac{1}{r^2} \frac{\partial}{\partial r}(r^2 \rho v_r) = 0 \$$
@@ -20,12 +20,12 @@ SpheriX is based on the spherical symmetric form of the Euler equations, governi
 
 Where:
 - \(\rho\) is the density
-- \(v_r\) is the radial velocity component
+- \(v_r\) is the radial velocity
 - \(P\) is the pressure
 - \(E\) is the total energy per unit volume
 
 ## Additional Features
 
-- **Riemann Solvers:** Spherix1D includes two Riemann solvers: HLLC (Harten, Lax, van Leer, and Contact) and Rusanov,
+- **Riemann Solvers:** Breeze-1d includes two Riemann solvers: HLLC (Harten, Lax, van Leer, and Contact) and Rusanov,
 - **Wind Boundary Condition:** The spherically symmetric wind is modeled as a boundary condition,
 - **Cartesian 1D Support:** While primarily designed for spherical simulations, Spherix1D also supports Cartesian 1D simulations for added flexibility.
