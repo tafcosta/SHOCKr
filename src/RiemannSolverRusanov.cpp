@@ -5,29 +5,28 @@
  *      Author: ntc132
  */
 
+#include "Equations.h"
+#include "Grid.h"
 #include "RiemannSolverRusanov.h"
 
-void RiemannSolverRusanov::setFluxes(){
+std::vector<double> RiemannSolverRusanov::numericalFlux(std::vector<double>& quantitiesLeft, std::vector<double>& quantitiesRight){
 	double lambda = 0.;
 	double* flux_i;
 	double* flux_j;
 	std::vector<double> flux_vector(equations.nCons());
 
-	for(int i = grid.minXIndex; i <= (grid.maxXIndex + 1); i++)
-	{
-		flux_i = equations.getFlux(grid.quantities[i - 1]);
-		flux_j = equations.getFlux(grid.quantities[i]);
+	flux_i = equations.getFlux(quantitiesLeft);
+	flux_j = equations.getFlux(quantitiesRight);
 
-		lambda = std::max(equations.getMaxAbsEigenvalue(grid.quantities[i]), equations.getMaxAbsEigenvalue(grid.quantities[i - 1]));
+	lambda = std::max(equations.getMaxAbsEigenvalue(quantitiesRight), equations.getMaxAbsEigenvalue(quantitiesLeft));
 
-		for(int k = 0; k < equations.nCons(); k++)
-			flux_vector[k] = 0.5 * (flux_i[k] + flux_j[k]) - 0.5 * (grid.quantities[i][k] - grid.quantities[i - 1][k]) * lambda;
+	for(int k = 0; k < equations.nCons(); k++)
+		flux_vector[k] = 0.5 * (flux_i[k] + flux_j[k]) - 0.5 * (quantitiesRight[k] - quantitiesLeft[k]) * lambda;
 
-		grid.fluxes[i] = flux_vector;
+	if(maxSpeed < lambda)
+		maxSpeed = lambda;
 
-		if(maxSpeed < lambda)
-			maxSpeed = lambda;
-	}
+	return flux_vector;
 }
 
 RiemannSolverRusanov::~RiemannSolverRusanov() {

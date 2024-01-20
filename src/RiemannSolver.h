@@ -20,7 +20,8 @@ public:
 	Equations& equations;
 
 	double maxSpeed;
-	virtual void setFluxes() {};
+	void setFluxes();
+	virtual std::vector<double> numericalFlux(std::vector<double>& quantitiesLeft, std::vector<double>& quantitiesRight){return std::vector<double>(equations.nCons(), 0.0);};
 };
 
 #endif /* SRC_RIEMANNSOLVER_H_ */

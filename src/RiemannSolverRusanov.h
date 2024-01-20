@@ -15,7 +15,7 @@ public:
 	RiemannSolverRusanov(Grid& grid, Equations& equations) : RiemannSolver(grid, equations){};
 	virtual ~RiemannSolverRusanov();
 
-	virtual void setFluxes() override;
+	virtual std::vector<double> numericalFlux(std::vector<double>& quantitiesLeft, std::vector<double>& quantitiesRight) override;
 };
 
 #endif /* SRC_RIEMANNSOLVERRUSANOV_H_ */

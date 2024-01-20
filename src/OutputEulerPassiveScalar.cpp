@@ -35,9 +35,10 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename){
     		kineticEnergy += 0.5 * rhoV2 * pow(grid.getX(i),2.);
     	}
 
-        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << grid.quantities[i][EquationsEulerPassiveScalar::XMOM]/grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << p/grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << grid.quantities[i][EquationsEulerPassiveScalar::PASS] << std::endl;
+        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << grid.quantities[i][EquationsEulerPassiveScalar::XMOM]/grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << p << " " << grid.quantities[i][EquationsEulerPassiveScalar::PASS] << std::endl;
     }
 
+    outputFile << " " << std::endl;
     outputFile << " " << std::endl;
     outputFile.close();
 
