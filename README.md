@@ -23,3 +23,9 @@ Where:
 - \(v_r\) is the radial velocity component
 - \(P\) is the pressure
 - \(E\) is the total energy per unit volume
+
+## Additional Features
+
+- **Riemann Solvers:** Spherix1D includes two Riemann solvers: HLLC (Harten, Lax, van Leer, and Contact) and Rusanov,
+- **Wind Boundary Condition:** The spherically symmetric wind is modeled as a boundary condition,
+- **Cartesian 1D Support:** While primarily designed for spherical simulations, Spherix1D also supports Cartesian 1D simulations for added flexibility.
