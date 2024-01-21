@@ -1,8 +1,8 @@
-# SHOCKR-1d
-Shockr is a 1D spherical hydro solver designed for studying the shock structure emerging from the interaction between a spherically symmetric wind and an ambient medium with any specified density, velocity and temperature structure.
+# SHOCKr-1d
+SHOCKr is a 1D spherical hydro solver designed for studying the shock structure emerging from the interaction between a spherically symmetric wind and an ambient medium with any specified density, velocity and temperature structure.
 
 ![Alt Text](density_slice.png)
-<em> Fig. 1: Density slice of spherical outflow solution produced by Shockr. The central wind (modelled as a boundary condition) streams radially outwards until it encounters a reverse shock. The wind also drives a forward shock. Simulation performed in domain with 1,000 radial cells, using the HLLC Riemann solver. </em>
+<em> Fig. 1: Density slice of spherical outflow solution produced by SHOCKr. The central wind (modelled as a boundary condition) streams radially outwards until it encounters a reverse shock. The wind also drives a forward shock. Simulation performed in domain with 1,000 radial cells, using the HLLC Riemann solver. </em>
 
 ## Key Highlights
 
@@ -30,6 +30,11 @@ Where:
 
 ## Additional Features
 
-- **Riemann Solvers:** Shockr includes two Riemann solvers: HLLC (Harten, Lax, van Leer, and Contact) and Rusanov,
+- **Riemann Solvers:** SHOCKr includes two Riemann solvers: HLLC (Harten, Lax, van Leer, and Contact) and Rusanov,
 - **Wind Boundary Condition:** The spherically symmetric wind is modeled as a boundary condition,
-- **Cartesian 1D Support:** While primarily designed for spherical simulations, Shockr also supports Cartesian 1D simulations for added flexibility.
+- **Cartesian 1D Support:** While primarily designed for spherical simulations, SHOCKr also supports Cartesian 1D simulations for added flexibility.
+
+## In Development
+
+- **External Gravitational Field:** 
+- **Radiative Cooling:**
