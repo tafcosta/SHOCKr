@@ -43,11 +43,11 @@ SHOCKr uses a configuration file (`config.txt`) to define various simulation par
 
 2. **Maximum Simulation Time:**
    - *Description:* The maximum simulation time determines the duration of the simulation in arbitrary units.
-   - *Example:* `maxTime 0.5`
+   - *Example:* `maxTime 1.`
 
 3. **Output Time Interval:**
    - *Description:* The time interval between consecutive outputs or snapshots of the simulation.
-   - *Example:* `outputTimeInterval 0.01`
+   - *Example:* `outputTimeInterval 0.1`
 
 4. **Output Filename:**
    - *Description:* The name of the file where simulation results are stored.
