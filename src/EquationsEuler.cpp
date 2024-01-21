@@ -7,13 +7,16 @@
 
 #include "EquationsEuler.h"
 
+#include <cstdlib>
+#include <cmath>
+
 double EquationsEuler::getMaxAbsEigenvalue(std::vector<double>& quantities) {
 	double u, cs;
 
 	cs   = getSoundSpeed(quantities);
 	u    = quantities[EquationsEuler::XMOM]/quantities[EquationsEuler::DENS];
 
-	return abs(u) + abs(cs);
+	return std::abs(u) + std::abs(cs);
 }
 
 double* EquationsEuler::getFlux(std::vector<double>& quantities) {
@@ -41,7 +44,7 @@ double EquationsEuler::getSoundSpeed(std::vector<double>& quantities){
 	double p = getPressure(quantities[ENERGY], rhoV2);
 	double rho = quantities[DENS];
 
-	return sqrt(gamma * p / rho);
+	return std::sqrt(gamma * p / rho);
 }
 
 EquationsEuler::~EquationsEuler() {

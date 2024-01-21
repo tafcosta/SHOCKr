@@ -8,6 +8,8 @@
 #include "Equations.h"
 #include "Grid.h"
 
+#include <string>
+
 #ifndef SRC_OUTPUT_H_
 #define SRC_OUTPUT_H_
 

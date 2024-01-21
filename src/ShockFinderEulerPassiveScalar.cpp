@@ -5,6 +5,7 @@
  *      Author: ntc132
  */
 
+#include <cmath>
 #include <iostream>
 #include <fstream>
 
@@ -47,8 +48,8 @@ void ShockFinderEulerPassiveScalar::calculateGradients(int i) {
 	rho_i   = grid.quantities[i][EquationsEulerPassiveScalar::DENS];
 	rho_j   = grid.quantities[i + 1][EquationsEulerPassiveScalar::DENS];
 
-	rhoV2_i = pow(grid.quantities[i][EquationsEulerPassiveScalar::XMOM], 2.) / grid.quantities[i][EquationsEulerPassiveScalar::DENS];
-	rhoV2_j = pow(grid.quantities[i + 1][EquationsEulerPassiveScalar::XMOM], 2.) / grid.quantities[i + 1][EquationsEulerPassiveScalar::DENS];
+	rhoV2_i = std::pow(grid.quantities[i][EquationsEulerPassiveScalar::XMOM], 2.) / grid.quantities[i][EquationsEulerPassiveScalar::DENS];
+	rhoV2_j = std::pow(grid.quantities[i + 1][EquationsEulerPassiveScalar::XMOM], 2.) / grid.quantities[i + 1][EquationsEulerPassiveScalar::DENS];
 	p_i     = (static_cast<EquationsEulerPassiveScalar*>(&equations))->getPressure(grid.quantities[i][EquationsEulerPassiveScalar::ENERGY], rhoV2_i);
 	p_j     = (static_cast<EquationsEulerPassiveScalar*>(&equations))->getPressure(grid.quantities[i + 1][EquationsEulerPassiveScalar::ENERGY], rhoV2_j);
 
