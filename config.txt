@@ -1,0 +1,5 @@
+CFL 0.3
+maxTime 0.5
+outputTimeInterval 0.01
+outputFilename output_hllc.txt
+outputEnergy energy.txt
