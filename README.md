@@ -1,10 +1,14 @@
 # Breeze-1d
 Breeze-1d is a 1D spherical hydro solver designed for studying the shock structure emerging from the interaction between a spherically symmetric wind and an ambient medium with any specified density, velocity and temperature structure.
 
+![Alt Text](density_slice.png)
+<em> Fig. 1: Density slice of spherical outflow solution produced by Breeze-1D. The central wind (modelled as a boundary condition) streams radially outwards until it encounters a reverse shock. The wind also drives a forward shock. Simulation performed in domain with 1,000 radial cells, using the HLLC Riemann solver. </em>
+
 ## Key Highlights
 
 - **Spherical Modeling:** Simulate hydrodynamics in a 1D spherical framework.
 - **Shock Structure Study:** Explore and analyze shock structures resulting from wind and ambient medium interaction.
+- **On-the-Fly Shock Finder:** Breeze-1D incorporates a real-time shock finder that dynamically identifies shock fronts during simulations without the need for post-processing.
 
 ## Euler Equations
 Breeze-1d is based on the spherical symmetric form of the Euler equations, governing fluid dynamics in a 1D radial direction. The set of equations solved by Breeze-1d are
