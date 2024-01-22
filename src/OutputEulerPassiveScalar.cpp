@@ -7,6 +7,8 @@
 
 #include "EquationsEulerPassiveScalar.h"
 #include "OutputEulerPassiveScalar.h"
+
+#include <cmath>
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -30,9 +32,9 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename){
     	p = (static_cast<EquationsEulerPassiveScalar*>(&equations))->getPressure(grid.quantities[i][EquationsEulerPassiveScalar::ENERGY], rhoV2);
 
     	if(grid.quantities[i][EquationsEulerPassiveScalar::PASS]/grid.quantities[i][EquationsEulerPassiveScalar::DENS] > 0.1){
-    		thermalEnergy += p / ((static_cast<EquationsEulerPassiveScalar*>(&equations))->gamma - 1) * pow(grid.getX(i),2.);
-    		totalEnergy   += grid.quantities[i][EquationsEulerPassiveScalar::ENERGY] * pow(grid.getX(i),2.);
-    		kineticEnergy += 0.5 * rhoV2 * pow(grid.getX(i),2.);
+    		thermalEnergy += p / ((static_cast<EquationsEulerPassiveScalar*>(&equations))->gamma - 1) * std::pow(grid.getX(i),2.);
+    		totalEnergy   += grid.quantities[i][EquationsEulerPassiveScalar::ENERGY] * std::pow(grid.getX(i),2.);
+    		kineticEnergy += 0.5 * rhoV2 * std::pow(grid.getX(i),2.);
     	}
 
         outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << grid.quantities[i][EquationsEulerPassiveScalar::XMOM]/grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << p << " " << grid.quantities[i][EquationsEulerPassiveScalar::PASS] << std::endl;

@@ -8,8 +8,13 @@
 #include "EquationsLinearisedEuler.h"
 #include "Equations.h"
 
+#include <algorithm>
+#include <cstdlib>
+#include <cmath>
+#include <climits>
+
 double EquationsLinearisedEuler::getMaxAbsEigenvalue(std::vector<double>& quantities) {
-	return std::max(abs(BgDensity), std::max(abs(BgVel), abs(BgSoundSpeed)));
+	return std::max(std::abs(BgDensity), std::max(std::abs(BgVel), std::abs(BgSoundSpeed)));
 }
 
 double* EquationsLinearisedEuler::getFlux(std::vector<double>& quantities) {
@@ -17,7 +22,7 @@ double* EquationsLinearisedEuler::getFlux(std::vector<double>& quantities) {
 
 	flux[DENS]  = BgVel * quantities[DENS] + BgDensity * quantities[VEL];
 	flux[VEL]   = BgVel * quantities[VEL] + quantities[PRESS] / BgDensity;
-	flux[PRESS] = BgVel * quantities[PRESS] + BgDensity * pow(BgSoundSpeed, 2.) * quantities[VEL];
+	flux[PRESS] = BgVel * quantities[PRESS] + BgDensity * std::pow(BgSoundSpeed, 2.) * quantities[VEL];
 
 	return flux;
 }

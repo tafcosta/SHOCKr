@@ -10,6 +10,8 @@
 #include "Equations.h"
 #include "EquationsEuler.h"
 
+#include <cmath>
+
 void InitialDataIsothermal::setInitialData() {
 	double p, rho, u, rRef;
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
@@ -19,9 +21,9 @@ void InitialDataIsothermal::setInitialData() {
 		u    = 0.;
 		rRef = 1;
 
-		grid.quantities[i][EquationsEuler::DENS]   = rho * pow(rRef/grid.getX(i),2.);
-		grid.quantities[i][EquationsEuler::XMOM]   = rho * u * pow(rRef/grid.getX(i),2.);
-		grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(p, rho * u * u * pow(rRef/grid.getX(i),2.));
+		grid.quantities[i][EquationsEuler::DENS]   = rho * std::pow(rRef/grid.getX(i),2.);
+		grid.quantities[i][EquationsEuler::XMOM]   = rho * u * std::pow(rRef/grid.getX(i),2.);
+		grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(p, rho * u * u * std::pow(rRef/grid.getX(i),2.));
 	}
 }
 
