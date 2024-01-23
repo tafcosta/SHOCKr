@@ -34,6 +34,7 @@
 #include "RiemannSolverRusanov.h"
 #include "ShockFinder.h"
 #include "ShockFinderEulerPassiveScalar.h"
+#include "SimulationConfig.h"
 
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
 Grid *grid                   = new GridRadial(0.01, 10., 1, 1000, *equations);
@@ -53,19 +54,35 @@ void freeMemory(void){
 	delete shockfinder;
 }
 
-int main(){
-	double CFL = 0.3;
-	double maxTime = 0.5;
-	double outputTimeInterval = 0.01;
-    std::string outputFilename="output_hllc.txt";
-    std::string outputEnergy="energy.txt";
+void greeting(void){
+	std::cout << "-----------------------------------------" << std::endl;
+	std::cout << " " << std::endl;
+    std::cout << "  SSS   H   H   OOO   CCCC  K   K   rrrr " << std::endl;
+    std::cout << " S      H   H  O   O  C     K  K    r  rr" << std::endl;
+    std::cout << "  SSS   HHHHH  O   O  C     KKK     rrr  " << std::endl;
+    std::cout << "     S  H   H  O   O  C     K  K    r  r " << std::endl;
+    std::cout << "  SSS   H   H   OOO   CCCC  K   K   r   rr" << std::endl;
+	std::cout << " " << std::endl;
+	std::cout << "-----------------------------------------" << std::endl;
 
-	double time = 0., dt = 0.;
-	double timeSinceLastOutput = 0.0;
+}
+
+int main(){
+	SimulationConfig config("config.txt");
+
+	double CFL                 = config.CFL;
+	double maxTime             = config.maxTime;
+	double outputTimeInterval  = config.outputTimeInterval;
+	std::string outputFilename = config.outputFilename;
+	std::string outputEnergy   = config.outputEnergy;
 
 	if (std::remove(outputFilename.c_str()) != 0) {}
 	if (std::remove(outputEnergy.c_str()) != 0) {}
 
+	double time = 0., dt = 0.;
+	double timeSinceLastOutput = 0.0;
+
+	greeting();
 	initialdata->setInitialData();
 
 	while(time <= maxTime){
@@ -95,5 +112,6 @@ int main(){
 	shockfinder->findShockZones();
 
 	freeMemory();
+	std::cout << "All done." << std::endl;
 	return 0;
 }

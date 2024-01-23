@@ -77,8 +77,8 @@ std::vector<double> RiemannSolverHLLC::numericalFlux(std::vector<double>& quanti
 
 void RiemannSolverHLLC::setMaxSpeed(double sLeft, double sRight){
 
-	if(maxSpeed  < std::max(abs(sLeft), abs(sRight)))
-		maxSpeed = std::max(abs(sLeft), abs(sRight));
+	if(maxSpeed  < std::max(std::abs(sLeft), std::abs(sRight)))
+		maxSpeed = std::max(std::abs(sLeft), std::abs(sRight));
 }
 
 RiemannSolverHLLC::~RiemannSolverHLLC() {
