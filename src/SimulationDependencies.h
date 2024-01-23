@@ -8,6 +8,9 @@
 #ifndef SRC_SIMULATIONDEPENDENCIES_H_
 #define SRC_SIMULATIONDEPENDENCIES_H_
 
+#include <iostream>
+#include <cstdio>
+
 #include "Boundary.h"
 #include "BoundaryWind.h"
 #include "BoundaryZeroGradient.h"
