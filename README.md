@@ -1,4 +1,4 @@
-# SHOCKr1d
+# SHOCKr
 SHOCKr is a 1D spherical hydro solver designed for studying the shock structure emerging from the interaction between a spherically symmetric wind and an ambient medium with any specified density, velocity and temperature structure.
 
 ![Alt Text](density_slice.png)
