@@ -2,7 +2,7 @@
  * EquationsLinearisedEuler.h
  *
  *  Created on: 23 Dec 2023
- *      Author: ntc132
+ *      Author: Tiago Costa
  */
 
 #ifndef SRC_EQUATIONSLINEARISEDEULER_H_

@@ -12,7 +12,7 @@
 
 class GridRadial: public Grid {
 public:
-	GridRadial(double xmin, double xmax, int nGhost, int nx, EquationsEuler& equations) : Grid(xmin, xmax, nGhost, nx, equations){};
+	GridRadial(double xmin, double xmax, int nGhost, int nx, Equations& equations) : Grid(xmin, xmax, nGhost, nx, equations){};
 	void update(double dt) override;
 	virtual ~GridRadial();
 };

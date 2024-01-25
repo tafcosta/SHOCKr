@@ -45,6 +45,4 @@
 #include "ShockFinder.h"
 #include "ShockFinderEulerPassiveScalar.h"
 
-#include "SimulationConfig.h"
-
 #endif /* SRC_SIMULATIONDEPENDENCIES_H_ */

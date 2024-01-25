@@ -13,6 +13,7 @@
 
 class RiemannSolverHLLC: public RiemannSolver {
 public:
+
 	RiemannSolverHLLC(Grid& grid, EquationsEuler& equations) : RiemannSolver(grid, equations) {};
 
 	virtual std::vector<double> numericalFlux(std::vector<double>& quantitiesLeft, std::vector<double>& quantitiesRight) override;

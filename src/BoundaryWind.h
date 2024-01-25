@@ -14,9 +14,11 @@
 
 class BoundaryWind: public Boundary {
 public:
-	BoundaryWind(Grid& grid, EquationsEuler& equations) : Boundary(grid,equations){};
+	BoundaryWind(double rhoWind, double velWind, double pressureWind, Grid& grid, EquationsEuler& equations) : Boundary(grid, equations), rhoWind(rhoWind), velWind(velWind), pressureWind(pressureWind) {};
 	virtual ~BoundaryWind();
 	void setBoundaries() override;
+
+	double rhoWind, velWind, pressureWind;
 };
 
 #endif /* SRC_BOUNDARYWINDTMP_H_ */
