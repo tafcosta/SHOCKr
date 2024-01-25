@@ -1,0 +1,15 @@
+maxTime            0.5
+outputTimeInterval 0.01
+
+gridMin            0.01
+gridMax            10.
+NumberCells        10000
+NumberGhostCells   1
+
+bgDensity          0.1
+bgVel              0.
+bgPressure         0.01
+
+windDensity        1000
+windVel            20.
+windPressure       0.0001

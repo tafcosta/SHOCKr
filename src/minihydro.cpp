@@ -7,15 +7,12 @@
 
 #include "SimulationDependencies.h"
 
-int nCell      = 10000;
-int nGhost     = 1;
-double gridMax = 10.;
-double gridMin = 0.01;
+SimulationConfig config("config.txt");
 
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
-Grid *grid                             = new GridRadial(gridMin, gridMax, nGhost, nCell, *equations);
-InitialData *initialdata               = new InitialDataHomogeneousPassiveScalar(0.1, 0., 0.01, *grid, *equations);
-Boundary *boundary                     = new BoundaryWindPassiveScalar(1000.,20.,0.0001,*grid, *equations);
+Grid *grid                             = new GridRadial(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
+InitialData *initialdata               = new InitialDataHomogeneousPassiveScalar(config.bgDensity, config.bgVel, config.bgPressure, *grid, *equations);
+Boundary *boundary                     = new BoundaryWindPassiveScalar(config.windDensity, config.windVel, config.windPressure, *grid, *equations);
 Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);
 ShockFinder *shockfinder               = new ShockFinderEulerPassiveScalar(*grid, *equations);
@@ -26,11 +23,10 @@ void freeMemory();
 int main(){
 	std::string outputFilename = "output_hllc.txt";
 	std::string outputEnergy = "energy.txt";
+
 	double CFL = 0.3;
-	double maxTime = 0.5;
-	double outputTimeInterval = 0.01;
-
-
+	double maxTime = config.maxTime;
+	double outputTimeInterval = config.outputTimeInterval;
 
 	if (std::remove(outputFilename.c_str()) != 0) {}
 	if (std::remove(outputEnergy.c_str()) != 0) {}
@@ -51,7 +47,7 @@ int main(){
 
 		grid->update(dt);
 
-		if((time == 0.) || (timeSinceLastOutput > outputTimeInterval)){
+		if((time == 0.) || (timeSinceLastOutput > config.outputTimeInterval)){
 			output->makeOutput(outputFilename);
 			shockfinder->findShockZones();
 			timeSinceLastOutput = 0.;
