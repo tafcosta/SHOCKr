@@ -34,31 +34,6 @@ Where:
 - **Wind Boundary Condition:** The spherically symmetric wind is modeled as a boundary condition,
 - **Cartesian 1D Support:** While primarily designed for spherical simulations, SHOCKr also supports Cartesian 1D simulations for added flexibility.
 
-## Configuration File (config.txt)
-SHOCKr uses a configuration file (`config.txt`) to define various simulation parameters. Below is a list of key parameters that can be customized in the configuration file:
-
-1. **CFL (Courant-Friedrichs-Lewy) Parameter:**
-   - *Description:* CFL parameter determines the size of the time step in the simulation.
-   - *Example:* `CFL 0.3`
-
-2. **Maximum Simulation Time:**
-   - *Description:* The maximum simulation time determines the duration of the simulation in arbitrary units.
-   - *Example:* `maxTime 1.`
-
-3. **Output Time Interval:**
-   - *Description:* The time interval between consecutive outputs or snapshots of the simulation.
-   - *Example:* `outputTimeInterval 0.1`
-
-4. **Output Filename:**
-   - *Description:* The name of the file where simulation results are stored.
-   - *Example:* `outputFilename output.txt`
-
-5. **Output Energy Filename:**
-   - *Description:* The name of the file where energy-related output is stored.
-   - *Example:* `outputEnergy energy.txt`
-
-These parameters control the overall behavior and output of the SHOCKr simulation. Ensure the configuration file is formatted correctly, and values are adjusted based on the specific requirements of your simulation.
-
 ## In Development
 
 - **External Gravitational Field:** 
