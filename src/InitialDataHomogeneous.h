@@ -15,12 +15,14 @@
 
 class InitialDataHomogeneous: public InitialData {
 public:
-	InitialDataHomogeneous(Grid& grid, EquationsEuler& equations) : InitialData(grid, equations){};
+	InitialDataHomogeneous(double rhoBackground, double velBackground, double pressureBackground, Grid& grid, EquationsEuler& equations) : InitialData(grid, equations), rhoBackground(rhoBackground), velBackground(velBackground), pressureBackground(pressureBackground){};
 	virtual ~InitialDataHomogeneous();
 	void setInitialData() override;
 
+	double rhoBackground, velBackground, pressureBackground;
+
 protected:
-    void initialize(int i, double& rho, double& p, double& u);
+    void initialize(int i);
 };
 
 #endif /* SRC_INITIALDATAHOMOGENEOUS_H_ */

@@ -7,9 +7,14 @@
 
 #include "SimulationDependencies.h"
 
+int nCell      = 10000;
+int nGhost     = 1;
+double gridMax = 10.;
+double gridMin = 0.01;
+
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
-Grid *grid                             = new GridRadial(0.01, 10,1, 10000, *equations);
-InitialData *initialdata               = new InitialDataHomogeneousPassiveScalar(*grid, *equations);
+Grid *grid                             = new GridRadial(gridMin, gridMax, nGhost, nCell, *equations);
+InitialData *initialdata               = new InitialDataHomogeneousPassiveScalar(0.1, 0., 0.01, *grid, *equations);
 Boundary *boundary                     = new BoundaryWindPassiveScalar(1000.,20.,0.0001,*grid, *equations);
 Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);
