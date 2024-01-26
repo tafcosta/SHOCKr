@@ -18,7 +18,11 @@ public:
 	virtual ~BoundaryWind();
 	void setBoundaries() override;
 
+protected:
 	double rhoWind, velWind, pressureWind;
+	void doSubsonicWind(int i);
+	void doSupersonicWind(int i);
+	double getSoundSpeed(double gamma, double density, double pressure);
 };
 
 #endif /* SRC_BOUNDARYWINDTMP_H_ */
