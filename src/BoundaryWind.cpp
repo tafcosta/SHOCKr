@@ -29,15 +29,15 @@ void BoundaryWind::setBoundaries(){
 void BoundaryWind::doSupersonicWind(int i){
 	grid.quantities[i][EquationsEuler::DENS]   = rhoWind;
 	grid.quantities[i][EquationsEuler::XMOM]   = rhoWind * velWind;
-	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureWind, rhoWind * velWind * velWind);
+	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureWind, rhoWind * std::pow(velWind, 2.));
 }
 
 void BoundaryWind::doSubsonicWind(int i){
-	double pressureAtBoundary = grid.quantities[grid.minXIndex][EquationsEuler::DENS] * \
-			(pressureWind/rhoWind - std::pow(velWind, 2.) * 0.5 * ((static_cast<EquationsEuler*>(&equations))->gamma - 1)/(static_cast<EquationsEuler*>(&equations))->gamma);
-
 	grid.quantities[i][EquationsEuler::DENS]   = grid.quantities[grid.minXIndex][EquationsEuler::DENS];
 	grid.quantities[i][EquationsEuler::XMOM]   = grid.quantities[grid.minXIndex][EquationsEuler::DENS] * velWind;
+
+	double pressureAtBoundary = grid.quantities[grid.minXIndex][EquationsEuler::DENS] * \
+			(pressureWind/rhoWind - std::pow(velWind, 2.) * 0.5 * ((static_cast<EquationsEuler*>(&equations))->gamma - 1)/(static_cast<EquationsEuler*>(&equations))->gamma);
 	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureAtBoundary, grid.quantities[grid.minXIndex][EquationsEuler::DENS] * std::pow(velWind, 2.));
 }
 
