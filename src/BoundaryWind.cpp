@@ -18,10 +18,12 @@ void BoundaryWind::setBoundaries(){
 
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
 		if (i < grid.minXIndex){
+
 			if (machNumber > 1)
 				doSupersonicWind(i);
 			else
-				doSubsonicWind(i);
+				doSupersonicWind(i);//doSubsonicWind(i);
+
 		}
 		else if(i > grid.maxXIndex)
 			grid.quantities[i] = grid.quantities[grid.maxXIndex];
@@ -40,6 +42,7 @@ void BoundaryWind::doSubsonicWind(int i){
 
 	double pressureAtBoundary = grid.quantities[grid.minXIndex][EquationsEuler::DENS] * \
 			(pressureWind/rhoWind - std::pow(velWind, 2.) * 0.5 * ((static_cast<EquationsEuler*>(&equations))->gamma - 1)/(static_cast<EquationsEuler*>(&equations))->gamma);
+
 	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureAtBoundary, grid.quantities[grid.minXIndex][EquationsEuler::DENS] * std::pow(velWind, 2.));
 }
 
