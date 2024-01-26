@@ -38,7 +38,7 @@ void BoundaryWind::doSubsonicWind(int i){
 
 	grid.quantities[i][EquationsEuler::DENS]   = grid.quantities[grid.minXIndex][EquationsEuler::DENS];
 	grid.quantities[i][EquationsEuler::XMOM]   = grid.quantities[grid.minXIndex][EquationsEuler::DENS] * velWind;
-	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureAtBoundary, grid.quantities[grid.minXIndex][EquationsEuler::DENS] * velWind * velWind);
+	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureAtBoundary, grid.quantities[grid.minXIndex][EquationsEuler::DENS] * std::pow(velWind, 2.));
 }
 
 double BoundaryWind::getSoundSpeed(double gamma, double density, double pressure){
