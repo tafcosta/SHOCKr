@@ -14,14 +14,16 @@
 #include <cstdio>
 
 void BoundaryWind::setBoundaries(){
+	double machNumber = velWind/getSoundSpeed((static_cast<EquationsEuler*>(&equations))->gamma, rhoWind, pressureWind);
 
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
 		if (i < grid.minXIndex){
-			if (velWind/getSoundSpeed((static_cast<EquationsEuler*>(&equations))->gamma, rhoWind, pressureWind) > 1)
+			if (machNumber > 1)
 				doSupersonicWind(i);
 			else
 				doSubsonicWind(i);
-		} else if(i > grid.maxXIndex)
+		}
+		else if(i > grid.maxXIndex)
 			grid.quantities[i] = grid.quantities[grid.maxXIndex];
 	}
 }
