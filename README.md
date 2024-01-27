@@ -9,6 +9,7 @@ SHOCKr is a 1D spherical hydro solver designed for studying the shock structure 
 - **Spherical Modeling:** Simulate hydrodynamics in a 1D spherical framework.
 - **Shock Structure Study:** Explore and analyze shock structures resulting from wind and ambient medium interaction.
 - **On-the-Fly Shock Finder:** Shockr incorporates a real-time shock finder that dynamically identifies shock fronts during simulations without the need for post-processing.
+- **Subsonic & Supersonic winds :** Shockr supports the injection of both supersonic and subsonic winds. 
 
 ## Euler Equations
 Shockr is based on the spherical symmetric form of the Euler equations, governing fluid dynamics in a 1D radial direction. The set of equations solved by SHOCKr are
@@ -34,7 +35,56 @@ Where:
 - **Wind Boundary Condition:** The spherically symmetric wind is modeled as a boundary condition,
 - **Cartesian 1D Support:** While primarily designed for spherical simulations, SHOCKr also supports Cartesian 1D simulations for added flexibility.
 
-## In Development
+## Configuration File Explanation
 
-- **External Gravitational Field:** 
-- **Radiative Cooling:**
+The `config.txt` file is used to specify various parameters for the simulation. Below is an explanation of each parameter:
+
+- **maxTime**: Maximum simulation time in code units.
+
+- **outputTimeInterval**: Time interval at which simulation results are outputted to files.
+
+- **outputFilename**: Name of the file where general simulation output will be stored.
+
+- **outputEnergy**: Name of the file where energy-related data will be stored.
+
+- **gridMin**: Location of the first grid cell in the domain.
+
+- **gridMax**: Location of the last grid cell in the domain.
+
+- **NumberCells**: Number of cells in the grid.
+
+- **NumberGhostCells**: Number of ghost cells in the grid. Ghost cells are used to handle boundary conditions.
+
+- **bgDensity**: Background density for the simulation.
+
+- **bgVel**: Background velocity.
+
+- **bgPressure**: Background pressure.
+
+- **windDensity**: Density of the wind.
+
+- **windVel**: Velocity of the wind.
+
+- **windPressure**: Pressure of the wind.
+
+## Example Configuration File:
+
+```plaintext
+
+maxTime            1.0
+outputTimeInterval 0.1
+outputFilename     output.txt
+outputEnergy       energy.txt
+
+gridMin            0.01
+gridMax            10.0
+NumberCells        1000
+NumberGhostCells   1
+
+bgDensity          0.1
+bgVel              0.0
+bgPressure         0.01
+
+windDensity        100
+windVel            20.
+windPressure       0.0001
