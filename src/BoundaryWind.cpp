@@ -22,7 +22,7 @@ void BoundaryWind::setBoundaries(){
 			if (machNumber > 1)
 				doSupersonicWind(i);
 			else
-				doSupersonicWind(i);//doSubsonicWind(i);
+				doSubsonicWind(i);
 
 		}
 		else if(i > grid.maxXIndex)
@@ -37,13 +37,25 @@ void BoundaryWind::doSupersonicWind(int i){
 }
 
 void BoundaryWind::doSubsonicWind(int i){
-	grid.quantities[i][EquationsEuler::DENS]   = grid.quantities[grid.minXIndex][EquationsEuler::DENS];
-	grid.quantities[i][EquationsEuler::XMOM]   = grid.quantities[grid.minXIndex][EquationsEuler::DENS] * velWind;
+	grid.quantities[i][EquationsEuler::DENS]   = rhoWind;
+	grid.quantities[i][EquationsEuler::XMOM]   = rhoWind * velWind;
 
-	double pressureAtBoundary = grid.quantities[grid.minXIndex][EquationsEuler::DENS] * \
-			(pressureWind/rhoWind - std::pow(velWind, 2.) * 0.5 * ((static_cast<EquationsEuler*>(&equations))->gamma - 1)/(static_cast<EquationsEuler*>(&equations))->gamma);
+	double rhoOut = rhoBackground;
+	double pOut   = pressureBackground;
+	double vOut   = velBackground;
 
-	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureAtBoundary, grid.quantities[grid.minXIndex][EquationsEuler::DENS] * std::pow(velWind, 2.));
+	double gamma = (static_cast<EquationsEuler*>(&equations))->gamma;
+
+	double pressureAtBoundary = pOut + ((velWind - vOut)*((1 + gamma) * rhoOut * (velWind - vOut) \
+			+ std::sqrt(rhoOut * (16 * gamma * pOut + rhoOut * std::pow(velWind,2) \
+			+ gamma * (2 + gamma) * rhoOut * std::pow(velWind,2) \
+			- 2 * std::pow(1 + gamma,2) * rhoOut * velWind * vOut + std::pow(1 + gamma, 2) * rhoOut * std::pow(vOut,2))))) / 4.;
+
+	// double pressureAtBoundary = pOut - ((velWind - vOut)*(-((1 + gamma) * rhoOut * (velWind - vOut)) \
+			+ std::sqrt(rhoOut * (16* gamma * pOut + rhoOut * std::pow(velWind,2) + gamma*(2 + gamma)*rhoOut*std::pow(velWind,2) \
+			- 2*std::pow(1 + gamma,2)*rhoOut*velWind*vOut + std::pow(1 + gamma,2)*rhoOut*std::pow(vOut,2)))))/4.;
+
+	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureAtBoundary, rhoWind * std::pow(velWind, 2.));
 }
 
 double BoundaryWind::getSoundSpeed(double gamma, double density, double pressure){
