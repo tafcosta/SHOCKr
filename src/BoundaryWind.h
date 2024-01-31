@@ -25,8 +25,10 @@ protected:
 	double rhoBackground, velBackground, pressureBackground;
 
 	void doSubsonicWind(int i);
+	void doSubsonicWindGross(int i);
 	void doSupersonicWind(int i);
 	double getSoundSpeed(double gamma, double density, double pressure);
+	std::vector<double> matrixMultiply(std::vector<std::vector<double> > matrix, std::vector<double> vector);
 };
 
 #endif /* SRC_BOUNDARYWINDTMP_H_ */
