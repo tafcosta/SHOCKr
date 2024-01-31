@@ -77,60 +77,15 @@ void BoundaryWind::doSubsonicWindGross(int i){
 	primitiveDerivativesWind[1] = (vx - velWind)     /grid.dx;
 	primitiveDerivativesWind[2] = (p - pressureWind) /grid.dx;
 
-
-
-	transform[0][0] = 0.;
-	transform[0][1] = ((-std::sqrt(gamma * p * rho) + (-1 + gamma) * rho * vx) * (gamma * p - std::sqrt(gamma * p * rho) * vx)                       \
-			* (2 * gamma * p * std::sqrt(gamma * p * rho) + gamma * rho * std::pow(vx, 2.) * (5 * std::sqrt(gamma * p * rho) - 2 * rho * vx)         \
-			+ rho*std::pow(vx,2)*(-3*std::sqrt(gamma*p*rho) + rho*vx) +  std::pow(gamma,2)*rho*std::pow(vx,2)*(-2*std::sqrt(gamma*p*rho) + rho*vx))) \
-			/ (4.*(-1 + gamma) * gamma * p * rho * (rho * std::pow(vx, 2.) + std::pow(gamma, 2.) * rho * std::pow(vx, 2.) - gamma*(p + 2 * rho * std::pow(vx, 2.))));
-	transform[0][2] = (rho * (-((gamma * p) / std::sqrt(gamma * p * rho)) + vx) * (-2 * gamma * p * std::sqrt(gamma * p * rho) + std::pow(gamma, 2)  \
-			* rho * std::pow(vx, 2.)*(2*std::sqrt(gamma*p*rho) - rho*vx) + rho*std::pow(vx,2)*(3*std::sqrt(gamma*p*rho) - rho*vx)                    \
-			+ gamma * rho * std::pow(vx, 2.)*(-5 * std::sqrt(gamma * p * rho) + 2 * rho * vx)) * (std::sqrt(gamma * p * rho) * vx + gamma * (p - std::sqrt(gamma * p * rho) * vx)))  \
-			/ (4.* (-1 + gamma) * std::pow(gamma*p*rho, 1.5) * (rho * std::pow(vx, 2.) + std::pow(gamma, 2.) * rho * std::pow(vx, 2.) - gamma * (p + 2 * rho*std::pow(vx, 2.))));
-
-	transform[1][0] = std::pow(vx, 3.) / 2.;
-	transform[1][1] = 0.0;
-	transform[1][2] = -0.5 * (rho * std::pow(vx,3)) / (gamma * p);
-
-	transform[2][0] = 0.0;
-	transform[2][1] = ((std::sqrt(gamma * p * rho) + (-1 + gamma) * rho * vx) * (gamma * p + std::sqrt(gamma * p * rho) *vx)                     \
-			* (std::pow(gamma,2)*rho*std::pow(vx, 2.) * (2 * std::sqrt(gamma * p * rho) + rho * vx) + rho * std::pow(vx, 2.) * (3 * std::sqrt(gamma * p * rho) + rho*vx) \
-			- gamma*(2*p*std::sqrt(gamma*p*rho) + rho*std::pow(vx,2)*(5*std::sqrt(gamma*p*rho) + 2*rho*vx))))                                    \
-			/ (4.*(-1 + gamma)*gamma*p*rho*(rho*std::pow(vx,2) + std::pow(gamma,2)*rho*std::pow(vx,2) - gamma*(p + 2*rho*std::pow(vx,2))));
-	transform[2][2] = (rho*((gamma*p)/std::sqrt(gamma*p*rho) + vx)*(-(std::sqrt(gamma*p*rho)*vx) + gamma*(p + std::sqrt(gamma*p*rho)*vx))        \
-			* (std::pow(gamma,2)*rho*std::pow(vx,2)*(2*std::sqrt(gamma*p*rho) + rho*vx) + rho*std::pow(vx,2)*(3*std::sqrt(gamma*p*rho) + rho*vx) \
-			- gamma*(2*p*std::sqrt(gamma*p*rho) + rho*std::pow(vx,2)*(5*std::sqrt(gamma*p*rho) + 2*rho*vx))))                                    \
-			/ (4.*(-1 + gamma)*std::pow(gamma*p*rho,1.5)*(rho*std::pow(vx,2) + std::pow(gamma,2)*rho*std::pow(vx,2) - gamma*(p + 2*rho*std::pow(vx,2))));
-
-
-	transformInverse[0][0] = 2.0 * (-1 + gamma) * std::pow(rho, 2.) / (-2 * gamma * p * std::sqrt(gamma * p * rho)                                          \
-			+ 2 * std::pow(gamma, 2.) * p * rho * vx + rho * std::pow(vx, 2) * (3 * std::sqrt(gamma * p * rho) - rho * vx)                                  \
-			+ gamma * rho * std::pow(vx, 2) * (-3 * std::sqrt(gamma * p * rho) + rho * vx));
-	transformInverse[0][1] = 2.0 / std::pow(vx, 3.);
-	transformInverse[0][2] = (2*(-1 + gamma)*std::pow(rho,2))                                                                                               \
-			/ (2 * gamma * p * std::sqrt(gamma * p * rho) + 2*std::pow(gamma,2) * p * rho * vx - rho*std::pow(vx,2) * (3*std::sqrt(gamma*p*rho) + rho * vx) \
-			+ gamma * rho * std::pow(vx,2.) * (3 * std::sqrt(gamma * p * rho) + rho * vx));
-
-	transformInverse[1][0] = (2*(-1 + gamma)*gamma*p)/(rho*std::sqrt(gamma*p*rho)*std::pow(vx,3) - gamma*rho*std::pow(vx,2)*(3*p + std::sqrt(gamma*p*rho)*vx) +
-	       std::pow(gamma,2)*p*(2*p + vx*(-2*std::sqrt(gamma*p*rho) + 3*rho*vx)));
-	transformInverse[1][1] = 0.;
-	transformInverse[1][2] = (2*(-1 + gamma)*gamma*p)/(-(rho*std::sqrt(gamma*p*rho)*std::pow(vx,3)) + gamma*rho*std::pow(vx,2)*(-3*p + std::sqrt(gamma*p*rho)*vx) +
-	       std::pow(gamma,2)*p*(2*p + vx*(2*std::sqrt(gamma*p*rho) + 3*rho*vx)));
-
-	transformInverse[2][0] = 1.0 / (std::sqrt(gamma*p*rho)/(rho - gamma*rho) + (gamma*vx)/(-1 + gamma) + (std::pow(vx,2)*(-3*std::sqrt(gamma*p*rho) + rho*vx))/(2.*gamma*p));
-	transformInverse[2][1] = 0.0;
-	transformInverse[2][2] = 1.0 / ((gamma*p)/((-1 + gamma)*std::sqrt(gamma*p*rho)) + (gamma*vx)/(-1 + gamma) + (3*rho*std::pow(vx,2))/(2. * std::sqrt(gamma*p*rho)) + (rho * std::pow(vx,3))/(2.*gamma*p));
-
-
-
+	setTransform(transform, rho, vx, p);
+	setTransformInverse(transformInverse, rho, vx, p);
 
 	charDerivatives     = matrixMultiply(transform, primitiveDerivatives);
 	charDerivativesWind = matrixMultiply(transform, primitiveDerivativesWind);
 
-	charDerivativesMixed[0] = charDerivatives[0];            // Characteristic travelling at v - c
-	charDerivativesMixed[1] = 0. * charDerivativesWind[1]; // Characteristic travelling at v
-	charDerivativesMixed[2] = 0. * charDerivativesWind[2]; //Characteristic travelling at v + c
+	charDerivativesMixed[0] = charDerivatives[0];     // Characteristic travelling at v - c
+	charDerivativesMixed[1] = charDerivativesWind[1]; // Characteristic travelling at v
+	charDerivativesMixed[2] = charDerivativesWind[2]; //Characteristic travelling at v + c
 
 	primitiveDerivativesMixed = matrixMultiply(transformInverse, charDerivativesMixed);
 
@@ -160,6 +115,59 @@ std::vector<double> BoundaryWind::matrixMultiply(std::vector<std::vector<double>
 
 	return product;
 }
+
+void BoundaryWind::setTransform(std::vector<std::vector<double> >& transform, double rho, double vx, double p){
+	double gamma = (static_cast<EquationsEuler*>(&equations))->gamma;
+
+	transform[0][0] = 0.;
+	transform[0][1] = ((-std::sqrt(gamma * p * rho) + (-1 + gamma) * rho * vx) * (gamma * p - std::sqrt(gamma * p * rho) * vx)                       \
+			* (2 * gamma * p * std::sqrt(gamma * p * rho) + gamma * rho * std::pow(vx, 2.) * (5 * std::sqrt(gamma * p * rho) - 2 * rho * vx)         \
+			+ rho*std::pow(vx,2)*(-3*std::sqrt(gamma*p*rho) + rho*vx) +  std::pow(gamma,2)*rho*std::pow(vx,2)*(-2*std::sqrt(gamma*p*rho) + rho*vx))) \
+			/ (4.*(-1 + gamma) * gamma * p * rho * (rho * std::pow(vx, 2.) + std::pow(gamma, 2.) * rho * std::pow(vx, 2.) - gamma*(p + 2 * rho * std::pow(vx, 2.))));
+	transform[0][2] = (rho * (-((gamma * p) / std::sqrt(gamma * p * rho)) + vx) * (-2 * gamma * p * std::sqrt(gamma * p * rho) + std::pow(gamma, 2)  \
+			* rho * std::pow(vx, 2.)*(2*std::sqrt(gamma*p*rho) - rho*vx) + rho*std::pow(vx,2)*(3*std::sqrt(gamma*p*rho) - rho*vx)                    \
+			+ gamma * rho * std::pow(vx, 2.)*(-5 * std::sqrt(gamma * p * rho) + 2 * rho * vx)) * (std::sqrt(gamma * p * rho) * vx + gamma * (p - std::sqrt(gamma * p * rho) * vx)))  \
+			/ (4.* (-1 + gamma) * std::pow(gamma*p*rho, 1.5) * (rho * std::pow(vx, 2.) + std::pow(gamma, 2.) * rho * std::pow(vx, 2.) - gamma * (p + 2 * rho*std::pow(vx, 2.))));
+
+	transform[1][0] = std::pow(vx, 3.) / 2.;
+	transform[1][1] = 0.0;
+	transform[1][2] = -0.5 * (rho * std::pow(vx,3)) / (gamma * p);
+
+	transform[2][0] = 0.0;
+	transform[2][1] = ((std::sqrt(gamma * p * rho) + (-1 + gamma) * rho * vx) * (gamma * p + std::sqrt(gamma * p * rho) *vx)                         \
+			* (std::pow(gamma,2)*rho*std::pow(vx, 2.) * (2 * std::sqrt(gamma * p * rho) + rho * vx) + rho * std::pow(vx, 2.) * (3 * std::sqrt(gamma * p * rho) + rho*vx) \
+			- gamma*(2*p*std::sqrt(gamma*p*rho) + rho*std::pow(vx,2)*(5*std::sqrt(gamma*p*rho) + 2*rho*vx))))                                        \
+			/ (4.*(-1 + gamma)*gamma*p*rho*(rho*std::pow(vx,2) + std::pow(gamma,2)*rho*std::pow(vx,2) - gamma*(p + 2*rho*std::pow(vx,2))));
+	transform[2][2] = (rho*((gamma*p)/std::sqrt(gamma*p*rho) + vx)*(-(std::sqrt(gamma*p*rho)*vx) + gamma*(p + std::sqrt(gamma*p*rho)*vx))            \
+			* (std::pow(gamma,2)*rho*std::pow(vx,2)*(2*std::sqrt(gamma*p*rho) + rho*vx) + rho*std::pow(vx,2)*(3*std::sqrt(gamma*p*rho) + rho*vx)     \
+			- gamma*(2*p*std::sqrt(gamma*p*rho) + rho*std::pow(vx,2)*(5*std::sqrt(gamma*p*rho) + 2*rho*vx))))                                        \
+			/ (4.*(-1 + gamma)*std::pow(gamma*p*rho,1.5)*(rho*std::pow(vx,2) + std::pow(gamma,2)*rho*std::pow(vx,2) - gamma*(p + 2*rho*std::pow(vx,2))));
+
+}
+
+void BoundaryWind::setTransformInverse(std::vector<std::vector<double> >& transformInverse, double rho, double vx, double p){
+	double gamma = (static_cast<EquationsEuler*>(&equations))->gamma;
+
+	transformInverse[0][0] = 2.0 * (-1 + gamma) * std::pow(rho, 2.) / (-2 * gamma * p * std::sqrt(gamma * p * rho)                                          \
+		+ 2 * std::pow(gamma, 2.) * p * rho * vx + rho * std::pow(vx, 2) * (3 * std::sqrt(gamma * p * rho) - rho * vx)                                  \
+		+ gamma * rho * std::pow(vx, 2) * (-3 * std::sqrt(gamma * p * rho) + rho * vx));
+	transformInverse[0][1] = 2.0 / std::pow(vx, 3.);
+	transformInverse[0][2] = (2*(-1 + gamma)*std::pow(rho,2))                                                                                               \
+		/ (2 * gamma * p * std::sqrt(gamma * p * rho) + 2*std::pow(gamma,2) * p * rho * vx - rho*std::pow(vx,2) * (3*std::sqrt(gamma*p*rho) + rho * vx) \
+		+ gamma * rho * std::pow(vx,2.) * (3 * std::sqrt(gamma * p * rho) + rho * vx));
+
+	transformInverse[1][0] = (2*(-1 + gamma)*gamma*p)/(rho*std::sqrt(gamma*p*rho)*std::pow(vx,3) - gamma*rho*std::pow(vx,2)*(3*p + std::sqrt(gamma*p*rho)*vx) +
+       std::pow(gamma,2)*p*(2*p + vx*(-2*std::sqrt(gamma*p*rho) + 3*rho*vx)));
+	transformInverse[1][1] = 0.;
+	transformInverse[1][2] = (2*(-1 + gamma)*gamma*p)/(-(rho*std::sqrt(gamma*p*rho)*std::pow(vx,3)) + gamma*rho*std::pow(vx,2)*(-3*p + std::sqrt(gamma*p*rho)*vx) +
+       std::pow(gamma,2)*p*(2*p + vx*(2*std::sqrt(gamma*p*rho) + 3*rho*vx)));
+
+	transformInverse[2][0] = 1.0 / (std::sqrt(gamma*p*rho)/(rho - gamma*rho) + (gamma*vx)/(-1 + gamma) + (std::pow(vx,2)*(-3*std::sqrt(gamma*p*rho) + rho*vx))/(2.*gamma*p));
+	transformInverse[2][1] = 0.0;
+	transformInverse[2][2] = 1.0 / ((gamma*p)/((-1 + gamma)*std::sqrt(gamma*p*rho)) + (gamma*vx)/(-1 + gamma) + (3*rho*std::pow(vx,2))/(2. * std::sqrt(gamma*p*rho)) + (rho * std::pow(vx,3))/(2.*gamma*p));
+
+}
+
 
 BoundaryWind::~BoundaryWind() {
 	// TODO Auto-generated destructor stub
