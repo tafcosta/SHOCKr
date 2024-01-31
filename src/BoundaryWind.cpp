@@ -54,6 +54,7 @@ void BoundaryWind::doSubsonicWindGross(int i){
 
 	double rho, rho_j, vx, vel_j, p, p_j;
 	double rhoGhost, velGhost, pGhost;
+	double soundSpeed;
 
 	std::vector<double> charDerivatives (3, 0.0), charDerivativesWind (3, 0.0), charDerivativesMixed (3, 0.0);
 	std::vector<double> primitiveDerivatives (3, 0.0), primitiveDerivativesWind (3, 0.0), primitiveDerivativesMixed (3, 0.0);
@@ -68,14 +69,16 @@ void BoundaryWind::doSubsonicWindGross(int i){
 	vel_j = grid.quantities[grid.minXIndex + 1][EquationsEuler::XMOM]/grid.quantities[grid.minXIndex + 1][EquationsEuler::DENS];
 	p     = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex][EquationsEuler::ENERGY],     rho   * std::pow(vx, 2.));
 	p_j   = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex + 1][EquationsEuler::ENERGY], rho_j * std::pow(vel_j, 2.));
+	soundSpeed = std::sqrt(gamma * p/rho);
 
 	primitiveDerivatives[0]     = (rho_j - rho) /grid.dx;
 	primitiveDerivatives[1]     = (vel_j - vx)  /grid.dx;
 	primitiveDerivatives[2]     = (p_j   - p)   /grid.dx;
 
-	primitiveDerivativesWind[0] = (rho - rhoWind)    /grid.dx;
-	primitiveDerivativesWind[1] = (vx - velWind)     /grid.dx;
-	primitiveDerivativesWind[2] = (p - pressureWind) /grid.dx;
+	/*
+	primitiveDerivativesWind[0] = (rho - rhoWind)      /grid.dx;
+	primitiveDerivativesWind[1] = (vx  - velWind)      /grid.dx;
+	primitiveDerivativesWind[2] = (p   - pressureWind) /grid.dx;
 
 	setTransform(transform, rho, vx, p);
 	setTransformInverse(transformInverse, rho, vx, p);
@@ -88,10 +91,19 @@ void BoundaryWind::doSubsonicWindGross(int i){
 	charDerivativesMixed[2] = charDerivativesWind[2]; //Characteristic travelling at v + c
 
 	primitiveDerivativesMixed = matrixMultiply(transformInverse, charDerivativesMixed);
+	 */
 
+	double l1 = (vx - soundSpeed) * (primitiveDerivatives[2] - rho * soundSpeed * primitiveDerivatives[1]);
+
+	/*
 	rhoGhost = rho - grid.dx * primitiveDerivativesMixed[0];
 	velGhost = vx  - grid.dx * primitiveDerivativesMixed[1];
 	pGhost   = p   - grid.dx * primitiveDerivativesMixed[2];
+	*/
+
+	rhoGhost = rhoWind;
+	velGhost = velWind;
+	pGhost   = p - grid.dx * (l1 * vx / (vx * vx - soundSpeed * soundSpeed));
 
 	grid.quantities[i][EquationsEuler::DENS]   = rhoGhost;
 	grid.quantities[i][EquationsEuler::XMOM]   = rhoGhost * velGhost;
