@@ -26,6 +26,8 @@ protected:
 
 	void doSubsonicWind(int i);
 	void doSubsonicWindGross(int i);
+	void doSubsonicWindGrossRadial(int i);
+
 	void doSupersonicWind(int i);
 	void setTransform(std::vector<std::vector<double> >& transform, double rho, double vx, double p);
 	void setTransformInverse(std::vector<std::vector<double> >& transformInverse, double rho, double vx, double p);

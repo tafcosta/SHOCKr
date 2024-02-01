@@ -16,7 +16,7 @@
 void BoundaryWind::setBoundaries(){
 	double machNumber = velWind/getSoundSpeed((static_cast<EquationsEuler*>(&equations))->gamma, rhoWind, pressureWind);
 
-	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
+	for(int i = 0; i < grid.nx + 2 * grid.nGhost; i++){
 		if (i < grid.minXIndex){
 
 			if (machNumber > 1)
@@ -67,7 +67,7 @@ void BoundaryWind::doSubsonicWindGross(int i){
 	rho_j = grid.quantities[grid.minXIndex + 1][EquationsEuler::DENS];
 	vx    = grid.quantities[grid.minXIndex][EquationsEuler::XMOM]/grid.quantities[grid.minXIndex][EquationsEuler::DENS];
 	vel_j = grid.quantities[grid.minXIndex + 1][EquationsEuler::XMOM]/grid.quantities[grid.minXIndex + 1][EquationsEuler::DENS];
-	p     = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex][EquationsEuler::ENERGY],     rho   * std::pow(vx, 2.));
+	p     = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex][EquationsEuler::ENERGY], rho * std::pow(vx, 2.));
 	p_j   = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex + 1][EquationsEuler::ENERGY], rho_j * std::pow(vel_j, 2.));
 	soundSpeed = std::sqrt(gamma * p/rho);
 
@@ -109,6 +109,42 @@ void BoundaryWind::doSubsonicWindGross(int i){
 	grid.quantities[i][EquationsEuler::XMOM]   = rhoGhost * velGhost;
 	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pGhost,rhoGhost * std::pow(velGhost, 2.));
 
+}
+
+void BoundaryWind::doSubsonicWindGrossRadial(int i){
+	std::vector<double> conservedDerivatives (3, 0.0);
+	double rho, rho_j, mom, mom_j, energy, energy_j;
+	double rhoGhost, velGhost, energyGhost;
+	double soundSpeed, vx;
+	double gamma = (static_cast<EquationsEuler*>(&equations))->gamma;
+	double alpha = 1.;
+
+	rho        = grid.quantities[grid.minXIndex][EquationsEuler::DENS];
+	rho_j      = grid.quantities[grid.minXIndex + 1][EquationsEuler::DENS];
+	mom        = grid.quantities[grid.minXIndex][EquationsEuler::XMOM];
+	mom_j      = grid.quantities[grid.minXIndex + 1][EquationsEuler::XMOM];
+	energy     = grid.quantities[grid.minXIndex][EquationsEuler::ENERGY];
+	energy_j   = grid.quantities[grid.minXIndex + 1][EquationsEuler::ENERGY];
+	soundSpeed = (static_cast<EquationsEuler*>(&equations))->getSoundSpeed(grid.quantities[grid.minXIndex]);
+	vx         = grid.quantities[grid.minXIndex][EquationsEuler::XMOM]/grid.quantities[grid.minXIndex][EquationsEuler::DENS];
+
+	conservedDerivatives[0] = (rho_j - rho) /grid.dx;
+	conservedDerivatives[1] = (mom_j - mom)  /grid.dx;
+	conservedDerivatives[2] = (energy_j - energy)   /grid.dx;
+
+	double l1   = (vx - soundSpeed)/2 * (2.0*(gamma-1) * conservedDerivatives[2] - 2.0 * conservedDerivatives[1] * (soundSpeed + vx * (gamma-1)) + conservedDerivatives[0] * (2.0 * soundSpeed * vx + vx * vx * (gamma-1)));
+
+	if(alpha != 0)
+		l1 = l1 * (2 + vx/soundSpeed);
+
+	rhoGhost    = rhoWind;
+	velGhost    = velWind;
+	energyGhost = grid.quantities[grid.minXIndex][EquationsEuler::ENERGY] - grid.dx * (-rhoWind * velWind* velWind * alpha / grid.xmin + (gamma-3)/(gamma-1) * (soundSpeed * alpha * rho * vx*vx / grid.xmin * (vx + soundSpeed) + vx * l1 / 2) / (soundSpeed*soundSpeed - vx*vx));
+
+
+	grid.quantities[i][EquationsEuler::DENS]   = rhoGhost;
+	grid.quantities[i][EquationsEuler::XMOM]   = rhoGhost * velGhost;
+	grid.quantities[i][EquationsEuler::ENERGY] = energyGhost;
 }
 
 double BoundaryWind::getSoundSpeed(double gamma, double density, double pressure){
