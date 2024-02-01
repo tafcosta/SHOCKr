@@ -22,7 +22,7 @@ void BoundaryWind::setBoundaries(){
 			if (machNumber > 1)
 				doSupersonicWind(i);
 			else
-				doSubsonicWindGross(i);
+				doSubsonicWindGrossRadial(i);
 
 		}
 		else if(i > grid.maxXIndex)
@@ -132,7 +132,7 @@ void BoundaryWind::doSubsonicWindGrossRadial(int i){
 	conservedDerivatives[1] = (mom_j - mom)  /grid.dx;
 	conservedDerivatives[2] = (energy_j - energy)   /grid.dx;
 
-	double l1   = (vx - soundSpeed)/2 * (2.0*(gamma-1) * conservedDerivatives[2] - 2.0 * conservedDerivatives[1] * (soundSpeed + vx * (gamma-1)) + conservedDerivatives[0] * (2.0 * soundSpeed * vx + vx * vx * (gamma-1)));
+	double l1   = (vx - soundSpeed)/2 * (2.0 * (gamma-1) * conservedDerivatives[2] - 2.0 * conservedDerivatives[1] * (soundSpeed + vx * (gamma-1)) + conservedDerivatives[0] * (2.0 * soundSpeed * vx + vx * vx * (gamma-1)));
 
 	if(alpha != 0)
 		l1 = l1 * (2 + vx/soundSpeed);
@@ -140,7 +140,6 @@ void BoundaryWind::doSubsonicWindGrossRadial(int i){
 	rhoGhost    = rhoWind;
 	velGhost    = velWind;
 	energyGhost = grid.quantities[grid.minXIndex][EquationsEuler::ENERGY] - grid.dx * (-rhoWind * velWind* velWind * alpha / grid.xmin + (gamma-3)/(gamma-1) * (soundSpeed * alpha * rho * vx*vx / grid.xmin * (vx + soundSpeed) + vx * l1 / 2) / (soundSpeed*soundSpeed - vx*vx));
-
 
 	grid.quantities[i][EquationsEuler::DENS]   = rhoGhost;
 	grid.quantities[i][EquationsEuler::XMOM]   = rhoGhost * velGhost;
