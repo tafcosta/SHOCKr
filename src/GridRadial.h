@@ -19,8 +19,8 @@ public:
 
 protected:
 	std::vector<std::vector<double> > InverseJacobian(double rho, double vel, double press, double gamma);
-	std::vector<std::vector<double> > JacobianPositivePart(double absvx, double soundSpeed, double vel, double gamma);
-	std::vector<std::vector<double> > JacobianNegativePart(double absvx, double soundSpeed, double vel, double gamma);
+	std::vector<std::vector<double> > JacobianPositivePart(double soundSpeed, double vel, double gamma);
+	std::vector<std::vector<double> > JacobianNegativePart(double soundSpeed, double vel, double gamma);
 };
 
 #endif /* SRC_GRIDRADIAL_H_ */
