@@ -14,6 +14,7 @@ class GridRadial: public Grid {
 public:
 	GridRadial(double xmin, double xmax, int nGhost, int nx, Equations& equations) : Grid(xmin, xmax, nGhost, nx, equations){};
 	void update(double dt) override;
+	double wellBalancedSource(double sLeft, double sMid, double sRight, int i);
 	virtual ~GridRadial();
 };
 
