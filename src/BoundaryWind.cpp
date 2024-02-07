@@ -51,13 +51,11 @@ void BoundaryWind::doSubsonicWind(int i){
 
 
 void BoundaryWind::doSubsonicWindGross(int i){
-	double rho, rho_j, rho_k, vx, vel_j, vel_k, p, p_j, p_k;
-	double rhoGhost, velGhost, pGhost;
-	double soundSpeed;
 
-	std::vector<double> charDerivatives (3, 0.0), charDerivativesWind (3, 0.0), charDerivativesMixed (3, 0.0);
 	std::vector<double> primitiveDerivatives (3, 0.0), primitiveDerivativesWind (3, 0.0), primitiveDerivativesMixed (3, 0.0);
 
+	double rho, rho_j, rho_k, vx, vel_j, vel_k, p, p_j, p_k, soundSpeed;
+	double rhoGhost, velGhost, pGhost;
 	double gamma = (static_cast<EquationsEuler*>(&equations))->gamma;
 
 	rho   = grid.quantities[grid.minXIndex][EquationsEuler::DENS];
@@ -80,7 +78,7 @@ void BoundaryWind::doSubsonicWindGross(int i){
 
 	double l1 = (vx - soundSpeed) * (primitiveDerivatives[2] - rho * soundSpeed * primitiveDerivatives[1]);
 
-	std::cout << "L1 = " << l1 << rho << " " << vx << " " << p << std::endl;
+	std::cout << "L1 = " << l1 << " " << rho << " " << vx << " " << p << std::endl;
 
 	rhoGhost = rhoWind;
 	velGhost = velWind;
