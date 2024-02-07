@@ -22,7 +22,7 @@ void BoundaryWind::setBoundaries(){
 			if (machNumber > 1)
 				doSupersonicWind(i);
 			else
-				doSubsonicWindGrossRadial(i);
+				doSubsonicWindGross(i);
 
 		}
 		else if(i > grid.maxXIndex)
@@ -51,8 +51,7 @@ void BoundaryWind::doSubsonicWind(int i){
 
 
 void BoundaryWind::doSubsonicWindGross(int i){
-
-	double rho, rho_j, vx, vel_j, p, p_j;
+	double rho, rho_j, rho_k, vx, vel_j, vel_k, p, p_j, p_k;
 	double rhoGhost, velGhost, pGhost;
 	double soundSpeed;
 
@@ -65,15 +64,22 @@ void BoundaryWind::doSubsonicWindGross(int i){
 
 	rho   = grid.quantities[grid.minXIndex][EquationsEuler::DENS];
 	rho_j = grid.quantities[grid.minXIndex + 1][EquationsEuler::DENS];
+	rho_k = grid.quantities[grid.minXIndex + 2][EquationsEuler::DENS];
+
 	vx    = grid.quantities[grid.minXIndex][EquationsEuler::XMOM]/grid.quantities[grid.minXIndex][EquationsEuler::DENS];
 	vel_j = grid.quantities[grid.minXIndex + 1][EquationsEuler::XMOM]/grid.quantities[grid.minXIndex + 1][EquationsEuler::DENS];
-	p     = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex][EquationsEuler::ENERGY], rho * std::pow(vx, 2.));
+	vel_k = grid.quantities[grid.minXIndex + 2][EquationsEuler::XMOM]/grid.quantities[grid.minXIndex + 2][EquationsEuler::DENS];
+
+	p     = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex][EquationsEuler::ENERGY],       rho * std::pow(vx, 2.));
 	p_j   = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex + 1][EquationsEuler::ENERGY], rho_j * std::pow(vel_j, 2.));
+	p_k   = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex + 2][EquationsEuler::ENERGY], rho_k * std::pow(vel_k, 2.));
+
 	soundSpeed = std::sqrt(gamma * p/rho);
 
-	primitiveDerivatives[0]     = (rho_j - rho) /grid.dx;
-	primitiveDerivatives[1]     = (vel_j - vx)  /grid.dx;
-	primitiveDerivatives[2]     = (p_j   - p)   /grid.dx;
+	primitiveDerivatives[0]     = (-rho_k + 3 * rho_j -2 * rho)/grid.dx; //(rho_j - rho) /grid.dx;
+	primitiveDerivatives[1]     = (-vel_k + 3 * vel_j -2 * vx) /grid.dx; //(vel_j - vx)  /grid.dx;
+	primitiveDerivatives[2]     = (-p_k   + 3 * p_j   -2 * p)  /grid.dx; //(p_j   - p)   /grid.dx;
+
 
 	/*
 	primitiveDerivativesWind[0] = (rho - rhoWind)      /grid.dx;
@@ -103,7 +109,8 @@ void BoundaryWind::doSubsonicWindGross(int i){
 
 	rhoGhost = rhoWind;
 	velGhost = velWind;
-	pGhost   = p - grid.dx * (l1 * vx / (vx * vx - soundSpeed * soundSpeed));
+	//pGhost   = p - grid.dx * (l1 * vx / (vx * vx - soundSpeed * soundSpeed));
+	pGhost   = p - grid.dx * (l1 * velWind / (velWind * velWind - soundSpeed * soundSpeed));
 
 	grid.quantities[i][EquationsEuler::DENS]   = rhoGhost;
 	grid.quantities[i][EquationsEuler::XMOM]   = rhoGhost * velGhost;
@@ -128,9 +135,9 @@ void BoundaryWind::doSubsonicWindGrossRadial(int i){
 	soundSpeed = (static_cast<EquationsEuler*>(&equations))->getSoundSpeed(grid.quantities[grid.minXIndex]);
 	vx         = grid.quantities[grid.minXIndex][EquationsEuler::XMOM]/grid.quantities[grid.minXIndex][EquationsEuler::DENS];
 
-	conservedDerivatives[0] = (rho_j - rho) /grid.dx;
-	conservedDerivatives[1] = (mom_j - mom)  /grid.dx;
-	conservedDerivatives[2] = (energy_j - energy)   /grid.dx;
+	conservedDerivatives[0] = (rho_j - rho)       /grid.dx;
+	conservedDerivatives[1] = (mom_j - mom)       /grid.dx;
+	conservedDerivatives[2] = (energy_j - energy) /grid.dx;
 
 	double l1   = (vx - soundSpeed)/2 * (2.0 * (gamma-1) * conservedDerivatives[2] - 2.0 * conservedDerivatives[1] * (soundSpeed + vx * (gamma-1)) + conservedDerivatives[0] * (2.0 * soundSpeed * vx + vx * vx * (gamma-1)));
 
@@ -139,7 +146,7 @@ void BoundaryWind::doSubsonicWindGrossRadial(int i){
 
 	rhoGhost    = rhoWind;
 	velGhost    = velWind;
-	energyGhost = grid.quantities[grid.minXIndex][EquationsEuler::ENERGY] - grid.dx * (-rhoWind * velWind* velWind * alpha / grid.xmin + (gamma-3)/(gamma-1) * (soundSpeed * alpha * rho * vx*vx / grid.xmin * (vx + soundSpeed) + vx * l1 / 2) / (soundSpeed*soundSpeed - vx*vx));
+	energyGhost = grid.quantities[grid.minXIndex][EquationsEuler::ENERGY] - grid.dx * (-rhoWind * velWind* velWind * alpha / grid.xmin + (gamma-3)/(gamma-1) * (soundSpeed * alpha * rho * vx * vx / grid.xmin * (vx + soundSpeed) + vx * l1 / 2) / (soundSpeed*soundSpeed - vx*vx));
 
 	grid.quantities[i][EquationsEuler::DENS]   = rhoGhost;
 	grid.quantities[i][EquationsEuler::XMOM]   = rhoGhost * velGhost;

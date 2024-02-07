@@ -39,6 +39,11 @@ double EquationsEuler::getPressure(double e, double rhoV2){
 	return (gamma - 1) * (e - 0.5 * rhoV2);
 }
 
+double EquationsEuler::getPressure(std::vector<double>& quantities){
+	double rhoV2 = quantities[XMOM] * quantities[XMOM] / quantities[DENS];
+	return getPressure(quantities[ENERGY], rhoV2);
+}
+
 double EquationsEuler::getSoundSpeed(std::vector<double>& quantities){
 	double rhoV2 = quantities[XMOM] * quantities[XMOM] / quantities[DENS];
 	double p = getPressure(quantities[ENERGY], rhoV2);
