@@ -68,9 +68,9 @@ void BoundaryWind::doSubsonicWindGross(int i){
 	vel_j = grid.quantities[grid.minXIndex + 1][EquationsEuler::XMOM]/grid.quantities[grid.minXIndex + 1][EquationsEuler::DENS];
 	vel_k = grid.quantities[grid.minXIndex + 2][EquationsEuler::XMOM]/grid.quantities[grid.minXIndex + 2][EquationsEuler::DENS];
 
-	p     = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex][EquationsEuler::ENERGY],       rho * std::pow(vx, 2.));
-	p_j   = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex + 1][EquationsEuler::ENERGY], rho_j * std::pow(vel_j, 2.));
-	p_k   = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex + 2][EquationsEuler::ENERGY], rho_k * std::pow(vel_k, 2.));
+	p     = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex]);
+	p_j   = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex + 1]);
+	p_k   = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[grid.minXIndex + 2]);
 
 	soundSpeed = std::sqrt(gamma * p/rho);
 
@@ -78,33 +78,9 @@ void BoundaryWind::doSubsonicWindGross(int i){
 	primitiveDerivatives[1]     = (-vel_k + 3 * vel_j -2 * vx) /grid.dx; //(vel_j - vx)  /grid.dx;
 	primitiveDerivatives[2]     = (-p_k   + 3 * p_j   -2 * p)  /grid.dx; //(p_j   - p)   /grid.dx;
 
-
-	/*
-	primitiveDerivativesWind[0] = (rho - rhoWind)      /grid.dx;
-	primitiveDerivativesWind[1] = (vx  - velWind)      /grid.dx;
-	primitiveDerivativesWind[2] = (p   - pressureWind) /grid.dx;
-
-	setTransform(transform, rho, vx, p);
-	setTransformInverse(transformInverse, rho, vx, p);
-
-	charDerivatives     = matrixMultiply(transform, primitiveDerivatives);
-	charDerivativesWind = matrixMultiply(transform, primitiveDerivativesWind);
-
-	charDerivativesMixed[0] = charDerivatives[0];     // Characteristic travelling at v - c
-	charDerivativesMixed[1] = charDerivativesWind[1]; // Characteristic travelling at v
-	charDerivativesMixed[2] = charDerivativesWind[2]; //Characteristic travelling at v + c
-
-	primitiveDerivativesMixed = matrixMultiply(transformInverse, charDerivativesMixed);
-	 */
-
 	double l1 = (vx - soundSpeed) * (primitiveDerivatives[2] - rho * soundSpeed * primitiveDerivatives[1]);
 
-	std::cout << "L1 = " << l1 << " PrimDeriv1 = " << primitiveDerivatives[1] << " PrimDeriv2 = " << primitiveDerivatives[2] << std::endl;
-	/*
-	rhoGhost = rho - grid.dx * primitiveDerivativesMixed[0];
-	velGhost = vx  - grid.dx * primitiveDerivativesMixed[1];
-	pGhost   = p   - grid.dx * primitiveDerivativesMixed[2];
-	*/
+	std::cout << "L1 = " << l1 << rho << " " << vx << " " << p << std::endl;
 
 	rhoGhost = rhoWind;
 	velGhost = velWind;
