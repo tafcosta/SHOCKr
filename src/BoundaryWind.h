@@ -26,7 +26,6 @@ protected:
 
 	void doSubsonicWind(int i);
 	void doSubsonicWindGross(int i);
-	void doSubsonicWindGrossRadial(int i);
 
 	void doSupersonicWind(int i);
 	double getSoundSpeed(double gamma, double density, double pressure);
