@@ -1,7 +1,7 @@
 maxTime            0.12
 outputTimeInterval 0.01
 
-gridMin            1.
+gridMin            0.9
 gridMax            10.
 NumberCells        1000
 NumberGhostCells   1
