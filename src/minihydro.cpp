@@ -15,7 +15,7 @@ InitialData *initialdata               = new InitialDataHomogeneous(config.bgDen
 Boundary *boundary                     = new BoundaryWind(config.windDensity, config.windVel, config.windPressure, config.bgDensity, config.bgVel, config.bgPressure, *grid, *equations);
 Output *output                         = new OutputEuler(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);
-//ShockFinder *shockfinder               = new ShockFinderEulerPassiveScalar(*grid, *equations);
+ShockFinder *shockfinder               = new ShockFinderEuler(*grid, *equations);
 
 void doGreeting();
 void freeMemory();
@@ -59,7 +59,7 @@ int main(){
 	}
 
 	output->makeOutput(outputFilename);
-	//shockfinder->findShockZones();
+	shockfinder->findShockZones();
 
 	freeMemory();
 
@@ -88,5 +88,5 @@ void freeMemory(void){
 	delete initialdata;
 	delete output;
 	delete riemannsolver;
-	//delete shockfinder;
+	delete shockfinder;
 }

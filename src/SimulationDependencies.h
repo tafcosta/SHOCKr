@@ -44,7 +44,7 @@
 #include "RiemannSolverRusanov.h"
 
 #include "ShockFinder.h"
-#include "ShockFinderEulerPassiveScalar.h"
+#include "ShockFinderEuler.h"
 #include "SimulationConfig.h"
 
 #endif /* SRC_SIMULATIONDEPENDENCIES_H_ */
