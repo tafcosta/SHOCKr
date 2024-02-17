@@ -8,6 +8,7 @@ SHOCKr is a 1D spherical hydro solver designed for studying the shock structure 
 
 - **Spherical Modeling:** Simulate hydrodynamics in a 1D spherical framework.
 - **Shock Structure Study:** Explore and analyze shock structures resulting from wind and ambient medium interaction.
+- **Radiative Cooling :** Primordial Radiative Cooling is implemented following the exact integration method introduced in Townsend (2009). 
 - **On-the-Fly Shock Finder:** Shockr incorporates a real-time shock finder that dynamically identifies shock fronts during simulations without the need for post-processing.
 - **Subsonic & Supersonic winds :** Shockr supports the injection of both supersonic and subsonic winds. 
 
