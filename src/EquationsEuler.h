@@ -20,6 +20,7 @@ public:
 	static const int ENERGY = 2;
 
 	double gamma;
+
 	double* getFlux(std::vector<double>& quantities) override;
 	double  getMaxAbsEigenvalue(std::vector<double>& quantities) override;
 	double  getPressure(double e, double rhoV2);

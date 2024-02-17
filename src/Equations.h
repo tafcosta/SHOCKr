@@ -20,6 +20,8 @@ public:
 	virtual double  getMaxAbsEigenvalue(std::vector<double>& quantities){return 0.;};
 	virtual double* getFlux(std::vector<double>& quantities){return 0;};
 	virtual void postProcessor(std::vector<double>& quantities, double dt){};
+	virtual void preProcessor(){};
+
 };
 
 #endif /* SRC_EQUATIONS_H_ */

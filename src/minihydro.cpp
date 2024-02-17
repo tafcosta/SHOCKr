@@ -33,6 +33,8 @@ int main(){
 	double time = 0., dt = 0., timeSinceLastOutput = 0.0;
 
 	doGreeting();
+
+	equations->preProcessor();
 	initialdata->setInitialData();
 
 	while(time <= maxTime){
@@ -49,7 +51,7 @@ int main(){
 
 		if((time == 0.) || (timeSinceLastOutput > config.outputTimeInterval)){
 			output->makeOutput(outputFilename);
-			//shockfinder->findShockZones();
+			shockfinder->findShockZones();
 			timeSinceLastOutput = 0.;
 		}
 

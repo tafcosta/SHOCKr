@@ -17,13 +17,17 @@ public:
 
 	static const double temperatureRef = 0.1;
 
+	std::vector<std::vector<double> > coolingTable;
+
 	double coolingRate(double temperature);
 	void   doCooling(std::vector<double>& quantities, double dt);
 
 	double getCoolingTime(double temperature);
-	double getInverseTemporalEvolutionFunction(double temperature);
+	double getInverseTemporalEvolutionFunction(double Y);
 	double getTemporalEvolutionFunction(double temperature);
 	double getTemperatureInternalUnits(std::vector<double>& quantities);
+
+	void   preProcessor() override;
 	void   postProcessor(std::vector<double>& quantities, double dt) override;
 
 
