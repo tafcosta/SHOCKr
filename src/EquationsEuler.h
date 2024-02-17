@@ -21,11 +21,11 @@ public:
 
 	double gamma;
 	double* getFlux(std::vector<double>& quantities) override;
-	double getMaxAbsEigenvalue(std::vector<double>& quantities) override;
-	double totalEnergy(double p, double rhoV2);
-	double getPressure(double e, double rhoV2);
-	double getPressure(std::vector<double>& quantities);
-	double getSoundSpeed(std::vector<double>& quantities);
+	double  getMaxAbsEigenvalue(std::vector<double>& quantities) override;
+	double  getPressure(double e, double rhoV2);
+	double  getPressure(std::vector<double>& quantities);
+	double  getSoundSpeed(std::vector<double>& quantities);
+	double  totalEnergy(double p, double rhoV2);
 };
 
 #endif /* SRC_EQUATIONSEULER_H_ */

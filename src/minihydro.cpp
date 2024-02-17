@@ -9,13 +9,13 @@
 
 SimulationConfig config("config.txt");
 
-EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
-Grid *grid                             = new Grid1D(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
-InitialData *initialdata               = new InitialDataHomogeneousPassiveScalar(config.bgDensity, config.bgVel, config.bgPressure, *grid, *equations);
-Boundary *boundary                     = new BoundaryWindPassiveScalar(config.windDensity, config.windVel, config.windPressure, config.bgDensity, config.bgVel, config.bgPressure, *grid, *equations);
-Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
+EquationsEuler *equations              = new EquationsEulerCooling(5./3);
+Grid *grid                             = new GridRadial(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
+InitialData *initialdata               = new InitialDataHomogeneous(config.bgDensity, config.bgVel, config.bgPressure, *grid, *equations);
+Boundary *boundary                     = new BoundaryWind(config.windDensity, config.windVel, config.windPressure, config.bgDensity, config.bgVel, config.bgPressure, *grid, *equations);
+Output *output                         = new OutputEuler(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);
-ShockFinder *shockfinder               = new ShockFinderEulerPassiveScalar(*grid, *equations);
+//ShockFinder *shockfinder               = new ShockFinderEulerPassiveScalar(*grid, *equations);
 
 void doGreeting();
 void freeMemory();
@@ -49,7 +49,7 @@ int main(){
 
 		if((time == 0.) || (timeSinceLastOutput > config.outputTimeInterval)){
 			output->makeOutput(outputFilename);
-			shockfinder->findShockZones();
+			//shockfinder->findShockZones();
 			timeSinceLastOutput = 0.;
 		}
 
@@ -59,9 +59,10 @@ int main(){
 	}
 
 	output->makeOutput(outputFilename);
-	shockfinder->findShockZones();
+	//shockfinder->findShockZones();
 
 	freeMemory();
+
 	std::cout << "All done." << std::endl;
 	return 0;
 }
@@ -87,5 +88,5 @@ void freeMemory(void){
 	delete initialdata;
 	delete output;
 	delete riemannsolver;
-	delete shockfinder;
+	//delete shockfinder;
 }

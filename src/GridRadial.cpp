@@ -34,6 +34,7 @@ void GridRadial::update(double dt) {
 		quantities[i][EquationsEuler::XMOM] += dt * 3 * 2./dVolume * dx * getX(i) * p;
 		//quantities[i][EquationsEuler::XMOM] += dt * wellBalancedSource(3 * 2./dVolume * dx * getX(i-1) * pLeft, 3 * 2./dVolume * dx * getX(i) * p, 3 * 2./dVolume * dx * getX(i+1) * pRight, i);
 
+		equations.postProcessor(quantities[i], dt);
 	}
 }
 

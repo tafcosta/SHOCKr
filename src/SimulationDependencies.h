@@ -19,6 +19,7 @@
 
 #include "Equations.h"
 #include "EquationsEuler.h"
+#include "EquationsEulerCooling.h"
 #include "EquationsEulerPassiveScalar.h"
 #include "EquationsLinearisedEuler.h"
 

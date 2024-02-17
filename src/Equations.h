@@ -17,8 +17,9 @@ public:
 
 	virtual int nCons(void);
 
-	virtual double getMaxAbsEigenvalue(std::vector<double>& quantities){return 0.;};
+	virtual double  getMaxAbsEigenvalue(std::vector<double>& quantities){return 0.;};
 	virtual double* getFlux(std::vector<double>& quantities){return 0;};
+	virtual void postProcessor(std::vector<double>& quantities, double dt){};
 };
 
 #endif /* SRC_EQUATIONS_H_ */

@@ -24,9 +24,10 @@ void OutputEuler::makeOutput(const std::string& filename){
     	rhoV2 = grid.quantities[i][EquationsEuler::XMOM] * grid.quantities[i][EquationsEuler::XMOM] / grid.quantities[i][EquationsEuler::DENS];
     	p = (static_cast<EquationsEuler*>(&equations))->getPressure(grid.quantities[i][EquationsEuler::ENERGY], rhoV2);
     	gamma = (static_cast<EquationsEuler*>(&equations))->gamma;
-        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEuler::DENS] << " " << 0.5 * rhoV2 / (p / (gamma - 1) + 0.5 * rhoV2) << " " << grid.quantities[i][EquationsEuler::XMOM] / grid.quantities[i][EquationsEuler::DENS] << " " << p << std::endl;
+        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEuler::DENS] << " " << grid.quantities[i][EquationsEuler::XMOM] / grid.quantities[i][EquationsEuler::DENS] << " " << p << std::endl;
     }
 
+    outputFile << " " << std::endl;
     outputFile << " " << std::endl;
     outputFile.close();
 }

@@ -20,6 +20,7 @@ public:
 	static const int PASS  = 3;
 
 	double* getFlux(std::vector<double>& quantities) override;
+
 };
 
 #endif /* SRC_EQUATIONSEULERPASSIVESCALAR_H_ */
