@@ -15,15 +15,21 @@ public:
 	EquationsEulerCooling(double gamma) : EquationsEuler(gamma) {};
 	virtual ~EquationsEulerCooling();
 
-	static const double temperatureRef = 0.1;
+protected:
 
+	double coolingRateRef, temperatureRef;
+	int numTemperatureBins;
+
+    std::vector<double> temperatureBins;
+    std::vector<double> coolingRateEdgeBin;
+    std::vector<double> slope;
 	std::vector<std::vector<double> > coolingTable;
 
 	double coolingRate(double temperature);
 	void   doCooling(std::vector<double>& quantities, double dt);
 
 	double getCoolingTime(double temperature);
-	double getInverseTemporalEvolutionFunction(double Y);
+	double getInverseTemporalEvolutionFunction(double temperature, double TemporalEvolutionFunction);
 	double getTemporalEvolutionFunction(double temperature);
 	double getTemperatureInternalUnits(std::vector<double>& quantities);
 
