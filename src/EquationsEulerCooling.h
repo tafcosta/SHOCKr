@@ -18,7 +18,7 @@ public:
 protected:
 
 	double coolingRateRef, temperatureRef;
-	int numTemperatureBins;
+	int numTemperatureEdges;
 
     std::vector<double> temperatureBins;
     std::vector<double> coolingRateEdgeBin;

@@ -24,8 +24,10 @@ void EquationsEulerCooling::doCooling(std::vector<double>& quantities, double dt
 }
 
 double EquationsEulerCooling::coolingRate(double temperature){
-	double lambdaRef = 1;
-	return std::max(lambdaRef * (temperature / temperatureRef), 1.e-30);
+	int k;
+	for(k = numTemperatureEdges - 1; temperature < temperatureBins[k]; k--){};
+
+	return std::max(coolingRateEdgeBin[k + 1] * (temperatureBins[k + 1] / temperatureRef), 1.e-30);
 }
 
 double EquationsEulerCooling::getCoolingTime(double temperature){
@@ -38,7 +40,7 @@ double EquationsEulerCooling::getTemporalEvolutionFunction(double temperature){
 	double TemporalEvolutionFunction;
 	double integrationConstant = 0.;
 
-	for(k = numTemperatureBins - 1; temperature < temperatureBins[k]; k--){
+	for(k = numTemperatureEdges - 1; temperature < temperatureBins[k]; k--){
 		if(slope[k] != 1)
 			integrationConstant -= 1./(1 - slope[k]) * coolingRateRef/coolingRateEdgeBin[k] * temperatureBins[k]/temperatureRef * (1 - std::pow(temperatureBins[k] / temperatureBins[k+1], slope[k] - 1));
 		else
@@ -55,12 +57,11 @@ double EquationsEulerCooling::getTemporalEvolutionFunction(double temperature){
 }
 
 double EquationsEulerCooling::getInverseTemporalEvolutionFunction(double temperature, double TemporalEvolutionFunction){
-
 	int k;
 	double integrationConstant = 0.;
 	double InverseTemporalEvolutionFunction;
 
-	for(k = numTemperatureBins - 1; temperature < temperatureBins[k]; k--){
+	for(k = numTemperatureEdges - 1; temperature < temperatureBins[k]; k--){
 		if(slope[k] != 1)
 			integrationConstant -= 1./(1 - slope[k]) * coolingRateRef/coolingRateEdgeBin[k] * temperatureBins[k]/temperatureRef * (1 - std::pow(temperatureBins[k] / temperatureBins[k+1], slope[k] - 1));
 		else
@@ -105,18 +106,17 @@ void EquationsEulerCooling::preProcessor(){
     inputFile.close();
 
     for (size_t i = 0; i < coolingTable.size(); ++i) {
-        temperatureBins.push_back(coolingTable[i][0]);
-        coolingRateEdgeBin.push_back(coolingTable[i][1]);
+        temperatureBins.push_back(std::pow(10, coolingTable[i][0]));
+        coolingRateEdgeBin.push_back(std::pow(10, coolingTable[i][1]));
         slope.push_back(coolingTable[i][2]);
     }
 
-    numTemperatureBins = static_cast<int>(coolingTable.size() + 1);
-    temperatureRef     = std::pow(10, coolingTable.back().front() + (coolingTable[1][0] - coolingTable[0][0]));
-    coolingRateRef     = coolingTable[numTemperatureBins - 1][1]  + slope[numTemperatureBins - 1] * (temperatureRef - temperatureBins[numTemperatureBins - 1]);
+    numTemperatureEdges = static_cast<int>(coolingTable.size());
+    temperatureRef      = std::pow(10, std::log10(temperatureBins[numTemperatureEdges - 1])    + (std::log10(temperatureBins[1]) - std::log10(temperatureBins[0])));
+    coolingRateRef      = std::pow(10, std::log10(coolingRateEdgeBin[numTemperatureEdges - 1]) + slope[numTemperatureEdges - 1]  * (std::log10(temperatureRef) - std::log10(temperatureBins[numTemperatureEdges - 1])));
 
     temperatureBins.push_back(temperatureRef);
     coolingRateEdgeBin.push_back(coolingRateRef);
-
 }
 
 void EquationsEulerCooling::postProcessor(std::vector<double>& quantities, double dt){
