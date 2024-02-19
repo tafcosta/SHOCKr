@@ -10,6 +10,8 @@
 #ifndef SRC_EQUATIONS_H_
 #define SRC_EQUATIONS_H_
 
+#include "SimulationConfig.h"
+
 class Equations {
 public:
 	Equations();

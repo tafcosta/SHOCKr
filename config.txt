@@ -8,8 +8,12 @@ NumberGhostCells   1
 
 bgDensity          0.1
 bgVel              0.
-bgPressure         0.01
+bgPressure         0.1
 
 windDensity        10
 windVel            20.
 windPressure       0.0001
+
+unitLengthInCgs    3.08567758e21
+unitMassInCgs      1.989e33
+unitVelocityInCgs  1.e5

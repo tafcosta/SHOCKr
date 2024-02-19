@@ -49,6 +49,12 @@ void SimulationConfig::readConfig(const std::string& configFile) {
         	windVel = std::stod(value);
         } else if (key == "windPressure") {
         	windPressure = std::stod(value);
+        } else if (key == "unitMassInCgs") {
+        	unitMassInCgs = std::stod(value);
+        } else if (key == "unitVelocityInCgs") {
+        	unitVelocityInCgs = std::stod(value);
+        } else if (key == "unitLengthInCgs") {
+        	unitLengthInCgs = std::stod(value);
         }
     }
 }

@@ -32,6 +32,9 @@ public:
     // Wind parameters
     double windDensity, windVel, windPressure;
 
+    // Units
+    double unitLengthInCgs, unitMassInCgs, unitVelocityInCgs;
+
     SimulationConfig(const std::string& configFile);
     virtual ~SimulationConfig();
 

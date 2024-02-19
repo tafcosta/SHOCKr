@@ -12,14 +12,16 @@
 #include <string>
 
 #include "EquationsEulerCooling.h"
-#include "Grid.h"
 
 void EquationsEulerCooling::doCooling(std::vector<double>& quantities, double dt){
 
-	double temperatureOld = getTemperatureInternalUnits(quantities);
+	double temperatureOld = getTemperaturePhysicalUnits(quantities);
 	double temperatureNew = getInverseTemporalEvolutionFunction(temperatureOld, getTemporalEvolutionFunction(temperatureOld) + temperatureOld/temperatureRef * coolingRate(temperatureRef)/coolingRate(temperatureOld) * dt/getCoolingTime(temperatureOld));
+	double temperatureNewInternalUnits = temperatureNew * BOLTZMANN_CONSTANT / PROTON_MASS / std::pow(unitV, 2.);
 
-	quantities[ENERGY] = EquationsEuler::totalEnergy(temperatureNew * quantities[DENS], std::pow(quantities[XMOM], 2.) / quantities[DENS]);
+	std::cout << "temperature = " << temperatureNewInternalUnits << " " << temperatureNew << std::endl;
+
+	quantities[ENERGY] = EquationsEuler::totalEnergy(temperatureNewInternalUnits * quantities[DENS], std::pow(quantities[XMOM], 2.) / quantities[DENS]);
 
 }
 
@@ -75,11 +77,11 @@ double EquationsEulerCooling::getInverseTemporalEvolutionFunction(double tempera
 		InverseTemporalEvolutionFunction = temperatureBins[k] * std::exp(-coolingRateEdgeBin[k]/coolingRateRef * temperatureRef/temperatureBins[k] * (TemporalEvolutionFunction - integrationConstant));
 
 	return InverseTemporalEvolutionFunction;
-;
+
 }
 
-double EquationsEulerCooling::getTemperatureInternalUnits(std::vector<double>& quantities){
-	return EquationsEuler::getPressure(quantities) / quantities[DENS];
+double EquationsEulerCooling::getTemperaturePhysicalUnits(std::vector<double>& quantities){
+	return EquationsEuler::getPressure(quantities) / quantities[DENS] * std::pow(unitV, 2.) * PROTON_MASS / BOLTZMANN_CONSTANT;
 }
 
 void EquationsEulerCooling::preProcessor(){

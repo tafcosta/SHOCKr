@@ -9,6 +9,7 @@
 #define SRC_EQUATIONSEULER_H_
 
 #include "Equations.h"
+#include "SimulationConfig.h"
 
 class EquationsEuler: public Equations {
 public:

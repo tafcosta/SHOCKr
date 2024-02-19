@@ -9,13 +9,19 @@
 #define SRC_EQUATIONSEULERCOOLING_H_
 
 #include "EquationsEuler.h"
+#include "Grid.h"
+#include "SimulationConfig.h"
 
 class EquationsEulerCooling: public EquationsEuler {
 public:
-	EquationsEulerCooling(double gamma) : EquationsEuler(gamma) {};
+	EquationsEulerCooling(double gamma, double unitL, double unitM, double unitV) : EquationsEuler(gamma), unitL(unitL), unitM(unitM), unitV(unitV) {};
 	virtual ~EquationsEulerCooling();
 
 protected:
+
+	double unitL, unitM, unitV;
+	double const BOLTZMANN_CONSTANT = 1.3807e-16;
+	double const PROTON_MASS = 1.66e-24;
 
 	double coolingRateRef, temperatureRef;
 	int numTemperatureEdges;
@@ -31,7 +37,7 @@ protected:
 	double getCoolingTime(double temperature);
 	double getInverseTemporalEvolutionFunction(double temperature, double TemporalEvolutionFunction);
 	double getTemporalEvolutionFunction(double temperature);
-	double getTemperatureInternalUnits(std::vector<double>& quantities);
+	double getTemperaturePhysicalUnits(std::vector<double>& quantities);
 
 	void   preProcessor() override;
 	void   postProcessor(std::vector<double>& quantities, double dt) override;
