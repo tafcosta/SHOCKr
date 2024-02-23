@@ -14,17 +14,15 @@
 
 class BoundaryWind: public Boundary {
 public:
-	BoundaryWind(double rhoWind, double velWind, double pressureWind, double rhoBackground, double velBackground, double pressureBackground, Grid& grid, EquationsEuler& equations) \
-	: Boundary(grid, equations), rhoWind(rhoWind), velWind(velWind), pressureWind(pressureWind), rhoBackground(rhoBackground), velBackground(velBackground), pressureBackground(pressureBackground) {};
+	BoundaryWind(double rhoWind, double velWind, double pressureWind, Grid& grid, EquationsEuler& equations) \
+	: Boundary(grid, equations), rhoWind(rhoWind), velWind(velWind), pressureWind(pressureWind) {};
 
 	virtual ~BoundaryWind();
 	void setBoundaries() override;
 
 protected:
 	double rhoWind, velWind, pressureWind;
-	double rhoBackground, velBackground, pressureBackground;
 
-	void doSubsonicWind(int i);
 	void doSubsonicWindGross(int i);
 
 	void doSupersonicWind(int i);

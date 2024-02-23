@@ -15,8 +15,8 @@
 
 class BoundaryWindPassiveScalar: public BoundaryWind {
 public:
-	BoundaryWindPassiveScalar(double rhoWind, double velWind, double pressureWind, double rhoBackground, double velBackground, double pressureBackground, Grid& grid, EquationsEulerPassiveScalar& equations) \
-	: BoundaryWind(rhoWind, velWind, pressureWind, rhoBackground, velBackground, pressureBackground, grid, equations) {};
+	BoundaryWindPassiveScalar(double rhoWind, double velWind, double pressureWind, Grid& grid, EquationsEulerPassiveScalar& equations) \
+	: BoundaryWind(rhoWind, velWind, pressureWind, grid, equations) {};
 	void setBoundaries() override;
 	virtual ~BoundaryWindPassiveScalar();
 };

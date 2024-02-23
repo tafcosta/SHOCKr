@@ -36,19 +36,6 @@ void BoundaryWind::doSupersonicWind(int i){
 	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureWind, rhoWind * std::pow(velWind, 2.));
 }
 
-void BoundaryWind::doSubsonicWind(int i){
-	grid.quantities[i][EquationsEuler::DENS]   = rhoWind;
-	grid.quantities[i][EquationsEuler::XMOM]   = rhoWind * velWind;
-
-	double gamma = (static_cast<EquationsEuler*>(&equations))->gamma;
-	double pressureAtBoundary = pressureBackground + ((velWind - velBackground)*((1 + gamma) * rhoBackground * (velWind - velBackground) \
-			+ std::sqrt(rhoBackground * (16 * gamma * pressureBackground + rhoBackground * std::pow(velWind,2) \
-			+ gamma * (2 + gamma) * rhoBackground * std::pow(velWind,2) \
-			- 2 * std::pow(1 + gamma,2) * rhoBackground * velWind * velBackground + std::pow(1 + gamma, 2) * rhoBackground * std::pow(velBackground,2))))) / 4.;
-
-	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureAtBoundary, rhoBackground * std::pow(velWind, 2.));
-}
-
 
 void BoundaryWind::doSubsonicWindGross(int i){
 
