@@ -55,7 +55,7 @@ int main(){
 			timeSinceLastOutput = 0.;
 		}
 
-		std::cout << "time = " << time << std::endl;
+		std::cout << time << std::endl;
 		timeSinceLastOutput += dt;
 		time += dt;
 	}

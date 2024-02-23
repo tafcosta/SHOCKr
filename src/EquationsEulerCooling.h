@@ -34,7 +34,7 @@ protected:
 	double coolingRate(double temperature);
 	void   doCooling(std::vector<double>& quantities, double dt);
 
-	double getCoolingTime(double temperature);
+	double getCoolingTime(std::vector<double>& quantities);
 	double getInverseTemporalEvolutionFunction(double temperature, double TemporalEvolutionFunction);
 	double getTemporalEvolutionFunction(double temperature);
 	double getTemperaturePhysicalUnits(std::vector<double>& quantities);

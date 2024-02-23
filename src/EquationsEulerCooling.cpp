@@ -14,12 +14,12 @@
 #include "EquationsEulerCooling.h"
 
 void EquationsEulerCooling::doCooling(std::vector<double>& quantities, double dt){
-
+	double dtPhysical = dt * unitL/unitV;
 	double temperatureOld = getTemperaturePhysicalUnits(quantities);
-	double temperatureNew = getInverseTemporalEvolutionFunction(temperatureOld, getTemporalEvolutionFunction(temperatureOld) + temperatureOld/temperatureRef * coolingRate(temperatureRef)/coolingRate(temperatureOld) * dt/getCoolingTime(temperatureOld));
+	double temperatureNew = std::max(1.e4, getInverseTemporalEvolutionFunction(temperatureOld, getTemporalEvolutionFunction(temperatureOld) + temperatureOld/temperatureRef * coolingRate(temperatureRef)/coolingRate(temperatureOld) * dtPhysical/getCoolingTime(quantities)));
 	double temperatureNewInternalUnits = temperatureNew * BOLTZMANN_CONSTANT / PROTON_MASS / std::pow(unitV, 2.);
 
-	std::cout << "temperature = " << temperatureNewInternalUnits << " " << temperatureNew << std::endl;
+	//std::cout << temperatureNew << std::endl;
 
 	quantities[ENERGY] = EquationsEuler::totalEnergy(temperatureNewInternalUnits * quantities[DENS], std::pow(quantities[XMOM], 2.) / quantities[DENS]);
 
@@ -29,11 +29,14 @@ double EquationsEulerCooling::coolingRate(double temperature){
 	int k;
 	for(k = numTemperatureEdges - 1; temperature < temperatureBins[k]; k--){};
 
-	return std::max(coolingRateEdgeBin[k + 1] * (temperatureBins[k + 1] / temperatureRef), 1.e-30);
+	return std::max(coolingRateEdgeBin[k + 1] * std::pow((temperatureBins[k + 1] / temperatureRef), slope[k]), 1.e-30);
 }
 
-double EquationsEulerCooling::getCoolingTime(double temperature){
-	return std::pow((gamma - 1) * coolingRate(temperature) / temperature, -1);
+double EquationsEulerCooling::getCoolingTime(std::vector<double>& quantities){
+	double temperature = getTemperaturePhysicalUnits(quantities);
+	double densityPhysical = quantities[DENS] * PROTON_MASS;
+
+	return std::pow(((gamma - 1) * coolingRate(temperature) * densityPhysical)/ (BOLTZMANN_CONSTANT * PROTON_MASS * temperature), -1);
 }
 
 double EquationsEulerCooling::getTemporalEvolutionFunction(double temperature){
@@ -48,7 +51,6 @@ double EquationsEulerCooling::getTemporalEvolutionFunction(double temperature){
 		else
 			integrationConstant -= coolingRateRef/coolingRateEdgeBin[k] * temperatureBins[k]/temperatureRef * std::log(temperatureBins[k] / temperatureBins[k+1]);
 	}
-	k += 1;
 
 	if(slope[k] != 1)
 		TemporalEvolutionFunction = 1./(1 - slope[k]) * coolingRateRef/coolingRateEdgeBin[k] * temperatureBins[k]/temperatureRef * (1 - std::pow(temperatureBins[k] / temperature, slope[k] - 1));
@@ -69,10 +71,9 @@ double EquationsEulerCooling::getInverseTemporalEvolutionFunction(double tempera
 		else
 			integrationConstant -= coolingRateRef/coolingRateEdgeBin[k] * temperatureBins[k]/temperatureRef * std::log(temperatureBins[k] / temperatureBins[k+1]);
 	}
-	k += 1;
 
 	if(slope[k] != 1)
-		InverseTemporalEvolutionFunction = temperatureBins[k] * std::pow((1 - (1 - slope[k]) * coolingRateEdgeBin[k]/coolingRateRef * temperatureRef/temperatureBins[k] * (TemporalEvolutionFunction - integrationConstant)), 1/(1 - slope[k]));
+		InverseTemporalEvolutionFunction = temperatureBins[k] * std::pow((1 - (1 - slope[k]) * coolingRateEdgeBin[k]/coolingRateRef * temperatureRef/temperatureBins[k] * (TemporalEvolutionFunction - integrationConstant)), 1./(1 - slope[k]));
 	else
 		InverseTemporalEvolutionFunction = temperatureBins[k] * std::exp(-coolingRateEdgeBin[k]/coolingRateRef * temperatureRef/temperatureBins[k] * (TemporalEvolutionFunction - integrationConstant));
 

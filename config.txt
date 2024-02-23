@@ -3,15 +3,15 @@ outputTimeInterval 0.01
 
 gridMin            0.01
 gridMax            10.
-NumberCells        1000
+NumberCells        1
 NumberGhostCells   1
 
 bgDensity          0.1
 bgVel              0.
-bgPressure         0.1
+bgPressure         10000.
 
-windDensity        10
-windVel            20.
+windDensity        100
+windVel            200.
 windPressure       0.0001
 
 unitLengthInCgs    3.08567758e21
