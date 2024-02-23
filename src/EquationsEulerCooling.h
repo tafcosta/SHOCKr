@@ -22,6 +22,7 @@ protected:
 	double unitL, unitM, unitV;
 	double const BOLTZMANN_CONSTANT = 1.3807e-16;
 	double const PROTON_MASS = 1.66e-24;
+	double const tempMin = 1.e4;
 
 	double coolingRateRef, temperatureRef;
 	int numTemperatureEdges;

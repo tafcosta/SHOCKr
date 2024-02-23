@@ -16,7 +16,7 @@
 void EquationsEulerCooling::doCooling(std::vector<double>& quantities, double dt){
 	double dtPhysical = dt * unitL/unitV;
 	double temperatureOld = getTemperaturePhysicalUnits(quantities);
-	double temperatureNew = std::max(1.e4, getInverseTemporalEvolutionFunction(temperatureOld, getTemporalEvolutionFunction(temperatureOld) + temperatureOld/temperatureRef * coolingRate(temperatureRef)/coolingRate(temperatureOld) * dtPhysical/getCoolingTime(quantities)));
+	double temperatureNew = std::max(tempMin, getInverseTemporalEvolutionFunction(temperatureOld, getTemporalEvolutionFunction(temperatureOld) + temperatureOld/temperatureRef * coolingRate(temperatureRef)/coolingRate(temperatureOld) * dtPhysical/getCoolingTime(quantities)));
 	double temperatureNewInternalUnits = temperatureNew * BOLTZMANN_CONSTANT / PROTON_MASS / std::pow(unitV, 2.);
 
 	//std::cout << temperatureNew << std::endl;
@@ -127,6 +127,5 @@ void EquationsEulerCooling::postProcessor(std::vector<double>& quantities, doubl
 }
 
 EquationsEulerCooling::~EquationsEulerCooling() {
-	// TODO Auto-generated destructor stub
 }
 
