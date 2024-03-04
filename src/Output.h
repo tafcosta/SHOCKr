@@ -17,7 +17,7 @@ class Output {
 public:
 	Output(Grid& grid, Equations& equations);
 	virtual ~Output();
-	virtual void makeOutput(const std::string& filename){};
+	virtual void makeOutput(const std::string& filename, double time){};
 
 	Grid& grid;
 	Equations& equations;

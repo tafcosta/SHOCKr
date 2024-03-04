@@ -15,7 +15,7 @@ public:
 	OutputLinearisedEuler(Grid& grid, Equations& equations) : Output(grid, equations) {};;
 	virtual ~OutputLinearisedEuler();
 
-	void makeOutput(const std::string& filename) override;
+	void makeOutput(const std::string& filename, double time) override;
 };
 
 #endif /* SRC_OUTPUTLINEARISEDEULER_H_ */

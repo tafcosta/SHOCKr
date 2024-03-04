@@ -14,10 +14,10 @@
 
 class OutputEulerPassiveScalar: public Output {
 public:
-	OutputEulerPassiveScalar(Grid& grid, EquationsEulerPassiveScalar& equations) : Output(grid, equations) {};
+	OutputEulerPassiveScalar(Grid& grid, Equations& equations) : Output(grid, equations) {};
 	virtual ~OutputEulerPassiveScalar();
 
-	void makeOutput(const std::string& filename) override;
+	void makeOutput(const std::string& filename, double time) override;
 
 };
 

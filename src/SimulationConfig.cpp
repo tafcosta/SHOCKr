@@ -43,6 +43,8 @@ void SimulationConfig::readConfig(const std::string& configFile) {
         	bgVel = std::stod(value);
         } else if (key == "bgPressure") {
         	bgPressure = std::stod(value);
+        } else if (key == "powerLawExponent") {
+        	powerLawExponent = std::stod(value);
         } else if (key == "windDensity") {
         	windDensity = std::stod(value);
         } else if (key == "windVel") {

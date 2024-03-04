@@ -11,7 +11,7 @@
 #include <string>
 #include <iostream>
 
-void OutputEuler::makeOutput(const std::string& filename){
+void OutputEuler::makeOutput(const std::string& filename, double time){
     std::ofstream outputFile(filename, std::ios_base::app);
     double rhoV2, p, gamma;
 

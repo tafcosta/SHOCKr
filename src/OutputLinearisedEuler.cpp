@@ -11,7 +11,7 @@
 #include <string>
 #include <iostream>
 
-void OutputLinearisedEuler::makeOutput(const std::string& filename){
+void OutputLinearisedEuler::makeOutput(const std::string& filename, double time){
     std::ofstream outputFile(filename);
 
     if (!outputFile.is_open()) {

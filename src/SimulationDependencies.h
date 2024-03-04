@@ -31,7 +31,7 @@
 #include "InitialDataHomogeneous.h"
 #include "InitialDataHomogeneousLinearisedEuler.h"
 #include "InitialDataHomogeneousPassiveScalar.h"
-#include "InitialDataIsothermal.h"
+#include "InitialDataPowerLaw.h"
 #include "InitialDataSodShock.h"
 
 #include "Output.h"

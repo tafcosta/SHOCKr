@@ -19,6 +19,8 @@ void EquationsEulerCooling::doCooling(std::vector<double>& quantities, double dt
 	double temperatureNew = std::max(tempMin, getInverseTemporalEvolutionFunction(temperatureOld, getTemporalEvolutionFunction(temperatureOld) + temperatureOld/temperatureRef * coolingRate(temperatureRef)/coolingRate(temperatureOld) * dtPhysical/getCoolingTime(quantities)));
 	double temperatureNewInternalUnits = temperatureNew * BOLTZMANN_CONSTANT / PROTON_MASS / std::pow(unitV, 2.);
 
+	std::cout << getCoolingTime(quantities)/(unitL/unitV) << " " << temperatureNew << std::endl;
+
 	quantities[ENERGY] = EquationsEuler::totalEnergy(temperatureNewInternalUnits * quantities[DENS], std::pow(quantities[XMOM], 2.) / quantities[DENS]);
 
 }
