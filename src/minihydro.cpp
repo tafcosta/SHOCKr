@@ -11,7 +11,7 @@ SimulationConfig config("config.txt");
 
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);//EquationsEulerCooling(5./3, config.unitLengthInCgs, config.unitMassInCgs, config.unitVelocityInCgs);
 Grid *grid                             = new GridRadial(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
-InitialData *initialdata               = new InitialDataHomogeneousPassiveScalar(config.bgDensity, config.bgVel, config.bgPressure, *grid, *equations);
+InitialData *initialdata               = new InitialDataPowerLawPassiveScalar(config.bgDensity, config.bgVel, config.bgPressure, config.powerLawExponent, *grid, *equations);
 Boundary *boundary                     = new BoundaryWindPassiveScalar(config.windDensity, config.windVel, config.windPressure, *grid, *equations);
 Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);
