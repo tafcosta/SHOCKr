@@ -100,3 +100,6 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cu   $(INCL)  $(MAKEFILES)
 
 $(BUILD_DIR)/compile_time_info.o: $(BUILD_DIR)/compile_time_info.cc $(MAKEFILES)
 	$(CPP) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/minihydro.o: $(SRC_DIR)/minihydro.cpp $(INCL) $(MAKEFILES)
+	$(CPP) $(CFLAGS) -c $< -o $@
