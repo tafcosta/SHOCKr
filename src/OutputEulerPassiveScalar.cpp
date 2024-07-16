@@ -55,9 +55,15 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
     }
 
     //outputFileEnergy << time << " " << contactPosition - grid.xmin << " " << thermalEnergy/kineticEnergy << std::endl;
-    outputFileEnergy << time << " " << contactPosition - grid.xmin << " " << kineticEnergy/(502640000.0 * time) << std::endl;
-
+    if(time > 0)
+      outputFileEnergy << time << " " << contactPosition - grid.xmin << " " << kineticEnergy/(502640000.0 * time) << std::endl;
     outputFileEnergy.close();
+
+    if(grid.quantities[grid.maxXIndex][EquationsEulerPassiveScalar::XMOM] > 1.e-5){
+      std::cout << grid.quantities[grid.maxXIndex][EquationsEulerPassiveScalar::XMOM] << std::endl;
+      throw std::runtime_error("Error: Contact has left domain. Stop.");
+    }
+
 }
 
 OutputEulerPassiveScalar::~OutputEulerPassiveScalar() {
