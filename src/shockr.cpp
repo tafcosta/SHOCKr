@@ -10,8 +10,8 @@
 SimulationConfig config("config.txt");
 
 EquationsEuler *equations = new EquationsEuler(5./3);//EquationsEulerCooling(5./3, config.unitLengthInCgs, config.unitMassInCgs, config.unitVelocityInCgs);
-Grid *grid                             = new Grid1D(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
-InitialData *initialdata               = new InitialDataHomogeneous(config.bgDensity, config.bgVel, config.bgPressure, *grid, *equations);
+Grid *grid                             = new GridRadial(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
+InitialData *initialdata               = new InitialDataPowerLaw(config.bgDensity, config.bgVel, config.bgPressure, config.powerLawExponent, *grid, *equations);
 Boundary *boundary                     = new BoundaryWind(config.windDensity, config.windVel, config.windPressure, *grid, *equations);
 Output *output                         = new OutputEuler(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);

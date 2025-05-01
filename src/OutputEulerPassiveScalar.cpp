@@ -54,9 +54,8 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
         return;
     }
 
-    //outputFileEnergy << time << " " << contactPosition - grid.xmin << " " << thermalEnergy/kineticEnergy << std::endl;
-    if(time > 0)
-      outputFileEnergy << time << " " << contactPosition - grid.xmin << " " << kineticEnergy/(502640000.0 * time) << std::endl;
+    outputFileEnergy << time << " " << contactPosition - grid.xmin << " " << thermalEnergy/kineticEnergy << std::endl;
+
     outputFileEnergy.close();
 
     if(grid.quantities[grid.maxXIndex][EquationsEulerPassiveScalar::XMOM] > 1.e-5){
