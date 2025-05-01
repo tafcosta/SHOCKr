@@ -39,6 +39,12 @@ int main(){
 
 	while(time <= maxTime){
 
+		if((time == 0.) || (timeSinceLastOutput > config.outputTimeInterval)){
+			output->makeOutput(outputFilename, time);
+			shockfinder->findShockZones();
+			timeSinceLastOutput = 0.;
+		}
+
 		boundary->setBoundaries();
 		riemannsolver->setFluxes();
 
@@ -48,12 +54,6 @@ int main(){
 			throw std::runtime_error("Error: Invalid maxSpeed.");
 
 		grid->update(dt);
-
-		if((time == 0.) || (timeSinceLastOutput > config.outputTimeInterval)){
-			output->makeOutput(outputFilename, time);
-			shockfinder->findShockZones();
-			timeSinceLastOutput = 0.;
-		}
 
 		std::cout << time << std::endl;
 		timeSinceLastOutput += dt;
