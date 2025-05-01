@@ -13,7 +13,7 @@ bgPressure         0.001
 windDensity        1
 windVel            100.
 windPressure       0.0001
-powerLawExponent   2.
+powerLawExponent   2.5
 
 unitLengthInCgs    3.08567758e21
 unitMassInCgs      1.989e33
