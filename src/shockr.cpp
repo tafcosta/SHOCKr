@@ -9,11 +9,11 @@
 
 SimulationConfig config("config.txt");
 
-EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);//EquationsEulerCooling(5./3, config.unitLengthInCgs, config.unitMassInCgs, config.unitVelocityInCgs);
-Grid *grid                             = new GridRadial(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
-InitialData *initialdata               = new InitialDataPowerLawPassiveScalar(config.bgDensity, config.bgVel, config.bgPressure, config.powerLawExponent, *grid, *equations);
-Boundary *boundary                     = new BoundaryWindPassiveScalar(config.windDensity, config.windVel, config.windPressure, *grid, *equations);
-Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
+EquationsEuler *equations = new EquationsEuler(5./3);//EquationsEulerCooling(5./3, config.unitLengthInCgs, config.unitMassInCgs, config.unitVelocityInCgs);
+Grid *grid                             = new Grid1D(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
+InitialData *initialdata               = new InitialDataHomogeneous(config.bgDensity, config.bgVel, config.bgPressure, *grid, *equations);
+Boundary *boundary                     = new BoundaryWind(config.windDensity, config.windVel, config.windPressure, *grid, *equations);
+Output *output                         = new OutputEuler(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);
 ShockFinder *shockfinder               = new ShockFinderEuler(*grid, *equations);
 

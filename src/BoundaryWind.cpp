@@ -65,7 +65,7 @@ void BoundaryWind::doSubsonicWindGross(int i){
 
 	double l1 = (vx - soundSpeed) * (primitiveDerivatives[2] - rho * soundSpeed * primitiveDerivatives[1]);
 
-	std::cout << "L1 = " << l1 << " " << rho << " " << vx << " " << p << std::endl;
+	//std::cout << "L1 = " << l1 << " " << rho << " " << vx << " " << p << std::endl;
 
 	rhoGhost = rhoWind;
 	velGhost = velWind;
