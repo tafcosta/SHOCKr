@@ -17,6 +17,7 @@ std::vector<int> ShockFinderEuler::findShockZones(void){
 	this->gradients = std::vector<std::vector<double> > (grid.nx + 2*grid.nGhost, std::vector<double>(2, 0.0));
 	this->divV      = std::vector<double>(grid.nx + 2*grid.nGhost, 0.0);
 	this->shock     = std::vector<int>(grid.nx + 2*grid.nGhost, 0);
+    this->contact   = std::vector<int>(grid.nx + 2*grid.nGhost, 0);
 
     std::ofstream outFile("shock_output.txt");
     if (!outFile.is_open()) {

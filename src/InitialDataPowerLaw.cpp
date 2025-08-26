@@ -15,10 +15,9 @@
 
 void InitialDataPowerLaw::setInitialData() {
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++){
-
 		grid.quantities[i][EquationsEuler::DENS]   = rhoBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent);
 		grid.quantities[i][EquationsEuler::XMOM]   = rhoBackground * velBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent);
-		grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureBackground, rhoBackground * velBackground * velBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent));
+		grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent), rhoBackground * velBackground * velBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent));
 	}
 }
 

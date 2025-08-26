@@ -21,9 +21,11 @@ public:
 	Grid& grid;
 	Equations& equations;
 
+	std::vector<int> contact;
 	std::vector<std::vector<double> > gradients;
 	std::vector<double> divV;
 	std::vector<int> shock;
+
 };
 
 #endif /* SRC_SHOCKFINDER_H_ */

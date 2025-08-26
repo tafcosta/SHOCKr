@@ -9,9 +9,9 @@
 
 SimulationConfig config("config.txt");
 
-EquationsEuler *equations 			   = new EquationsEulerPassiveScalar(5./3);//EquationsEulerCooling(5./3, config.unitLengthInCgs, config.unitMassInCgs, config.unitVelocityInCgs);
+EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
 Grid *grid                             = new GridRadial(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
-InitialData *initialdata               = new InitialDataPowerLaw(config.bgDensity, config.bgVel, config.bgPressure, config.powerLawExponent, *grid, *equations);
+InitialData *initialdata               = new InitialDataPowerLawPassiveScalar(config.bgDensity, config.bgVel, config.bgPressure, config.powerLawExponent, *grid, *equations);
 Boundary *boundary                     = new BoundaryWindPassiveScalar(config.windDensity, config.windVel, config.windPressure, *grid, *equations);
 Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);
@@ -37,9 +37,11 @@ int main(){
 	equations->preProcessor();
 	initialdata->setInitialData();
 
+
 	while(time <= maxTime){
 
 		if((time == 0.) || (timeSinceLastOutput > config.outputTimeInterval)){
+			std::cout << time << std::endl;
 			output->makeOutput(outputFilename, time);
 			shockfinder->findShockZones();
 			timeSinceLastOutput = 0.;
@@ -55,13 +57,12 @@ int main(){
 
 		grid->update(dt);
 
-		std::cout << time << std::endl;
 		timeSinceLastOutput += dt;
 		time += dt;
 	}
 
-	output->makeOutput(outputFilename, time);
-	shockfinder->findShockZones();
+	/*output->makeOutput(outputFilename, time);
+	shockfinder->findShockZones();*/
 
 	freeMemory();
 

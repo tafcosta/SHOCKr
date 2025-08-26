@@ -72,6 +72,9 @@ std::vector<double> RiemannSolverHLLC::numericalFlux(std::vector<double>& quanti
 
 	setMaxSpeed(sLeft, sRight);
 
+	delete[] fluxLeft;
+	delete[] fluxRight;
+
 	return flux_vector;
 }
 

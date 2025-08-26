@@ -26,6 +26,9 @@ std::vector<double> RiemannSolverRusanov::numericalFlux(std::vector<double>& qua
 	if(maxSpeed < lambda)
 		maxSpeed = lambda;
 
+	delete[] flux_i;
+	delete[] flux_j;
+
 	return flux_vector;
 }
 
