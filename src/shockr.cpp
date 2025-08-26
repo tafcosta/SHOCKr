@@ -21,7 +21,7 @@ void doGreeting();
 void freeMemory();
 
 int main(){
-	std::string outputFilename = "output_hllc.txt";
+	std::string outputFilename = "outputRes15000.txt";
 	std::string outputEnergy = "energy.txt";
 
 	double CFL = 0.3;
@@ -61,8 +61,8 @@ int main(){
 		time += dt;
 	}
 
-	/*output->makeOutput(outputFilename, time);
-	shockfinder->findShockZones();*/
+	output->makeOutput(outputFilename, time);
+	shockfinder->findShockZones();
 
 	freeMemory();
 

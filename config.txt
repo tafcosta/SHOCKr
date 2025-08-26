@@ -1,5 +1,5 @@
-maxTime            0.11
-outputTimeInterval 0.001
+maxTime            0.5
+outputTimeInterval 0.0002
 
 gridMin            0.1
 gridMax            50
