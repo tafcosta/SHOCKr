@@ -40,8 +40,8 @@ endif
 SUBDIRS += .
 
 
-OBJS    += minihydro.o Boundary.o BoundaryWind.o BoundaryWindLinearisedEuler.o BoundaryWindPassiveScalar.o BoundaryZeroGradient.o Equations.o EquationsEuler.o EquationsEulerPassiveScalar.o EquationsLinearisedEuler.o Grid.o Grid1D.o GridRadial.o InitialData.o InitialDataHomogeneous.o InitialDataHomogeneousLinearisedEuler.o InitialDataHomogeneousPassiveScalar.o InitialDataPowerLaw.o InitialDataPowerLawPassiveScalar.o InitialDataSodShock.o Output.o OutputEuler.o OutputEulerPassiveScalar.o OutputLinearisedEuler.o RiemannSolver.o RiemannSolverHLLC.o RiemannSolverRusanov.o ShockFinder.o ShockFinderEuler.o SimulationConfig.o
-INCL    +=             Boundary.h BoundaryWind.h BoundaryWindLinearisedEuler.h BoundaryWindPassiveScalar.h BoundaryZeroGradient.h Equations.h EquationsEuler.h EquationsEulerPassiveScalar.h EquationsLinearisedEuler.h Grid.h Grid1D.h GridRadial.h InitialData.h InitialDataHomogeneous.h InitialDataHomogeneousLinearisedEuler.h InitialDataHomogeneousPassiveScalar.h InitialDataPowerLaw.h InitialDataPowerLawPassiveScalar.h InitialDataSodShock.h Output.h OutputEuler.h OutputEulerPassiveScalar.h OutputLinearisedEuler.h RiemannSolver.h RiemannSolverHLLC.h RiemannSolverRusanov.h ShockFinder.h ShockFinderEuler.h SimulationConfig.h
+OBJS    += shockr.o Boundary.o BoundaryWind.o BoundaryWindLinearisedEuler.o BoundaryWindPassiveScalar.o BoundaryZeroGradient.o Equations.o EquationsEuler.o EquationsEulerPassiveScalar.o EquationsLinearisedEuler.o Grid.o Grid1D.o GridRadial.o InitialData.o InitialDataHomogeneous.o InitialDataHomogeneousLinearisedEuler.o InitialDataHomogeneousPassiveScalar.o InitialDataPowerLaw.o InitialDataPowerLawPassiveScalar.o InitialDataSodShock.o Output.o OutputEuler.o OutputEulerPassiveScalar.o OutputLinearisedEuler.o RiemannSolver.o RiemannSolverHLLC.o RiemannSolverRusanov.o ShockFinder.o ShockFinderEuler.o SimulationConfig.o
+INCL    +=          Boundary.h BoundaryWind.h BoundaryWindLinearisedEuler.h BoundaryWindPassiveScalar.h BoundaryZeroGradient.h Equations.h EquationsEuler.h EquationsEulerPassiveScalar.h EquationsLinearisedEuler.h Grid.h Grid1D.h GridRadial.h InitialData.h InitialDataHomogeneous.h InitialDataHomogeneousLinearisedEuler.h InitialDataHomogeneousPassiveScalar.h InitialDataPowerLaw.h InitialDataPowerLawPassiveScalar.h InitialDataSodShock.h Output.h OutputEuler.h OutputEulerPassiveScalar.h OutputLinearisedEuler.h RiemannSolver.h RiemannSolverHLLC.h RiemannSolverRusanov.h ShockFinder.h ShockFinderEuler.h SimulationConfig.h
 
 ################################
 #determine the needed libraries#
@@ -101,5 +101,5 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cu   $(INCL)  $(MAKEFILES)
 $(BUILD_DIR)/compile_time_info.o: $(BUILD_DIR)/compile_time_info.cc $(MAKEFILES)
 	$(CPP) $(CFLAGS) -c $< -o $@
 
-$(BUILD_DIR)/minihydro.o: $(SRC_DIR)/minihydro.cpp $(INCL) $(MAKEFILES)
+$(BUILD_DIR)/shockr.o: $(SRC_DIR)/shockr.cpp $(INCL) $(MAKEFILES)
 	$(CPP) $(CFLAGS) -c $< -o $@
