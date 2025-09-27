@@ -21,6 +21,7 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
     double thermalEnergy = 0.;
     double windEnergy   = 0.;
     double windThermalEnergy   = 0.;
+    double windKineticEnergy = 0.;
     double kineticEnergy = 0.;
     double contactPosition, v;
 
@@ -30,6 +31,9 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
     }
 
     for (int i = 0; i <= grid.maxXIndex; i++) {
+
+    	double dV = 4./3 * M_PI * (std::pow(grid.getX(i) + grid.dx/2., 3.) - std::pow(grid.getX(i) - grid.dx/2., 3.));
+
     	rhoV2 = grid.quantities[i][EquationsEulerPassiveScalar::XMOM] * grid.quantities[i][EquationsEulerPassiveScalar::XMOM] / grid.quantities[i][EquationsEulerPassiveScalar::DENS];
     	p = (static_cast<EquationsEulerPassiveScalar*>(&equations))->getPressure(grid.quantities[i][EquationsEulerPassiveScalar::ENERGY], rhoV2);
     	v = grid.quantities[i][EquationsEulerPassiveScalar::XMOM] / grid.quantities[i][EquationsEulerPassiveScalar::DENS];
@@ -37,16 +41,18 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
     	if(grid.quantities[i][EquationsEulerPassiveScalar::PASS]/grid.quantities[i][EquationsEulerPassiveScalar::DENS] > 1.e-5)
     		contactPosition = grid.getX(i);
 
-    	if(grid.quantities[i][EquationsEulerPassiveScalar::PASS]/grid.quantities[i][EquationsEulerPassiveScalar::DENS] < 1.e-5){
-    		thermalEnergy += p / ((static_cast<EquationsEulerPassiveScalar*>(&equations))->gamma - 1) * (std::pow(grid.getX(i) + grid.dx/2., 3.) - std::pow(grid.getX(i) - grid.dx/2., 3.));
-    		kineticEnergy += 0.5 * rhoV2 * (std::pow(grid.getX(i) + grid.dx/2., 3.) - std::pow(grid.getX(i) - grid.dx/2., 3.));
+    	if(grid.quantities[i][EquationsEulerPassiveScalar::PASS]/grid.quantities[i][EquationsEulerPassiveScalar::DENS] < 1.e-5 && v > 0.1){
+    		thermalEnergy += p / ((static_cast<EquationsEulerPassiveScalar*>(&equations))->gamma - 1) * dV;
+    		kineticEnergy += 0.5 * rhoV2 * dV;
     	} else {
-    		windEnergy += grid.quantities[i][EquationsEulerPassiveScalar::ENERGY] * (std::pow(grid.getX(i) + grid.dx/2., 3.) - std::pow(grid.getX(i) - grid.dx/2., 3.));
-    		windThermalEnergy += p / ((static_cast<EquationsEulerPassiveScalar*>(&equations))->gamma - 1) * (std::pow(grid.getX(i) + grid.dx/2., 3.) - std::pow(grid.getX(i) - grid.dx/2., 3.));
+    		windEnergy += grid.quantities[i][EquationsEulerPassiveScalar::ENERGY] * dV;
+
+    		windThermalEnergy += p / ((static_cast<EquationsEulerPassiveScalar*>(&equations))->gamma - 1) * dV;
+    		windKineticEnergy += 0.5 * rhoV2 * dV;
 
     	}
 
-        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << grid.quantities[i][EquationsEulerPassiveScalar::XMOM] / grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << p << " " << p/grid.quantities[i][EquationsEulerPassiveScalar::DENS] << std::endl;
+        outputFile << grid.getX(i) << " " << grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << grid.quantities[i][EquationsEulerPassiveScalar::XMOM] / grid.quantities[i][EquationsEulerPassiveScalar::DENS] << " " << p << " " << grid.quantities[i][EquationsEulerPassiveScalar::PASS] << std::endl;
     }
 
     outputFile << " " << std::endl;
@@ -58,7 +64,7 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
         return;
     }
 
-    outputFileEnergy << time << " " << contactPosition - grid.xmin << " " << kineticEnergy/windEnergy << std::endl;
+    outputFileEnergy << time << " " << contactPosition - grid.xmin << " " << windKineticEnergy << " " << windThermalEnergy << " " << kineticEnergy << " " << thermalEnergy << std::endl;
     outputFileEnergy.close();
 
     if(grid.quantities[grid.maxXIndex][EquationsEulerPassiveScalar::XMOM] > 1.e-5){

@@ -12,6 +12,8 @@ Grid::Grid(double xmin, double xmax, int nGhost, int nx, Equations& equations) :
 
 	quantities = std::vector<std::vector<double> > (nx + 2*nGhost,     std::vector<double>(equations.nCons(), 0.0));
 	fluxes     = std::vector<std::vector<double> > (nx + 2*nGhost + 1, std::vector<double>(equations.nCons(), 0.0));
+	sources    = std::vector<std::vector<double> > (nx + 2*nGhost,     std::vector<double>(equations.nCons(), 0.0));
+
 
 	dx = (xmax - xmin)/nx;
 	xMidpoint = (xmax + xmin)/2;

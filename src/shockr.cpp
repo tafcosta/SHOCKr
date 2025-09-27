@@ -11,6 +11,7 @@ SimulationConfig config("config.txt");
 
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
 Grid *grid                             = new GridRadial(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
+Source *source                         = new SourceGravity(*grid, *equations, 1.e7, 6.674e-8 / (std::pow(config.unitLengthInCgs, 3)/config.unitMassInCgs/std::pow(config.unitLengthInCgs/config.unitVelocityInCgs,2)));
 InitialData *initialdata               = new InitialDataPowerLawPassiveScalar(config.bgDensity, config.bgVel, config.bgPressure, config.powerLawExponent, *grid, *equations);
 Boundary *boundary                     = new BoundaryWindPassiveScalar(config.windDensity, config.windVel, config.windPressure, *grid, *equations);
 Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
@@ -41,7 +42,7 @@ int main(){
 	while(time <= maxTime){
 
 		if((time == 0.) || (timeSinceLastOutput > config.outputTimeInterval)){
-			std::cout << time << std::endl;
+			std::cout << "time = " << time << std::endl;
 			output->makeOutput(outputFilename, time);
 			shockfinder->findShockZones();
 			timeSinceLastOutput = 0.;
@@ -49,6 +50,7 @@ int main(){
 
 		boundary->setBoundaries();
 		riemannsolver->setFluxes();
+		source->setSources();
 
 		if(riemannsolver->maxSpeed > 0)
 			dt = CFL * grid->dx / riemannsolver->maxSpeed;
@@ -88,6 +90,7 @@ void freeMemory(void){
 	delete boundary;
 	delete equations;
 	delete grid;
+	delete source;
 	delete initialdata;
 	delete output;
 	delete riemannsolver;

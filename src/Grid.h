@@ -23,6 +23,7 @@ public:
 
 	std::vector<std::vector<double> > quantities;
 	std::vector<std::vector<double> > fluxes;
+	std::vector<std::vector<double> > sources;
 
 	double getX(int cellIndex){
 		return xmin + (cellIndex - minXIndex) * dx + dx/2.;

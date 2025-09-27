@@ -29,6 +29,10 @@ void GridRadial::update(double dt) {
 			xRight  = getX(i)+dx/2.;
 			dVolume = std::pow(xRight, 3) - std::pow(xLeft, 3);
 			quantities[i][k] = quantities[i][k] - dt/dVolume * 3 * (fluxes[i + 1][k] * pow(xRight, 2.) - fluxes[i][k] * pow(xLeft, 2.));
+
+			quantities[i][k] +=  dt * sources[i][k];
+
+			//std::cout << "BUBU " << dt * sources[i][k] << " " << dt/dVolume * 3 * (fluxes[i + 1][k] * pow(xRight, 2.) - fluxes[i][k] * pow(xLeft, 2.)) << std::endl;
 		}
 
 		quantities[i][EquationsEuler::XMOM] += dt * 3 * 2./dVolume * dx * getX(i) * p;

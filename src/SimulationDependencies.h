@@ -47,5 +47,9 @@
 #include "ShockFinder.h"
 #include "ShockFinderEuler.h"
 #include "SimulationConfig.h"
+#include "Source.h"
+#include "SourceGravity.h"
+#include "SourceNone.h"
+
 
 #endif /* SRC_SIMULATIONDEPENDENCIES_H_ */
