@@ -4,10 +4,11 @@ SHOCKr is a 1D spherical hydro solver designed for studying the shock structure 
 ![Alt Text](density_slice.png)
 <em> Fig. 1: Density slice of spherical outflow solution produced by SHOCKr. The central wind (modelled as a boundary condition) streams radially outwards until it encounters a reverse shock. The wind also drives a forward shock. Simulation performed in domain with 1,000 radial cells, using the HLLC Riemann solver. </em>
 
-## Key Highlights
+## Features
 
 - **Spherical Modeling:** Simulate hydrodynamics in a 1D spherical framework.
-- **Shock Structure Study:** Explore and analyze shock structures resulting from wind and ambient medium interaction.
+- **Shock Structure Study:** Analyze shock structures resulting from wind and ambient medium interaction.
+- **Central Gravitational Potential :** Gravity due to a point source (e.g. a supermassive black hole). 
 - **Radiative Cooling :** Primordial Radiative Cooling down to 10,000K is supported and was implemented following the exact integration method introduced in Townsend (2009). 
 - **On-the-Fly Shock Finder:** Shockr incorporates a real-time shock finder that dynamically identifies shock fronts during simulations without the need for post-processing.
 - **Subsonic & Supersonic winds :** Shockr supports the injection of both supersonic and subsonic winds. 
