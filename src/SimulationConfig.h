@@ -36,6 +36,9 @@ public:
     // Units
     double unitLengthInCgs, unitMassInCgs, unitVelocityInCgs;
 
+    // Output File
+    std::string outputFile;
+
     SimulationConfig(const std::string& configFile);
     virtual ~SimulationConfig();
 

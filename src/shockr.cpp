@@ -22,7 +22,7 @@ void doGreeting();
 void freeMemory();
 
 int main(){
-	std::string outputFilename = "outputConstant_n9_L45.txt";
+	std::string outputFilename = config.outputFile;
 	std::string outputEnergy = "energy.txt";
 
 	double CFL = 0.3;

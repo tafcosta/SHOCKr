@@ -57,6 +57,8 @@ void SimulationConfig::readConfig(const std::string& configFile) {
         	unitVelocityInCgs = std::stod(value);
         } else if (key == "unitLengthInCgs") {
         	unitLengthInCgs = std::stod(value);
+        } else if (key == "outputFile") {
+        	outputFile = std::string(value);
         }
     }
 }
