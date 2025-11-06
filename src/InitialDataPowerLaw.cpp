@@ -21,17 +21,14 @@ void InitialDataPowerLaw::setInitialData() {
 		grid.quantities[i][EquationsEuler::DENS]   = rhoBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent);
 		grid.quantities[i][EquationsEuler::XMOM]   = rhoBackground * velBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent);
 
+		/*
 		grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(
 				pressureBackground +  0.004296 * 1.e7 * rhoBackground / grid.xmin / (1 + powerLawExponent) * (std::pow(grid.xmin/grid.getX(i), powerLawExponent+1) - 1),
 				velBackground * velBackground * grid.quantities[i][EquationsEuler::DENS]);
+*/
 
-
-		//std::cout << "BLURPH " << rhoBackground / grid.xmin / (1 + powerLawExponent) * (std::pow(grid.xmin/grid.getX(i), powerLawExponent+1) - 1) << std::endl;
-
-		/*
 		grid.quantities[i][EquationsEuler::XMOM]   = rhoBackground * velBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent);
-		grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent), rhoBackground * velBackground * velBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent));
-	*/
+		grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureBackground, rhoBackground * velBackground * velBackground * std::pow(grid.xmin/grid.getX(i),powerLawExponent));
 	}
 }
 

@@ -11,7 +11,7 @@ SimulationConfig config("config.txt");
 
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
 Grid *grid                             = new GridRadial(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
-Source *source                         = new SourceGravity(*grid, *equations, 1.e7, 6.674e-8 / (std::pow(config.unitLengthInCgs, 3)/config.unitMassInCgs/std::pow(config.unitLengthInCgs/config.unitVelocityInCgs,2)));
+Source *source                         = new SourceNone(*grid, *equations); //SourceGravity(*grid, *equations, 1.e7, 6.674e-8 / (std::pow(config.unitLengthInCgs, 3)/config.unitMassInCgs/std::pow(config.unitLengthInCgs/config.unitVelocityInCgs,2)));
 InitialData *initialdata               = new InitialDataPowerLawPassiveScalar(config.bgDensity, config.bgVel, config.bgPressure, config.powerLawExponent, *grid, *equations);
 Boundary *boundary                     = new BoundaryWindPassiveScalar(config.windDensity, config.windVel, config.windPressure, *grid, *equations);
 Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
@@ -22,7 +22,7 @@ void doGreeting();
 void freeMemory();
 
 int main(){
-	std::string outputFilename = "outputRes15000.txt";
+	std::string outputFilename = "outputConstant_n9_L45.txt";
 	std::string outputEnergy = "energy.txt";
 
 	double CFL = 0.3;
