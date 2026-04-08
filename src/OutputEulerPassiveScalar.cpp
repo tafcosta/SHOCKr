@@ -32,41 +32,55 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
         return;
     }
 
-    for (int i = 0; i <= grid.maxXIndex; i++) {
+    if (!outputFileEnergy.is_open()) {
+        std::cerr << "Error opening file: energy.txt" << std::endl;
+        return;
+    }
 
-        const double dens   = grid.quantities[i][EquationsEulerPassiveScalar::DENS];
+    for (int i = 0; i <= grid.maxXIndex; i++) {
+        const double dens = grid.quantities[i][EquationsEulerPassiveScalar::DENS];
         if (dens <= 0.0)
             throw std::runtime_error("Non-positive density encountered in output.");
 
-        const double xmom   = grid.quantities[i][EquationsEulerPassiveScalar::XMOM];
-        const double pass   = grid.quantities[i][EquationsEulerPassiveScalar::PASS];
+        const double pass = grid.quantities[i][EquationsEulerPassiveScalar::PASS];
+        const double passFrac = pass / dens;
+
+        if (passFrac > 0.5) {
+            contactPosition = grid.getX(i);
+            foundContact = true;
+        }
+    }
+
+    for (int i = 0; i <= grid.maxXIndex; i++) {
+
+        const double dens = grid.quantities[i][EquationsEulerPassiveScalar::DENS];
+        if (dens <= 0.0)
+            throw std::runtime_error("Non-positive density encountered in output.");
+
+        const double xmom = grid.quantities[i][EquationsEulerPassiveScalar::XMOM];
+        const double pass = grid.quantities[i][EquationsEulerPassiveScalar::PASS];
+        const double ener = grid.quantities[i][EquationsEulerPassiveScalar::ENERGY];
 
         const double rL = grid.getX(i) - 0.5 * grid.dx;
         const double rR = grid.getX(i) + 0.5 * grid.dx;
         const double dV = (4.0 / 3.0) * M_PI * (rR*rR*rR - rL*rL*rL);
 
-        const double rhoV2    = xmom * xmom / dens;
-        const double p        = eq->getPressure(grid.quantities[i][EquationsEulerPassiveScalar::ENERGY], rhoV2);
-        const double v        = xmom / dens;
+        const double rhoV2 = xmom * xmom / dens;
+        const double p     = eq->getPressure(ener, rhoV2);
+        const double v     = xmom / dens;
         const double passFrac = pass / dens;
 
-        if (passFrac > 0.00001) {
-            contactPosition = grid.getX(i);
-            foundContact = true;
-        }
+        const double e_th  = p / (eq->gamma - 1.0) * dV;
+        const double e_kin = 0.5 * rhoV2 * dV;
 
-        double e_th = p / (eq->gamma - 1.0) * dV;
-        double e_kin = 0.5 * rhoV2 * dV;
-
-        if (v > 1) {
-        	if (grid.getX(i) < contactPosition) {
-        		windThermalEnergy += e_th;
-        		windKineticEnergy += e_kin;
-        	} else {
-        		thermalEnergy += e_th;
-        		kineticEnergy += e_kin;
-        	}
-
+        if (v > 1.0) {
+            if (grid.getX(i) < contactPosition) {
+                windThermalEnergy += e_th;
+                windKineticEnergy += e_kin;
+            } else {
+                thermalEnergy += e_th;
+                kineticEnergy += e_kin;
+            }
         }
 
         outputFile << grid.getX(i) << " "

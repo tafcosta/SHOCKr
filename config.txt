@@ -11,7 +11,7 @@ bgVel              0.
 bgPressure         6.932
 
 windDensity        1.
-windVel            100000.
+windVel            10000.
 windPressure       1e2
 powerLawExponent   0
 

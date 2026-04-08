@@ -2,7 +2,7 @@
  * RiemannSolverRusanov.cpp
  *
  *  Created on: 20 Jan 2024
- *      Author: ntc132
+ *      Author: Tiago Costa
  */
 
 #include "Equations.h"
