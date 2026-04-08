@@ -14,8 +14,6 @@ std::vector<double> SourceGravity::getSource(std::vector<double>& quantities, do
 
 	double acceleration = -Grav * massBH / (radialDistance * radialDistance);
 
-	//std::cout << "Grav = " << Grav << ", acceleration = " << acceleration << ", rad = " << radialDistance << std::endl;
-
 	res[EquationsEuler::XMOM]   = quantities[EquationsEuler::DENS] * acceleration;
 	res[EquationsEuler::ENERGY] = quantities[EquationsEuler::XMOM] * acceleration;
 

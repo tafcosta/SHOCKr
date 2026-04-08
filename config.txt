@@ -1,18 +1,18 @@
-maxTime            0.2
-outputTimeInterval 0.000001
+maxTime            0.1
+outputTimeInterval 0.0001
 
-gridMin            0.001
-gridMax            1
+gridMin            0.1
+gridMax            100
 NumberCells        5000
 NumberGhostCells   1
 
-bgDensity          2.5e7
+bgDensity          0.01
 bgVel              0.
-bgPressure         1e16
+bgPressure         6.932
 
-windDensity        500000.
+windDensity        1.
 windVel            100000.
-windPressure       100
+windPressure       1e2
 powerLawExponent   0
 
 unitLengthInCgs    3.08567758e18

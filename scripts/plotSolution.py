@@ -6,13 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
-# --- Read shock file ---
-shock_data = np.loadtxt('../shock_output.txt')  # Adjust path if needed
-shock_radii = shock_data[:, 0]
-shock_flags = shock_data[:, 1]
-
 # Read and split by truly empty lines (ignoring whitespace-only lines)
-with open('../outputIsothermal.txt') as f:
+with open('../test.txt') as f:
     lines = f.readlines()
 
 blocks = []
@@ -49,18 +44,10 @@ for i in range(0, len(blocks), 5):
     y = block[:, 1]  # Change this index to plot a different variable
     color = cmap(norm(i))
     plt.loglog(x, y, color=color)
-
-# --- Shade shock regions ---
-for i in range(len(shock_flags) - 1):
-    if shock_flags[i] == 1:
-        left = shock_radii[i]
-        right = shock_radii[i + 1]
-        #plt.axvspan(left, right, color='red', alpha=0.2)
     
 plt.xlabel(r'$R$')
 plt.ylabel(r'$\rho$')
 plt.xlim(1.e-2, 1.e2)
-
 
 plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), label=r'$t$')
 plt.show()

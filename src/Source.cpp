@@ -2,7 +2,7 @@
  * Source.cpp
  *
  *  Created on: 27 Sept 2025
- *      Author: ntc132
+ *      Author: Tiago Costa
  */
 
 #include "Source.h"
