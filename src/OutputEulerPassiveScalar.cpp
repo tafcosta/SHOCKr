@@ -50,26 +50,30 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
         const double v        = xmom / dens;
         const double passFrac = pass / dens;
 
-        if (passFrac > 0.5) {
+        if (passFrac > 0.00001) {
             contactPosition = grid.getX(i);
             foundContact = true;
         }
 
-        if (v > 0.1) {
-            if (passFrac < 1.e-5) {
-                thermalEnergy += p / (eq->gamma - 1.0) * dV;
-                kineticEnergy += 0.5 * rhoV2 * dV;
-            } else {
-                windThermalEnergy += p / (eq->gamma - 1.0) * dV;
-                windKineticEnergy += 0.5 * rhoV2 * dV;
-            }
+        double e_th = p / (eq->gamma - 1.0) * dV;
+        double e_kin = 0.5 * rhoV2 * dV;
+
+        if (v > 1) {
+        	if (grid.getX(i) < contactPosition) {
+        		windThermalEnergy += e_th;
+        		windKineticEnergy += e_kin;
+        	} else {
+        		thermalEnergy += e_th;
+        		kineticEnergy += e_kin;
+        	}
+
         }
 
         outputFile << grid.getX(i) << " "
                    << dens << " "
                    << v << " "
                    << p << " "
-                   << pass << '\n';
+                   << passFrac << '\n';
     }
 
     outputFile << '\n' << '\n';
@@ -82,8 +86,7 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
                      << thermalEnergy << '\n';
 
     const double boundaryDens = grid.quantities[grid.maxXIndex][EquationsEulerPassiveScalar::DENS];
-    const double boundaryVel =
-        grid.quantities[grid.maxXIndex][EquationsEulerPassiveScalar::XMOM] / boundaryDens;
+    const double boundaryVel  = grid.quantities[grid.maxXIndex][EquationsEulerPassiveScalar::XMOM] / boundaryDens;
 
     if (boundaryDens > 0.0 && boundaryVel > 1.e-1) {
         std::cout << boundaryVel << std::endl;

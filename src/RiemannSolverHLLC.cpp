@@ -2,7 +2,7 @@
  * RiemannSolverHLLC.cpp
  *
  *  Created on: 20 Jan 2024
- *      Author: ntc132
+ *      Author: Tiago Costa
  */
 
 #include "RiemannSolverHLLC.h"
@@ -44,27 +44,41 @@ std::vector<double> RiemannSolverHLLC::numericalFlux(std::vector<double>& quanti
 
 	else if((sLeft <= 0) && (sStar >= 0)){
 
-		quantitiesLeftStar[EquationsEuler::DENS]   = quantitiesLeft[EquationsEuler::DENS]   * (sLeft - uLeft) / (sLeft - sStar);
-		quantitiesLeftStar[EquationsEuler::XMOM]   = quantitiesLeftStar[EquationsEuler::DENS] * sStar;
-		quantitiesLeftStar[EquationsEuler::ENERGY] = quantitiesLeftStar[EquationsEuler::DENS]                      \
-			* (quantitiesLeft[EquationsEuler::ENERGY]/quantitiesLeft[EquationsEuler::DENS] + (sStar - uLeft)   \
-			* (sStar + pLeft/(quantitiesLeft[EquationsEuler::DENS] * (sLeft - uLeft))));
+	    const double leftFactor = (sLeft - uLeft) / (sLeft - sStar);
 
-		for(int k = 0; k < equations.nCons(); k++)
-			flux_vector[k] = fluxLeft[k]  + sLeft  * (quantitiesLeftStar[k]  - quantitiesLeft[k]);
-		}
+	    quantitiesLeftStar[EquationsEuler::DENS]   = quantitiesLeft[EquationsEuler::DENS] * leftFactor;
+	    quantitiesLeftStar[EquationsEuler::XMOM]   = quantitiesLeftStar[EquationsEuler::DENS] * sStar;
+	    quantitiesLeftStar[EquationsEuler::ENERGY] =
+	        quantitiesLeftStar[EquationsEuler::DENS] *
+	        (quantitiesLeft[EquationsEuler::ENERGY] / quantitiesLeft[EquationsEuler::DENS]
+	         + (sStar - uLeft) *
+	         (sStar + pLeft / (quantitiesLeft[EquationsEuler::DENS] * (sLeft - uLeft))));
+
+	    for (int k = EquationsEuler::ENERGY + 1; k < equations.nCons(); k++)
+	        quantitiesLeftStar[k] = quantitiesLeft[k] * leftFactor;
+
+	    for(int k = 0; k < equations.nCons(); k++)
+	        flux_vector[k] = fluxLeft[k] + sLeft * (quantitiesLeftStar[k] - quantitiesLeft[k]);
+	}
 
 	else if((sStar <= 0) && (sRight >= 0)){
 
-		quantitiesRightStar[EquationsEuler::DENS]   = quantitiesRight[EquationsEuler::DENS] * (sRight - uRight) / (sRight - sStar);
-		quantitiesRightStar[EquationsEuler::XMOM]   = quantitiesRightStar[EquationsEuler::DENS] * sStar;
-		quantitiesRightStar[EquationsEuler::ENERGY] = quantitiesRightStar[EquationsEuler::DENS]                    \
-				* (quantitiesRight[EquationsEuler::ENERGY]/quantitiesRight[EquationsEuler::DENS] + (sStar - uRight) \
-				* (sStar + pRight/(quantitiesRight[EquationsEuler::DENS] * (sRight - uRight))));
+	    const double rightFactor = (sRight - uRight) / (sRight - sStar);
 
-		for(int k = 0; k < equations.nCons(); k++)
-			flux_vector[k] = fluxRight[k] + sRight * (quantitiesRightStar[k] - quantitiesRight[k]);
-		}
+	    quantitiesRightStar[EquationsEuler::DENS]   = quantitiesRight[EquationsEuler::DENS] * rightFactor;
+	    quantitiesRightStar[EquationsEuler::XMOM]   = quantitiesRightStar[EquationsEuler::DENS] * sStar;
+	    quantitiesRightStar[EquationsEuler::ENERGY] =
+	        quantitiesRightStar[EquationsEuler::DENS] *
+	        (quantitiesRight[EquationsEuler::ENERGY] / quantitiesRight[EquationsEuler::DENS]
+	         + (sStar - uRight) *
+	         (sStar + pRight / (quantitiesRight[EquationsEuler::DENS] * (sRight - uRight))));
+
+	    for (int k = EquationsEuler::ENERGY + 1; k < equations.nCons(); k++)
+	        quantitiesRightStar[k] = quantitiesRight[k] * rightFactor;
+
+	    for(int k = 0; k < equations.nCons(); k++)
+	        flux_vector[k] = fluxRight[k] + sRight * (quantitiesRightStar[k] - quantitiesRight[k]);
+	}
 
 	else if(sRight <= 0)
 		for(int k = 0; k < equations.nCons(); k++)
