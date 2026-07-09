@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
 # Read and split by truly empty lines (ignoring whitespace-only lines)
-with open('../test.txt') as f:
+with open('../Constant_DenseISM_W1000.txt') as f:
     lines = f.readlines()
 
 blocks = []
@@ -41,7 +41,7 @@ plt.tick_params(
 for i in range(0, len(blocks), 5):
     block = blocks[i][1:]  # Exclude ghost cells
     x = block[:, 0]
-    y = block[:, 4]  # Change this index to plot a different variable
+    y = block[:, 1]  # Change this index to plot a different variable
     color = cmap(norm(i))
     plt.loglog(x, y, color=color)
     

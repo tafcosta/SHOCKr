@@ -44,7 +44,7 @@ int main(){
 		if((time == 0.) || (timeSinceLastOutput > config.outputTimeInterval)){
 			std::cout << "time = " << time << std::endl;
 			output->makeOutput(outputFilename, time);
-			shockfinder->findShockZones();
+			shockfinder->findShockZones(time);
 			timeSinceLastOutput = 0.;
 		}
 
@@ -64,7 +64,7 @@ int main(){
 	}
 
 	output->makeOutput(outputFilename, time);
-	shockfinder->findShockZones();
+	shockfinder->findShockZones(time);
 
 	freeMemory();
 

@@ -15,7 +15,7 @@
 
 void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double time){
     std::ofstream outputFile(filename, std::ios_base::app);
-    std::ofstream outputFileEnergy("energy.txt", std::ios_base::app);
+    std::ofstream outputFileEnergy("Isothermal_DenseISM_W1000_energy.txt", std::ios_base::app);
 
     auto* eq = static_cast<EquationsEulerPassiveScalar*>(&equations);
 
@@ -45,7 +45,7 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
         const double pass = grid.quantities[i][EquationsEulerPassiveScalar::PASS];
         const double passFrac = pass / dens;
 
-        if (passFrac > 0.5) {
+        if (passFrac > 0.01) {
             contactPosition = grid.getX(i);
             foundContact = true;
         }

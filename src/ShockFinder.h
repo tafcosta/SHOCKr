@@ -16,7 +16,7 @@ class ShockFinder {
 public:
 	ShockFinder(Grid& grid, Equations& equations);
 	virtual ~ShockFinder();
-	virtual std::vector<int> findShockZones(void){return std::vector<int>(grid.nx, 0);};
+	virtual std::vector<int> findShockZones(double time){return std::vector<int>(grid.nx, 0);};
 
 	Grid& grid;
 	Equations& equations;

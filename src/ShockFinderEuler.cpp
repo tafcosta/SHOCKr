@@ -13,15 +13,20 @@
 #include "ShockFinderEuler.h"
 #include "EquationsEulerPassiveScalar.h"
 
-std::vector<int> ShockFinderEuler::findShockZones(void){
+std::vector<int> ShockFinderEuler::findShockZones(double time){
 	this->gradients = std::vector<std::vector<double> > (grid.nx + 2*grid.nGhost, std::vector<double>(2, 0.0));
 	this->divV      = std::vector<double>(grid.nx + 2*grid.nGhost, 0.0);
 	this->shock     = std::vector<int>(grid.nx + 2*grid.nGhost, 0);
     this->contact   = std::vector<int>(grid.nx + 2*grid.nGhost, 0);
 
-    std::ofstream outFile("shock_output.txt");
+    std::ostringstream fname;
+    fname << "shock_" << std::fixed << std::setprecision(4)
+          << time << ".txt";
+
+    std::ofstream outFile(fname.str());
+
     if (!outFile.is_open()) {
-        std::cerr << "Error: Unable to open the file for writing." << std::endl;
+        std::cerr << "Error opening " << fname.str() << std::endl;
         return shock;
     }
 
@@ -34,7 +39,6 @@ std::vector<int> ShockFinderEuler::findShockZones(void){
         outFile << grid.getX(i) << " " << shock[i] << std::endl;
     }
 
-    outFile.close();
     return shock;
 }
 

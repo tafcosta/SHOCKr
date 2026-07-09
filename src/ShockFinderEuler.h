@@ -21,7 +21,7 @@ public:
 	static const int DENS = 0;
 	static const int TEMP = 1;
 
-	std::vector<int> findShockZones(void) override;
+	std::vector<int> findShockZones(double time) override;
 
 private:
 	void detectShockZone(int i, double divV, double gradientDens, double gradientTemp);

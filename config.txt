@@ -1,16 +1,16 @@
-maxTime            0.1
-outputTimeInterval 0.0001
+maxTime            0.2
+outputTimeInterval 0.00001
 
 gridMin            0.1
 gridMax            1000
-NumberCells        2000
+NumberCells        10000
 NumberGhostCells   1
 
-bgDensity          0.01
+bgDensity          3.7
 bgVel              0.
-bgPressure         6.932
+bgPressure         0.6932
 
-windDensity        1.
+windDensity        1000
 windVel            10000.
 windPressure       1e2
 powerLawExponent   0
@@ -19,4 +19,4 @@ unitLengthInCgs    3.08567758e18
 unitMassInCgs      1.989e33
 unitVelocityInCgs  1.e5
 
-outputFile         test.txt
+outputFile         Constant_DenseISM_W1000.txt
