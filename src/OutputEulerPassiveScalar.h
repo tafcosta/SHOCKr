@@ -17,7 +17,7 @@ public:
 	OutputEulerPassiveScalar(Grid& grid, Equations& equations) : Output(grid, equations) {};
 	virtual ~OutputEulerPassiveScalar();
 
-	void makeOutput(const std::string& filename, double time) override;
+	void makeOutput(const std::string& filename, const std::string& energyFilename, double time) override;
 
 };
 

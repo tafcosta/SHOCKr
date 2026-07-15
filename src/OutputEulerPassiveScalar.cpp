@@ -13,9 +13,9 @@
 #include <string>
 #include <iostream>
 
-void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double time){
+void OutputEulerPassiveScalar::makeOutput(const std::string& filename, const std::string& energyFilename, double time){
     std::ofstream outputFile(filename, std::ios_base::app);
-    std::ofstream outputFileEnergy("Isothermal_DenseISM_W1000_energy.txt", std::ios_base::app);
+    std::ofstream outputFileEnergy(energyFilename, std::ios_base::app);
 
     auto* eq = static_cast<EquationsEulerPassiveScalar*>(&equations);
 

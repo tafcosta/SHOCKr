@@ -11,8 +11,9 @@
 #include <string>
 #include <iostream>
 
-void OutputEuler::makeOutput(const std::string& filename, double time){
+void OutputEuler::makeOutput(const std::string& filename, const std::string& energyFilename, double time){
     std::ofstream outputFile(filename, std::ios_base::app);
+
     double rhoV2, p;
 
     if (!outputFile.is_open()) {

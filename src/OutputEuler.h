@@ -17,7 +17,7 @@ public:
 	OutputEuler(Grid& grid, EquationsEuler& equations) : Output(grid, equations) {};
 	virtual ~OutputEuler();
 
-	void makeOutput(const std::string& filename, double time) override;
+	void makeOutput(const std::string& filename, const std::string& energyFilename, double time) override;
 
 };
 

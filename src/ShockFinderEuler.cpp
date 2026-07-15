@@ -14,36 +14,22 @@
 #include "EquationsEulerPassiveScalar.h"
 
 std::vector<int> ShockFinderEuler::findShockZones(double time, const std::string& filename){
-    gradients = std::vector< std::vector<double> >(grid.nx + 2*grid.nGhost,
-                                                 std::vector<double>(2, 0.0));
+    gradients = std::vector< std::vector<double> >(grid.nx + 2*grid.nGhost, std::vector<double>(2, 0.0));
+    divV      = std::vector<double>(grid.nx + 2*grid.nGhost, 0.0);
+    shock     = std::vector<int>(grid.nx + 2*grid.nGhost, 0);
 
-    divV    = std::vector<double>(grid.nx + 2*grid.nGhost, 0.0);
-    shock   = std::vector<int>(grid.nx + 2*grid.nGhost, 0);
-    contact = std::vector<int>(grid.nx + 2*grid.nGhost, 0);
-
-    std::ofstream outFile("shock_output.txt", std::ios::app);
-
-    if (!outFile.is_open()) {
-        std::cerr << "Error opening shock_output.txt\n";
-        return shock;
-    }
-
+    outputFilename = filename;
 
     for (int i = grid.minXIndex; i <= grid.maxXIndex; ++i) {
-
         calculateGradients(i);
         calculateDivV(i);
-        detectShockZone(i,
-                        divV[i],
-                        gradients[i][DENS],
-                        gradients[i][TEMP]);
+        detectShockZone(i, divV[i], gradients[i][DENS], gradients[i][TEMP]);
     }
 
     std::vector<int> starts;
     std::vector<int> ends;
 
     bool inShock = false;
-
     for (int i = grid.minXIndex; i <= grid.maxXIndex; ++i) {
 
         if (shock[i] && !inShock) {
@@ -120,25 +106,41 @@ double ShockFinderEuler::getKineticFlux(double rho, double velocity, double shoc
     return 0.5 * rho * vrel * vrel * vrel;
 }
 
-void ShockFinderEuler::writeShockOutput(
-    double time,
-    const std::vector<int>& goodStarts,
-    const std::vector<int>& goodEnds)
+void ShockFinderEuler::writeShockOutput(double time, const std::vector<int>& goodStarts, const std::vector<int>& goodEnds)
 {
-    std::ofstream outFile("shock_output.txt", std::ios::app);
+
+    double reverseShockPos = getShockPosition(goodStarts.front(), goodEnds.front());
+    double forwardShockPos = getShockPosition(goodStarts.back(),  goodEnds.back());
+
+    std::ofstream outFile(outputFilename, std::ios::app);
 
     if (!outFile.is_open()) {
-        std::cerr << "Error opening shock_output.txt\n";
+        std::cerr << "Error opening " << outputFilename << '\n';
         return;
     }
 
-    double reverseShock = getShockPosition(goodStarts.front(), goodEnds.front());
+    if (timeOld < 0.0) {
 
-    double forwardShock = getShockPosition(goodStarts.back(), goodEnds.back());
+    	outFile << time << " "
+                << reverseShockPos << " "
+                << forwardShockPos << " "
+                << 0.0 << " "
+                << 0.0 << '\n';
 
-    outFile << time << " "
-            << reverseShock << " "
-            << forwardShock << '\n';
+    } else {
+
+        double dt = time - timeOld;
+
+        outFile << time << " "
+                << reverseShockPos << " "
+                << forwardShockPos << " "
+                << (reverseShockPos - reverseShockPosOld)/dt << " "
+                << (forwardShockPos - forwardShockPosOld)/dt << '\n';
+    }
+
+    timeOld            = time;
+    reverseShockPosOld = reverseShockPos;
+    forwardShockPosOld = forwardShockPos;
 }
 
 double ShockFinderEuler::getShockPosition(int start, int end)

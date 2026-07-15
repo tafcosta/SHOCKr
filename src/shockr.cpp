@@ -48,7 +48,7 @@ int main(){
 
 		if((time == 0.) || (timeSinceLastOutput > config.outputTimeInterval)){
 			std::cout << "time = " << time << std::endl;
-			output->makeOutput(outputFilename, time);
+			output->makeOutput(outputFilename, outputEnergy, time);
 			shockfinder->findShockZones(time, outputShock);
 			timeSinceLastOutput = 0.;
 		}
@@ -69,7 +69,7 @@ int main(){
 	}
 
 	std::cout << "time = " << time << std::endl;
-	output->makeOutput(outputFilename, time);
+	output->makeOutput(outputFilename, outputEnergy, time);
 	shockfinder->findShockZones(time, outputShock);
 
 	freeMemory();
@@ -88,7 +88,7 @@ void doGreeting(void){
     std::cout << "  SSS   H   H   OOO   CCCC  K   K   R   R" << std::endl;
 	std::cout << " "                                         << std::endl;
 	std::cout << "-----------------------------------------" << std::endl;
-	std::cout << "                Version 0                " << std::endl;
+	std::cout << "                Version 1                " << std::endl;
 	std::cout << "-----------------------------------------" << std::endl;
 }
 

@@ -23,8 +23,6 @@ public:
 
 	std::vector<int> findShockZones(double time, const std::string& filename) override;
 
-	double getKineticFlux(double rho, double velocity, double shockVelocity);
-
 private:
 	void detectShockZone(int i, double divV, double gradientDens, double gradientTemp);
 	void calculateDivV(int i);
@@ -32,6 +30,14 @@ private:
 
     void writeShockOutput(double time, const std::vector<int>& goodStarts, const std::vector<int>& goodEnds);
     double getShockPosition(int start, int end);
+	double getKineticFlux(double rho, double velocity, double shockVelocity);
+
+	double reverseShockPosOld = 0.;
+	double forwardShockPosOld = 0.;
+	double timeOld = -1.;
+
+    std::string outputFilename;
+
 };
 
 #endif /* SRC_SHOCKFINDEREULERPASSIVESCALAR_H_ */
