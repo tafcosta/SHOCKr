@@ -36,8 +36,6 @@ public:
 
     // Output File
     std::string outputFile;
-    std::string shockOutputFile;
-    std::string energyOutputFile;
 
     SimulationConfig(const std::string& configFile);
     virtual ~SimulationConfig();

@@ -20,5 +20,3 @@ unitMassInCgs      1.989e33
 unitVelocityInCgs  1.e5
 
 outputFile         Constant_DenseISM_W1000.txt
-energyOutputFile   Energy.txt
-shockOutputFile    Shock.txt

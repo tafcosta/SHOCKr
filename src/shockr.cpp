@@ -20,6 +20,7 @@ ShockFinder *shockfinder               = new ShockFinderEuler(*grid, *equations)
 
 void doGreeting();
 void freeMemory();
+std::string removeExtension(const std::string& filename);
 
 int main(){
 	double CFL = 0.3;
@@ -27,8 +28,9 @@ int main(){
 	double outputTimeInterval = config.outputTimeInterval;
 
 	std::string outputFilename = config.outputFile;
-	std::string outputEnergy   = config.energyOutputFile;
-	std::string outputShock    = config.shockOutputFile;
+	std::string base = removeExtension(outputFilename);
+	std::string outputEnergy   = base + "_energy.txt";
+	std::string outputShock    = base + "_shock.txt";
 
 	if (std::remove(outputFilename.c_str()) != 0) {}
 	if (std::remove(outputEnergy.c_str()) != 0) {}
@@ -99,4 +101,14 @@ void freeMemory(void){
 	delete output;
 	delete riemannsolver;
 	delete shockfinder;
+}
+
+std::string removeExtension(const std::string& filename)
+{
+    size_t pos = filename.find_last_of('.');
+
+    if (pos == std::string::npos)
+        return filename;
+
+    return filename.substr(0, pos);
 }
