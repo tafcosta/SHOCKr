@@ -17,8 +17,6 @@ public:
     // Simulation parameters
     double maxTime;
     double outputTimeInterval;
-    std::string outputFilename;
-    std::string outputEnergy;
 
     // Grid parameters
     double gridMin;
@@ -38,6 +36,8 @@ public:
 
     // Output File
     std::string outputFile;
+    std::string shockOutputFile;
+    std::string energyOutputFile;
 
     SimulationConfig(const std::string& configFile);
     virtual ~SimulationConfig();

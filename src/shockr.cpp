@@ -22,15 +22,18 @@ void doGreeting();
 void freeMemory();
 
 int main(){
-	std::string outputFilename = config.outputFile;
-	std::string outputEnergy = "energy.txt";
-
 	double CFL = 0.3;
 	double maxTime = config.maxTime;
 	double outputTimeInterval = config.outputTimeInterval;
 
+	std::string outputFilename = config.outputFile;
+	std::string outputEnergy   = config.energyOutputFile;
+	std::string outputShock    = config.shockOutputFile;
+
 	if (std::remove(outputFilename.c_str()) != 0) {}
 	if (std::remove(outputEnergy.c_str()) != 0) {}
+	if (std::remove(outputShock.c_str()) != 0) {}
+
 	double time = 0., dt = 0., timeSinceLastOutput = 0.0;
 
 	doGreeting();
@@ -44,7 +47,7 @@ int main(){
 		if((time == 0.) || (timeSinceLastOutput > config.outputTimeInterval)){
 			std::cout << "time = " << time << std::endl;
 			output->makeOutput(outputFilename, time);
-			shockfinder->findShockZones(time);
+			shockfinder->findShockZones(time, outputShock);
 			timeSinceLastOutput = 0.;
 		}
 
@@ -63,8 +66,9 @@ int main(){
 		time += dt;
 	}
 
+	std::cout << "time = " << time << std::endl;
 	output->makeOutput(outputFilename, time);
-	shockfinder->findShockZones(time);
+	shockfinder->findShockZones(time, outputShock);
 
 	freeMemory();
 

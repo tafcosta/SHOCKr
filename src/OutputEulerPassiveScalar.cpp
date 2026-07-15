@@ -51,6 +51,7 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, double ti
         }
     }
 
+    outputFile << "# " << time << '\n';
     for (int i = 0; i <= grid.maxXIndex; i++) {
 
         const double dens = grid.quantities[i][EquationsEulerPassiveScalar::DENS];

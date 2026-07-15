@@ -21,12 +21,17 @@ public:
 	static const int DENS = 0;
 	static const int TEMP = 1;
 
-	std::vector<int> findShockZones(double time) override;
+	std::vector<int> findShockZones(double time, const std::string& filename) override;
+
+	double getKineticFlux(double rho, double velocity, double shockVelocity);
 
 private:
 	void detectShockZone(int i, double divV, double gradientDens, double gradientTemp);
 	void calculateDivV(int i);
 	void calculateGradients(int i);
+
+    void writeShockOutput(double time, const std::vector<int>& goodStarts, const std::vector<int>& goodEnds);
+    double getShockPosition(int start, int end);
 };
 
 #endif /* SRC_SHOCKFINDEREULERPASSIVESCALAR_H_ */

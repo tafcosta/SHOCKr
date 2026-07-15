@@ -59,6 +59,10 @@ void SimulationConfig::readConfig(const std::string& configFile) {
         	unitLengthInCgs = std::stod(value);
         } else if (key == "outputFile") {
         	outputFile = std::string(value);
+        } else if (key == "shockOutputFile") {
+        	shockOutputFile = std::string(value);
+        } else if (key == "energyOutputFile") {
+        	energyOutputFile = std::string(value);
         }
     }
 }
