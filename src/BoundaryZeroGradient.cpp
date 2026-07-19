@@ -9,7 +9,7 @@
 #include "Boundary.h"
 #include "Grid.h"
 
-void BoundaryZeroGradient::setBoundaries(){
+void BoundaryZeroGradient::setBoundaries(double time){
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++)
 	{
 		if(i < grid.minXIndex)

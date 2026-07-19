@@ -100,17 +100,46 @@ void ShockFinderEuler::calculateDivV(int i) {
 	divV[i] = (u_j * pow(grid.getX(i + 1), 2.) - u_i * pow(grid.getX(i), 2.)) / (grid.getX(i + 1) - grid.getX(i)) / pow(grid.getX(i), 2.);
 }
 
-double ShockFinderEuler::getKineticFlux(double rho, double velocity, double shockVelocity)
-{
-    double vrel = std::abs(velocity - shockVelocity);
-    return 0.5 * rho * vrel * vrel * vrel;
-}
 
 void ShockFinderEuler::writeShockOutput(double time, const std::vector<int>& goodStarts, const std::vector<int>& goodEnds)
 {
 
     double reverseShockPos = getShockPosition(goodStarts.front(), goodEnds.front());
     double forwardShockPos = getShockPosition(goodStarts.back(),  goodEnds.back());
+
+    const int offset = 2;
+
+    int reverseShockUpstream =
+        std::max(grid.minXIndex, goodStarts.front() - offset);
+
+    int reverseShockDownstream =
+        std::min(grid.maxXIndex, goodEnds.front() + offset);
+
+    int forwardShockUpstream =
+        std::min(grid.maxXIndex, goodEnds.back() + offset);
+
+    int forwardShockDownstream =
+        std::max(grid.minXIndex, goodStarts.back() - offset);
+
+    double rhoRS_up =
+        grid.quantities[reverseShockUpstream][EquationsEulerPassiveScalar::DENS];
+    double velRS_up =
+        grid.quantities[reverseShockUpstream][EquationsEulerPassiveScalar::XMOM] / rhoRS_up;
+
+    double rhoRS_down =
+        grid.quantities[reverseShockDownstream][EquationsEulerPassiveScalar::DENS];
+    double velRS_down =
+        grid.quantities[reverseShockDownstream][EquationsEulerPassiveScalar::XMOM] / rhoRS_down;
+
+    double rhoFS_up =
+        grid.quantities[forwardShockUpstream][EquationsEulerPassiveScalar::DENS];
+    double velFS_up =
+        grid.quantities[forwardShockUpstream][EquationsEulerPassiveScalar::XMOM] / rhoFS_up;
+
+    double rhoFS_down =
+        grid.quantities[forwardShockDownstream][EquationsEulerPassiveScalar::DENS];
+    double velFS_down =
+        grid.quantities[forwardShockDownstream][EquationsEulerPassiveScalar::XMOM] / rhoFS_down;
 
     std::ofstream outFile(outputFilename, std::ios::app);
 
@@ -122,20 +151,46 @@ void ShockFinderEuler::writeShockOutput(double time, const std::vector<int>& goo
     if (timeOld < 0.0) {
 
     	outFile << time << " "
-                << reverseShockPos << " "
-                << forwardShockPos << " "
-                << 0.0 << " "
-                << 0.0 << '\n';
-
+    	        << reverseShockPos << " "
+    	        << forwardShockPos << " "
+				<< grid.getX(reverseShockUpstream) << " "
+				<< grid.getX(reverseShockDownstream) << " "
+				<< grid.getX(forwardShockUpstream) << " "
+				<< grid.getX(forwardShockDownstream) << " "
+    	        << 0.0 << " "
+    	        << 0.0 << " "
+    	        << rhoRS_up << " "
+    	        << velRS_up << " "
+    	        << rhoRS_down << " "
+    	        << velRS_down << " "
+    	        << rhoFS_up << " "
+    	        << velFS_up << " "
+    	        << rhoFS_down << " "
+    	        << velFS_down << '\n';
     } else {
 
         double dt = time - timeOld;
 
+        double Vrs = (reverseShockPos - reverseShockPosOld)/dt;
+        double Vfs = (forwardShockPos - forwardShockPosOld)/dt;
+
         outFile << time << " "
                 << reverseShockPos << " "
                 << forwardShockPos << " "
-                << (reverseShockPos - reverseShockPosOld)/dt << " "
-                << (forwardShockPos - forwardShockPosOld)/dt << '\n';
+				<< grid.getX(reverseShockUpstream) << " "
+				<< grid.getX(reverseShockDownstream) << " "
+				<< grid.getX(forwardShockUpstream) << " "
+				<< grid.getX(forwardShockDownstream) << " "
+                << Vrs << " "
+                << Vfs << " "
+    	        << rhoRS_up << " "
+    	        << velRS_up << " "
+    	        << rhoRS_down << " "
+    	        << velRS_down << " "
+    	        << rhoFS_up << " "
+    	        << velFS_up << " "
+    	        << rhoFS_down << " "
+    	        << velFS_down << '\n';
     }
 
     timeOld            = time;

@@ -9,9 +9,9 @@
 #include "EquationsEulerPassiveScalar.h"
 #include "Grid.h"
 
-void BoundaryWindPassiveScalar::setBoundaries(){
+void BoundaryWindPassiveScalar::setBoundaries(double time){
 
-	BoundaryWind::setBoundaries();
+	BoundaryWind::setBoundaries(time);
 
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++)
 		if(i < grid.minXIndex)

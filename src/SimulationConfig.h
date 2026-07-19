@@ -27,6 +27,7 @@ public:
     // Background parameters
     double bgDensity, bgVel, bgPressure;
     double powerLawExponent;
+    double haloConcentration, haloMass, baryonFraction;
 
     // Wind parameters
     double windDensity, windVel, windPressure;

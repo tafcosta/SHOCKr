@@ -30,7 +30,6 @@ private:
 
     void writeShockOutput(double time, const std::vector<int>& goodStarts, const std::vector<int>& goodEnds);
     double getShockPosition(int start, int end);
-	double getKineticFlux(double rho, double velocity, double shockVelocity);
 
 	double reverseShockPosOld = 0.;
 	double forwardShockPosOld = 0.;

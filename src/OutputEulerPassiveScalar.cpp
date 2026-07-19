@@ -74,14 +74,12 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, const std
         const double e_th  = p / (eq->gamma - 1.0) * dV;
         const double e_kin = 0.5 * rhoV2 * dV;
 
-        if (v > 1.0) {
-            if (grid.getX(i) < contactPosition) {
-                windThermalEnergy += e_th;
-                windKineticEnergy += e_kin;
-            } else {
-                thermalEnergy += e_th;
-                kineticEnergy += e_kin;
-            }
+        if (grid.getX(i) < contactPosition) {
+        	windThermalEnergy += e_th;
+        	windKineticEnergy += e_kin;
+        } else {
+        	thermalEnergy += e_th;
+        	kineticEnergy += e_kin;
         }
 
         outputFile << grid.getX(i) << " "

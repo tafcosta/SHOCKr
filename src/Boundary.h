@@ -17,7 +17,7 @@ public:
 
 	Grid& grid;
 	Equations& equations;
-	virtual void setBoundaries(){};
+	virtual void setBoundaries(double time){};
 
 };
 

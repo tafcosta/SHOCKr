@@ -11,8 +11,9 @@ SimulationConfig config("config.txt");
 
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
 Grid *grid                             = new GridRadial(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
-Source *source                         = new SourceNone(*grid, *equations); //SourceGravity(*grid, *equations, 1.e7, 6.674e-8 / (std::pow(config.unitLengthInCgs, 3)/config.unitMassInCgs/std::pow(config.unitLengthInCgs/config.unitVelocityInCgs,2)));
-InitialData *initialdata               = new InitialDataPowerLawPassiveScalar(config.bgDensity, config.bgVel, config.bgPressure, config.powerLawExponent, *grid, *equations);
+Source *source                         = new SourceNone(*grid, *equations);//SourceGravity(*grid, *equations, 1.e7, 6.674e-8 / (std::pow(config.unitLengthInCgs, 3)/config.unitMassInCgs/std::pow(config.unitLengthInCgs/config.unitVelocityInCgs,2)), config.powerLawExponent, config.bgDensity, 0.1); //
+GasProfile *gas 					   = new GasProfileNFW(config.haloMass, config.haloConcentration, config.baryonFraction, config.unitLengthInCgs, config.unitMassInCgs, config.unitLengthInCgs/config.unitVelocityInCgs);//GasProfilePowerLaw(config.bgDensity, config.bgPressure, config.bgVel, config.gridMin, config.powerLawExponent);
+InitialData *initialdata 			   = new InitialDataRadial(*grid, *equations, *gas);
 Boundary *boundary                     = new BoundaryWindPassiveScalar(config.windDensity, config.windVel, config.windPressure, *grid, *equations);
 Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);
@@ -53,7 +54,7 @@ int main(){
 			timeSinceLastOutput = 0.;
 		}
 
-		boundary->setBoundaries();
+		boundary->setBoundaries(time);
 		riemannsolver->setFluxes();
 		source->setSources();
 
@@ -95,6 +96,7 @@ void doGreeting(void){
 void freeMemory(void){
 	delete boundary;
 	delete equations;
+	delete gas;
 	delete grid;
 	delete source;
 	delete initialdata;

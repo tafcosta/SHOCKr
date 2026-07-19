@@ -19,7 +19,7 @@ public:
 	BoundaryWindLinearisedEuler(Grid& grid, EquationsLinearisedEuler& equations, InitialDataHomogeneousLinearisedEuler& initialdata) : Boundary(grid, equations), initialdata(initialdata){};
 	virtual ~BoundaryWindLinearisedEuler();
 
-	void setBoundaries() override;
+	void setBoundaries(double time) override;
 	InitialDataHomogeneousLinearisedEuler initialdata;
 };
 

@@ -2,7 +2,7 @@
  * SourceGravity.h
  *
  *  Created on: 27 Sept 2025
- *      Author: ntc132
+ *      Author: Tiago Costa
  */
 
 #ifndef SRC_SOURCEGRAVITY_H_
@@ -12,14 +12,17 @@
 
 class SourceGravity: public Source {
 public:
-	SourceGravity(Grid& grid, EquationsEuler& equations, double massBH, double G_internal) : Source(grid, equations), massBH(massBH), Grav(G_internal) {};
+	SourceGravity(Grid& grid, EquationsEuler& equations, double massBH, double G_internal, double powerLawExponent, double rhoBackground, double gasFraction) : Source(grid, equations), massBH(massBH), Grav(G_internal), powerLawExponent(powerLawExponent), rhoBackground(rhoBackground), gasFraction(gasFraction) {};
 	virtual ~SourceGravity();
 
 	double massBH;
 	double Grav;
+	double powerLawExponent;
+	double rhoBackground;
+	double gasFraction;
 
 	std::vector<double> getSource(std::vector<double>& quantities, double radialDistance);
-
+	double enclosedMass(double radialDistance);
 };
 
 #endif /* SRC_SOURCEGRAVITY_H_ */

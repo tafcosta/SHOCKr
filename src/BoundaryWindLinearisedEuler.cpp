@@ -11,7 +11,7 @@
 #include "Grid.h"
 #include "InitialDataHomogeneousLinearisedEuler.h"
 
-void BoundaryWindLinearisedEuler::setBoundaries(){
+void BoundaryWindLinearisedEuler::setBoundaries(double time){
 	double rho_wind, u_wind, p_wind;
 	double qminus;
 	double cs_background, dens_background;

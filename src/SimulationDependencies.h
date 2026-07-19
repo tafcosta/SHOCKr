@@ -23,16 +23,17 @@
 #include "EquationsEulerPassiveScalar.h"
 #include "EquationsLinearisedEuler.h"
 
+#include "GasProfile.h"
+#include "GasProfileHomogeneous.h"
+#include "GasProfileNFW.h"
+#include "GasProfilePowerLaw.h"
 #include "Grid.h"
 #include "Grid1D.h"
 #include "GridRadial.h"
 
 #include "InitialData.h"
-#include "InitialDataHomogeneous.h"
+#include "InitialDataRadial.h"
 #include "InitialDataHomogeneousLinearisedEuler.h"
-#include "InitialDataHomogeneousPassiveScalar.h"
-#include "InitialDataPowerLaw.h"
-#include "InitialDataPowerLawPassiveScalar.h"
 #include "InitialDataSodShock.h"
 
 #include "Output.h"

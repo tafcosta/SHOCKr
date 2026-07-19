@@ -2,7 +2,7 @@
  * BoundaryWind.h
  *
  *  Created on: 22 Dec 2023
- *      Author: ntc132
+ *      Author: Tiago Costa
  */
 
 #ifndef SRC_BOUNDARYWINDTMP_H_
@@ -18,14 +18,14 @@ public:
 	: Boundary(grid, equations), rhoWind(rhoWind), velWind(velWind), pressureWind(pressureWind) {};
 
 	virtual ~BoundaryWind();
-	void setBoundaries() override;
+	void setBoundaries(double time) override;
 
 protected:
-	double rhoWind, velWind, pressureWind;
+	double rhoWindDecay, pressureWindDecay, rhoWind, velWind, pressureWind;
 
 	void doSubsonicWindGross(int i);
-
 	void doSupersonicWind(int i);
+
 	double getSoundSpeed(double gamma, double density, double pressure);
 	std::vector<double> matrixMultiply(std::vector<std::vector<double> > matrix, std::vector<double> vector);
 };

@@ -2,7 +2,7 @@
  * BoundaryWind.cpp
  *
  *  Created on: 22 Dec 2023
- *      Author: ntc132
+ *      Author: Tiago Costa
  */
 
 #include "BoundaryWind.h"
@@ -13,8 +13,16 @@
 #include <iostream>
 #include <cstdio>
 
-void BoundaryWind::setBoundaries(){
+void BoundaryWind::setBoundaries(double time){
 	double machNumber = velWind/getSoundSpeed((static_cast<EquationsEuler*>(&equations))->gamma, rhoWind, pressureWind);
+
+	if(time > 1.0){
+		rhoWindDecay = rhoWind * std::exp(-time/1.e-3);
+		pressureWindDecay = pressureWind * std::exp(-time/1.e-3);
+	} else {
+		rhoWindDecay = rhoWind;
+		pressureWindDecay = pressureWind;
+	}
 
 	for(int i = 0; i < grid.nx + 2 * grid.nGhost; i++){
 		if (i < grid.minXIndex){
@@ -23,7 +31,6 @@ void BoundaryWind::setBoundaries(){
 				doSupersonicWind(i);
 			else
 				doSubsonicWindGross(i);
-
 		}
 		else if(i > grid.maxXIndex)
 			grid.quantities[i] = grid.quantities[grid.maxXIndex];
@@ -31,11 +38,10 @@ void BoundaryWind::setBoundaries(){
 }
 
 void BoundaryWind::doSupersonicWind(int i){
-	grid.quantities[i][EquationsEuler::DENS]   = rhoWind;
-	grid.quantities[i][EquationsEuler::XMOM]   = rhoWind * velWind;
-	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureWind, rhoWind * std::pow(velWind, 2.));
+	grid.quantities[i][EquationsEuler::DENS]   = rhoWindDecay;
+	grid.quantities[i][EquationsEuler::XMOM]   = rhoWindDecay * velWind;
+	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pressureWindDecay, rhoWindDecay * std::pow(velWind, 2.));
 }
-
 
 void BoundaryWind::doSubsonicWindGross(int i){
 
@@ -77,7 +83,6 @@ void BoundaryWind::doSubsonicWindGross(int i){
 	grid.quantities[i][EquationsEuler::ENERGY] = (static_cast<EquationsEuler*>(&equations))->totalEnergy(pGhost,rhoGhost * std::pow(velGhost, 2.));
 
 }
-
 
 double BoundaryWind::getSoundSpeed(double gamma, double density, double pressure){
 	if (density == 0)

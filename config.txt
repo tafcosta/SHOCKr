@@ -1,22 +1,25 @@
-maxTime            0.01
-outputTimeInterval 0.0001
+maxTime            0.1
+outputTimeInterval 1.e-2
 
 gridMin            0.1
 gridMax            100
-NumberCells        20000
+NumberCells        10000
 NumberGhostCells   1
 
-bgDensity          3.7
+bgDensity          1.0
 bgVel              0.
-bgPressure         0.6932
+bgPressure         69.32
+haloMass           1.e12
+haloConcentration  10.
+baryonFraction     0.16
 
-windDensity        1000
+windDensity        10
 windVel            10000.
 windPressure       1e2
-powerLawExponent   0
+powerLawExponent   1
 
-unitLengthInCgs    3.08567758e18
+unitLengthInCgs    3.08567758e21
 unitMassInCgs      1.989e33
 unitVelocityInCgs  1.e5
 
-outputFile         Constant_DenseISM_W1000.txt
+outputFile         Constant_ISM370_W10_gravity.txt

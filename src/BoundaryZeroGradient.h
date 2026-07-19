@@ -15,7 +15,7 @@ class BoundaryZeroGradient: public Boundary {
 public:
 	BoundaryZeroGradient(Grid& grid, Equations& equations) : Boundary(grid, equations){};
 	virtual ~BoundaryZeroGradient();
-	void setBoundaries() override;
+	void setBoundaries(double time) override;
 
 };
 
