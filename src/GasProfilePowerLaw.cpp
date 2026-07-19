@@ -22,6 +22,10 @@ double GasProfilePowerLaw::velocity(double) const{
     return v0;
 }
 
+double GasProfilePowerLaw::enclosedMass(double r) const{
+    return 4.0 * M_PI * rho0 * std::pow(r0, alpha) * std::pow(r, 3.0 - alpha) / (3.0 - alpha);
+}
+
 GasProfilePowerLaw::~GasProfilePowerLaw() {
 	// TODO Auto-generated destructor stub
 }
