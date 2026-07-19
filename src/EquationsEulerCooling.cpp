@@ -2,7 +2,7 @@
  * EquationsEulerCooling.cpp
  *
  *  Created on: 13 Feb 2024
- *      Author: ntc132
+ *      Author: Tiago Costa
  */
 
 #include <iostream>

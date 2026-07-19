@@ -1,5 +1,5 @@
 maxTime            0.1
-outputTimeInterval 1.e-2
+outputTimeInterval 1.e-4
 
 gridMin            0.1
 gridMax            100
@@ -13,7 +13,7 @@ haloMass           1.e12
 haloConcentration  10.
 baryonFraction     0.16
 
-windDensity        10
+windDensity        10000
 windVel            10000.
 windPressure       1e2
 powerLawExponent   1

@@ -9,6 +9,8 @@
 #define SRC_GASPROFILENFW_H_
 
 #include "GasProfile.h"
+#include <vector>
+
 
 class GasProfileNFW : public GasProfile {
 
@@ -26,6 +28,9 @@ private:
     double rScale;
     double Gcode;
     double baryonFraction;
+
+    std::vector<double> radiusTable;
+    std::vector<double> pressureTable;
 };
 
 #endif /* SRC_GASPROFILENFW_H_ */

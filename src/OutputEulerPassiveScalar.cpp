@@ -101,10 +101,10 @@ void OutputEulerPassiveScalar::makeOutput(const std::string& filename, const std
     const double boundaryDens = grid.quantities[grid.maxXIndex][EquationsEulerPassiveScalar::DENS];
     const double boundaryVel  = grid.quantities[grid.maxXIndex][EquationsEulerPassiveScalar::XMOM] / boundaryDens;
 
-    if (boundaryDens > 0.0 && boundaryVel > 1.e-1) {
+    /*if (boundaryDens > 0.0 && boundaryVel > 1.e-1) {
         std::cout << boundaryVel << std::endl;
         throw std::runtime_error("Error: Contact has left domain. Stop.");
-    }
+    }*/
 }
 
 OutputEulerPassiveScalar::~OutputEulerPassiveScalar() {
