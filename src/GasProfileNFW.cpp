@@ -83,8 +83,7 @@ GasProfileNFW::GasProfileNFW(double haloMass,
     }
 }
 
-double GasProfileNFW::density(double r) const
-{
+double GasProfileNFW::density(double r) const{
     const double x = r/rScale;
 
     return rhoScale /
@@ -116,6 +115,11 @@ double GasProfileNFW::pressure(double r) const{
 
 double GasProfileNFW::velocity(double) const{
     return 0.0;
+}
+
+double GasProfileNFW::enclosedMass(double r) const{
+    const double x = r / rScale;
+    return 4.0 * M_PI * rhoScale * std::pow(rScale,3) * (std::log(1.0 + x) - x/(1.0 + x));
 }
 
 GasProfileNFW::~GasProfileNFW(){}

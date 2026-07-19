@@ -17,6 +17,7 @@ public:
     virtual double density(double r)  const = 0;
     virtual double pressure(double r) const = 0;
     virtual double velocity(double r) const;
+    virtual double enclosedMass(double r) const = 0;
 };
 
 #endif /* SRC_GASPROFILE_H_ */

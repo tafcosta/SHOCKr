@@ -9,20 +9,22 @@
 #define SRC_SOURCEGRAVITY_H_
 
 #include "Source.h"
+#include "GasProfile.h"
 
 class SourceGravity: public Source {
 public:
-	SourceGravity(Grid& grid, EquationsEuler& equations, double massBH, double G_internal, double powerLawExponent, double rhoBackground, double gasFraction) : Source(grid, equations), massBH(massBH), Grav(G_internal), powerLawExponent(powerLawExponent), rhoBackground(rhoBackground), gasFraction(gasFraction) {};
-	virtual ~SourceGravity();
+	SourceGravity(Grid& grid, EquationsEuler& equations, const GasProfile& profile, double massBH, double G_internal) : Source(grid, equations), gasProfile(profile), massBH(massBH), Grav(G_internal){}
 
-	double massBH;
-	double Grav;
-	double powerLawExponent;
-	double rhoBackground;
-	double gasFraction;
+    std::vector<double> getSource(std::vector<double>& quantities,
+                                  double radialDistance) override;
 
-	std::vector<double> getSource(std::vector<double>& quantities, double radialDistance);
-	double enclosedMass(double radialDistance);
+    ~SourceGravity() override;
+
+private:
+    const GasProfile& gasProfile;
+
+    double massBH;
+    double Grav;
 };
 
 #endif /* SRC_SOURCEGRAVITY_H_ */

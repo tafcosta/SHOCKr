@@ -22,6 +22,8 @@ public:
     double density(double r) const override;
     double pressure(double r) const override;
     double velocity(double r) const override;
+    virtual double enclosedMass(double r) const override;
+
 
 private:
     double rhoScale;

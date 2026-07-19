@@ -12,19 +12,12 @@ std::vector<double> SourceGravity::getSource(std::vector<double>& quantities, do
 
 	std::vector<double> res = std::vector<double>(equations.nCons(), 0.0);
 
-	double acceleration = -Grav * enclosedMass(radialDistance) / (radialDistance * radialDistance);
+	double acceleration = -Grav * (massBH + gasProfile.enclosedMass(radialDistance)) / (radialDistance * radialDistance);
 
 	res[EquationsEuler::XMOM]   = quantities[EquationsEuler::DENS] * acceleration;
 	res[EquationsEuler::ENERGY] = quantities[EquationsEuler::XMOM] * acceleration;
 
 	return res;
-}
-
-double SourceGravity::enclosedMass(double radialDistance){
-    double mGasEquivalent = 4.0 * M_PI * rhoBackground
-    		* std::pow(grid.xmin, powerLawExponent) * std::pow(radialDistance, 3.0 - powerLawExponent) / ((3.0 - powerLawExponent) * gasFraction);
-
-    return massBH + mGasEquivalent;
 }
 
 
