@@ -26,4 +26,8 @@ double GasProfileHomogeneous::velocity(double) const{
     return v0;
 }
 
+double GasProfileHomogeneous::enclosedMass(double r) const{
+    return 4.0/3.0 * M_PI * rho0 * r * r * r;
+}
+
 #endif

@@ -26,8 +26,14 @@ public:
 
     // Background parameters
     double bgDensity, bgVel, bgPressure;
-    double powerLawExponent;
+    double powerLawExponent = 0.0;
+    double powerLawRadius   = -1.0;
+    std::string gasProfile  = "nfw";
     double haloConcentration, haloMass, baryonFraction;
+
+    // Gravity
+    int    gravity       = 1;
+    double blackHoleMass = 1.e7;          // code units
 
     // Wind parameters
     double windDensity, windVel, windPressure;

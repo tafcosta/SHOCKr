@@ -9,10 +9,22 @@
 
 SimulationConfig config("config.txt");
 
+GasProfile* makeGasProfile(const SimulationConfig& c){
+	if (c.gasProfile == "homogeneous")
+		return new GasProfileHomogeneous(c.bgDensity, c.bgPressure, c.bgVel);
+	if (c.gasProfile == "powerlaw")
+		return new GasProfilePowerLaw(c.bgDensity, c.bgPressure, c.bgVel, c.powerLawRadius > 0 ? c.powerLawRadius : c.gridMin, c.powerLawExponent);
+	if (c.gasProfile == "nfw")
+		return new GasProfileNFW(c.haloMass, c.haloConcentration, c.baryonFraction, c.unitLengthInCgs, c.unitMassInCgs, c.unitLengthInCgs/c.unitVelocityInCgs);
+	throw std::runtime_error("Unknown gasProfile: " + c.gasProfile);
+}
+
 EquationsEulerPassiveScalar *equations = new EquationsEulerPassiveScalar(5./3);
 Grid *grid                             = new GridRadial(config.gridMin, config.gridMax, config.gridNGhost, config.gridNcell, *equations);
-GasProfile *gas 					   = new GasProfileNFW(config.haloMass, config.haloConcentration, config.baryonFraction, config.unitLengthInCgs, config.unitMassInCgs, config.unitLengthInCgs/config.unitVelocityInCgs);//GasProfilePowerLaw(config.bgDensity, config.bgPressure, config.bgVel, config.gridMin, config.powerLawExponent);
-Source *source                         = new SourceGravity(*grid, *equations, *gas, 1.e7, 6.674e-8 / (std::pow(config.unitLengthInCgs, 3)/config.unitMassInCgs/std::pow(config.unitLengthInCgs/config.unitVelocityInCgs,2))); //
+GasProfile *gas                        = makeGasProfile(config);
+Source *source                         = config.gravity
+    ? static_cast<Source*>(new SourceGravity(*grid, *equations, *gas, config.blackHoleMass, 6.674e-8 / (std::pow(config.unitLengthInCgs, 3)/config.unitMassInCgs/std::pow(config.unitLengthInCgs/config.unitVelocityInCgs,2))))
+    : static_cast<Source*>(new SourceNone(*grid, *equations));
 InitialData *initialdata 			   = new InitialDataRadial(*grid, *equations, *gas);
 Boundary *boundary                     = new BoundaryWindPassiveScalar(config.windDensity, config.windVel, config.windPressure, *grid, *equations);
 Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);

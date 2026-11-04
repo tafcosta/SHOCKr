@@ -9,6 +9,8 @@
 #define SRC_GASPROFILEHOMOGENEOUS_H_
 
 #include "GasProfile.h"
+#include "GasProfileHomogeneous.h"
+#include <cmath>
 
 class GasProfileHomogeneous : public GasProfile {
 
@@ -21,6 +23,7 @@ public:
     double density(double r) const override;
     double pressure(double r) const override;
     double velocity(double r) const override;
+    double enclosedMass(double r) const override;
 
 private:
 

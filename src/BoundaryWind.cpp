@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <cstdio>
+#include <cmath>
 
 void BoundaryWind::setBoundaries(double time){
 	double machNumber = velWind/getSoundSpeed((static_cast<EquationsEuler*>(&equations))->gamma, rhoWind, pressureWind);
