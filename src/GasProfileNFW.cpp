@@ -18,7 +18,8 @@ GasProfileNFW::GasProfileNFW(double haloMass,
                              double unitLengthInCgs,
                              double unitMassInCgs,
                              double unitTimeInCgs,
-                             double massBH)
+                             double massBH,
+							 double redshift)
 : baryonFraction(baryonFraction), massBH(massBH)
 {
     const double G    = 6.67430e-8;
@@ -27,7 +28,10 @@ GasProfileNFW::GasProfileNFW(double haloMass,
     const double Msun = 1.98847e33;
     const double H0   = 70.0 * km / Mpc;
 
-    const double rhoCrit = 3.0 * H0 * H0 / (8.0 * M_PI * G);
+    const double OmegaM  = 0.3, OmegaL = 0.7;
+    const double Hz      = H0 * std::sqrt(OmegaM * std::pow(1.0 + redshift, 3) + OmegaL);
+    const double rhoCrit = 3.0 * Hz * Hz / (8.0 * M_PI * G);
+
     const double M200    = haloMass * Msun;
     const double R200    = std::cbrt(3.0 * M200 / (4.0 * M_PI * 200.0 * rhoCrit));
 

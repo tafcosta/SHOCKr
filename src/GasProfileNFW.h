@@ -16,8 +16,8 @@ class GasProfileNFW : public GasProfile {
 
 public:
 
-	GasProfileNFW(double haloMass, double haloConcentration, double baryonFraction, double unitLengthInCgs, double unitMassInCgs, double unitTimeInCgs, double massBH = 0.0);
-	virtual ~GasProfileNFW();
+   	GasProfileNFW(double haloMass, double haloConcentration, double baryonFraction, double unitLengthInCgs, double unitMassInCgs, double unitTimeInCgs, double massBH = 0.0, double redshift = 0.0);
+   	virtual ~GasProfileNFW();
 
     double density(double r) const override;
     double pressure(double r) const override;

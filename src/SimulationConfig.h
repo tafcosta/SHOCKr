@@ -30,6 +30,7 @@ public:
     double powerLawRadius   = -1.0;
     std::string gasProfile  = "nfw";
     double haloConcentration, haloMass, baryonFraction;
+    double redshift = 0.0;
 
     // Gravity
     int    gravity       = 1;
