@@ -9,7 +9,6 @@
 #define SRC_GASPROFILEHOMOGENEOUS_H_
 
 #include "GasProfile.h"
-#include "GasProfileHomogeneous.h"
 #include <cmath>
 
 class GasProfileHomogeneous : public GasProfile {

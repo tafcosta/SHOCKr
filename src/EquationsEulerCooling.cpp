@@ -10,8 +10,10 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 #include "EquationsEulerCooling.h"
+
 
 void EquationsEulerCooling::doCooling(std::vector<double>& quantities, double dt){
 	double dtPhysical = dt * unitL/unitV;
