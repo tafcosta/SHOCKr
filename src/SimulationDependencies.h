@@ -17,6 +17,8 @@
 #include "BoundaryWindLinearisedEuler.h"
 #include "BoundaryWindPassiveScalar.h"
 
+#include "ComptonCooling.h"
+
 #include "Equations.h"
 #include "EquationsEuler.h"
 #include "EquationsEulerCooling.h"

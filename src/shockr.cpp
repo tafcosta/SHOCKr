@@ -30,9 +30,11 @@ Boundary *boundary                     = new BoundaryWindPassiveScalar(config.wi
 Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);
 ShockFinder *shockfinder               = new ShockFinderEuler(*grid, *equations);
+ComptonCooling *compton                = new ComptonCooling(*grid, *equations, config.comptonCooling, config.agnLuminosity, config.comptonTemperature, config.unitLengthInCgs, config.unitVelocityInCgs, config.comptonRelativistic != 0);
 
 void doGreeting();
 void freeMemory();
+void writeComptonOutput(const std::string& filename, double time, double windPower);
 std::string removeExtension(const std::string& filename);
 
 int main(){
@@ -44,14 +46,27 @@ int main(){
 	std::string base = removeExtension(outputFilename);
 	std::string outputEnergy   = base + "_energy.txt";
 	std::string outputShock    = base + "_shock.txt";
+	std::string outputCompton  = base + "_compton.txt";
 
 	if (std::remove(outputFilename.c_str()) != 0) {}
 	if (std::remove(outputEnergy.c_str()) != 0) {}
 	if (std::remove(outputShock.c_str()) != 0) {}
+	if (std::remove(outputCompton.c_str()) != 0) {}
+
+	// Wind kinetic power (code units), to express the radiated energy as a fraction
+	const double windPower = 2.0 * M_PI * config.gridMin * config.gridMin * config.windDensity * std::pow(config.windVel, 3);
 
 	double time = 0., dt = 0., timeSinceLastOutput = 0.0;
 
 	doGreeting();
+
+	if (config.comptonCooling != 0) {
+		if (config.agnLuminosity <= 0.0)
+			throw std::runtime_error("comptonCooling needs agnLuminosity > 0");
+		std::cout << "Compton cooling mode " << config.comptonCooling << ", L = " << config.agnLuminosity
+		          << " erg/s, T_C = " << config.comptonTemperature << " K"
+		          << (config.comptonRelativistic ? ", relativistic" : "") << std::endl;
+	}
 
 	equations->preProcessor();
 	initialdata->setInitialData();
@@ -63,6 +78,7 @@ int main(){
 			std::cout << "time = " << time << std::endl;
 			output->makeOutput(outputFilename, outputEnergy, time);
 			shockfinder->findShockZones(time, outputShock);
+			writeComptonOutput(outputCompton, time, windPower);
 			timeSinceLastOutput = 0.;
 		}
 
@@ -76,6 +92,7 @@ int main(){
 			throw std::runtime_error("Error: Invalid maxSpeed.");
 
 		grid->update(dt);
+		compton->apply(dt);
 
 		timeSinceLastOutput += dt;
 		time += dt;
@@ -84,6 +101,10 @@ int main(){
 	std::cout << "time = " << time << std::endl;
 	output->makeOutput(outputFilename, outputEnergy, time);
 	shockfinder->findShockZones(time, outputShock);
+	writeComptonOutput(outputCompton, time, windPower);
+
+	if (config.comptonCooling != 0)
+		std::cout << "Compton: net thermal energy radiated = " << compton->energyRadiated << " (code units)" << std::endl;
 
 	freeMemory();
 
@@ -115,6 +136,17 @@ void freeMemory(void){
 	delete output;
 	delete riemannsolver;
 	delete shockfinder;
+	delete compton;
+}
+
+// Time, cumulative thermal energy radiated (code units), and that energy as a
+// fraction of the wind kinetic energy injected so far
+void writeComptonOutput(const std::string& filename, double time, double windPower){
+	if (config.comptonCooling == 0)
+		return;
+	std::ofstream out(filename, std::ios_base::app);
+	out << time << " " << compton->energyRadiated << " "
+	    << (time > 0 ? compton->energyRadiated / (windPower * time) : 0.0) << '\n';
 }
 
 std::string removeExtension(const std::string& filename)

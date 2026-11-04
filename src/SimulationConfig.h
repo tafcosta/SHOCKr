@@ -36,6 +36,12 @@ public:
     int    gravity       = 1;
     double blackHoleMass = 1.e7;          // code units
 
+    // Compton cooling by the AGN radiation field
+    int    comptonCooling     = 0;        // 0 = off, 1 = cooling and heating, 2 = cooling only
+    double agnLuminosity      = 0.0;      // erg/s
+    double comptonTemperature = 2.e7;     // K
+    int    comptonRelativistic = 0;       // 1 = include relativistic correction for hot electrons
+
     // Wind parameters
     double windDensity, windVel, windPressure;
 

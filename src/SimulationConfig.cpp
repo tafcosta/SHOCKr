@@ -61,6 +61,14 @@ void SimulationConfig::readConfig(const std::string& configFile) {
         	haloConcentration = std::stod(value);
         } else if (key == "baryonFraction") {
         	baryonFraction = std::stod(value);
+        } else if (key == "comptonCooling") {
+        	comptonCooling = std::stoi(value);
+        } else if (key == "agnLuminosity") {
+        	agnLuminosity = std::stod(value);
+        } else if (key == "comptonTemperature") {
+        	comptonTemperature = std::stod(value);
+        } else if (key == "comptonRelativistic") {
+        	comptonRelativistic = std::stoi(value);
         } else if (key == "windDensity") {
         	windDensity = std::stod(value);
         } else if (key == "windVel") {
