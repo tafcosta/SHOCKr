@@ -1,34 +1,26 @@
-build/*
+# macOS
+.DS_Store
 
-# Prerequisites
-*.d
+# Eclipse
+.project
+.cproject
+.settings/
+.autotools
+Debug/
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# Build
+build/
+run.run
 
-# Precompiled Headers
-*.gch
-*.pch
+# Simulation outputs
+*.txt
+!config.txt
+!tables/*.txt
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Figures and movies
+*.pdf
+*.mp4
+figures/
 
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+# Editor backups
+*~
