@@ -20,6 +20,10 @@ public:
 	virtual ~BoundaryWind();
 	void setBoundaries(double time) override;
 
+	// Outer boundary: false = zero gradient (copy the last cell), true = keep the
+	// ghost cells at their initial values (holds a hydrostatic atmosphere in place)
+	bool fixedOuterBoundary = false;
+
 protected:
 	double rhoWindDecay, pressureWindDecay, rhoWind, velWind, pressureWind;
 

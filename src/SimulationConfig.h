@@ -31,6 +31,8 @@ public:
     std::string gasProfile  = "nfw";
     double haloConcentration, haloMass, baryonFraction;
     double redshift = 0.0;
+    double sisSigma    = 200.0;            // SIS velocity dispersion, km/s (code velocity)
+    double gasFraction = 0.16;             // SIS gas fraction f_g
 
     // Gravity
     int    gravity       = 1;
@@ -41,6 +43,9 @@ public:
     double agnLuminosity      = 0.0;      // erg/s
     double comptonTemperature = 2.e7;     // K
     int    comptonRelativistic = 0;       // 1 = include relativistic correction for hot electrons
+
+    // Outer boundary: "zerogradient" (default) or "fixed" (ghost cells stay at the initial profile)
+    std::string outerBoundary = "zerogradient";
 
     // Wind parameters
     double windDensity, windVel, windPressure;

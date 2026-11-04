@@ -9,6 +9,10 @@
 
 SimulationConfig config("config.txt");
 
+double gravitationalConstantCode(const SimulationConfig& c){
+	return 6.674e-8 / (std::pow(c.unitLengthInCgs, 3) / c.unitMassInCgs / std::pow(c.unitLengthInCgs / c.unitVelocityInCgs, 2));
+}
+
 GasProfile* makeGasProfile(const SimulationConfig& c){
 	if (c.gasProfile == "homogeneous")
 		return new GasProfileHomogeneous(c.bgDensity, c.bgPressure, c.bgVel);
@@ -16,6 +20,8 @@ GasProfile* makeGasProfile(const SimulationConfig& c){
 		return new GasProfilePowerLaw(c.bgDensity, c.bgPressure, c.bgVel, c.powerLawRadius > 0 ? c.powerLawRadius : c.gridMin, c.powerLawExponent);
 	if (c.gasProfile == "nfw")
    		return new GasProfileNFW(c.haloMass, c.haloConcentration, c.baryonFraction, c.unitLengthInCgs, c.unitMassInCgs, c.unitLengthInCgs/c.unitVelocityInCgs, c.gravity ? c.blackHoleMass : 0.0, c.redshift);
+	if (c.gasProfile == "sis")
+		return new GasProfileSIS(c.sisSigma, c.gasFraction, gravitationalConstantCode(c), c.gravity ? c.blackHoleMass : 0.0);
 	throw std::runtime_error("Unknown gasProfile: " + c.gasProfile);
 }
 
@@ -67,6 +73,12 @@ int main(){
 		          << " erg/s, T_C = " << config.comptonTemperature << " K"
 		          << (config.comptonRelativistic ? ", relativistic" : "") << std::endl;
 	}
+
+	if (config.outerBoundary == "fixed")
+		static_cast<BoundaryWind*>(boundary)->fixedOuterBoundary = true;
+	else if (config.outerBoundary != "zerogradient")
+		throw std::runtime_error("Unknown outerBoundary: " + config.outerBoundary);
+	std::cout << "outer boundary: " << config.outerBoundary << std::endl;
 
 	equations->preProcessor();
 	initialdata->setInitialData();

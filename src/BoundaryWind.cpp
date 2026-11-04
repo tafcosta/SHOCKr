@@ -33,7 +33,7 @@ void BoundaryWind::setBoundaries(double time){
 			else
 				doSubsonicWindGross(i);
 		}
-		else if(i > grid.maxXIndex)
+		else if(i > grid.maxXIndex && !fixedOuterBoundary)
 			grid.quantities[i] = grid.quantities[grid.maxXIndex];
 	}
 }

@@ -29,6 +29,7 @@
 #include "GasProfileHomogeneous.h"
 #include "GasProfileNFW.h"
 #include "GasProfilePowerLaw.h"
+#include "GasProfileSIS.h"
 #include "Grid.h"
 #include "Grid1D.h"
 #include "GridRadial.h"
