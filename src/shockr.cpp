@@ -15,7 +15,7 @@ GasProfile* makeGasProfile(const SimulationConfig& c){
 	if (c.gasProfile == "powerlaw")
 		return new GasProfilePowerLaw(c.bgDensity, c.bgPressure, c.bgVel, c.powerLawRadius > 0 ? c.powerLawRadius : c.gridMin, c.powerLawExponent);
 	if (c.gasProfile == "nfw")
-		return new GasProfileNFW(c.haloMass, c.haloConcentration, c.baryonFraction, c.unitLengthInCgs, c.unitMassInCgs, c.unitLengthInCgs/c.unitVelocityInCgs);
+		return new GasProfileNFW(c.haloMass, c.haloConcentration, c.baryonFraction, c.unitLengthInCgs, c.unitMassInCgs, c.unitLengthInCgs/c.unitVelocityInCgs, c.gravity ? c.blackHoleMass : 0.0);
 	throw std::runtime_error("Unknown gasProfile: " + c.gasProfile);
 }
 

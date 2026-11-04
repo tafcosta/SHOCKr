@@ -17,8 +17,9 @@ GasProfileNFW::GasProfileNFW(double haloMass,
                              double baryonFraction,
                              double unitLengthInCgs,
                              double unitMassInCgs,
-                             double unitTimeInCgs)
-: baryonFraction(baryonFraction)
+                             double unitTimeInCgs,
+                             double massBH)
+: baryonFraction(baryonFraction), massBH(massBH)
 {
     const double G    = 6.67430e-8;
     const double Mpc  = 3.085677581e24;
@@ -73,7 +74,7 @@ GasProfileNFW::GasProfileNFW(double haloMass,
             const double rhoDM = rhoScale / baryonFraction;
             const double M = 4.0 * M_PI * rhoDM * std::pow(rScale,3) * (std::log(1.0+x) - x/(1.0+x));
 
-            return rho * Gcode * M / (r * r);
+            return rho * Gcode * (M + massBH) / (r * r);
         };
 
         pressureTable[i] =
@@ -119,7 +120,7 @@ double GasProfileNFW::velocity(double) const{
 
 double GasProfileNFW::enclosedMass(double r) const{
     const double x = r / rScale;
-    return 4.0 * M_PI * rhoScale * std::pow(rScale,3) * (std::log(1.0 + x) - x/(1.0 + x));
+    return 4.0 * M_PI * (rhoScale / baryonFraction) * std::pow(rScale,3) * (std::log(1.0 + x) - x/(1.0 + x));
 }
 
 GasProfileNFW::~GasProfileNFW(){}

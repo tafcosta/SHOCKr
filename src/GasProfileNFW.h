@@ -16,7 +16,7 @@ class GasProfileNFW : public GasProfile {
 
 public:
 
-	GasProfileNFW(double haloMass, double haloConcentration, double baryonFraction, double unitLengthInCgs, double unitMassInCgs, double unitTimeInCgs);
+	GasProfileNFW(double haloMass, double haloConcentration, double baryonFraction, double unitLengthInCgs, double unitMassInCgs, double unitTimeInCgs, double massBH = 0.0);
 	virtual ~GasProfileNFW();
 
     double density(double r) const override;
@@ -30,6 +30,7 @@ private:
     double rScale;
     double Gcode;
     double baryonFraction;
+    double massBH;
 
     std::vector<double> radiusTable;
     std::vector<double> pressureTable;
