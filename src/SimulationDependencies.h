@@ -17,6 +17,7 @@
 #include "BoundaryWindLinearisedEuler.h"
 #include "BoundaryWindPassiveScalar.h"
 
+#include "ArtificialCooling.h"
 #include "ComptonCooling.h"
 
 #include "Equations.h"
@@ -54,6 +55,7 @@
 #include "Source.h"
 #include "SourceGravity.h"
 #include "SourceNone.h"
+#include "WindInjection.h"
 
 
 #endif /* SRC_SIMULATIONDEPENDENCIES_H_ */

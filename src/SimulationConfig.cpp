@@ -67,6 +67,14 @@ void SimulationConfig::readConfig(const std::string& configFile) {
         	gasFraction = std::stod(value);
         } else if (key == "outerBoundary") {
         	outerBoundary = value;
+        } else if (key == "innerBoundary") {
+        	innerBoundary = value;
+        } else if (key == "artificialCooling") {
+        	artificialCooling = std::stoi(value);
+        } else if (key == "haloPressurePerDensity") {
+        	haloPressurePerDensity = std::stod(value);
+        } else if (key == "injectionCells") {
+        	injectionCells = std::stoi(value);
         } else if (key == "comptonCooling") {
         	comptonCooling = std::stoi(value);
         } else if (key == "agnLuminosity") {

@@ -24,6 +24,10 @@ public:
 	// ghost cells at their initial values (holds a hydrostatic atmosphere in place)
 	bool fixedOuterBoundary = false;
 
+	// Inner boundary: false = wind enters through the ghost cells, true = reflecting
+	// wall (no gas in or out at r_in), used with WindInjection
+	bool reflectiveInnerBoundary = false;
+
 protected:
 	double rhoWindDecay, pressureWindDecay, rhoWind, velWind, pressureWind;
 

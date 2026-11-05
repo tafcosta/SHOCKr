@@ -47,6 +47,17 @@ public:
     // Outer boundary: "zerogradient" (default) or "fixed" (ghost cells stay at the initial profile)
     std::string outerBoundary = "zerogradient";
 
+    // Inner boundary: "wind" (default, wind enters through the ghost cells) or
+    // "injection" (reflecting wall at r_in, wind added as a source in the first
+    // injectionCells cells, see WindInjection.h)
+    std::string innerBoundary = "wind";
+    int    injectionCells     = 4;
+
+    // Artificial cooling test (see ArtificialCooling.h): 0 = off, 1 = wind,
+    // 2 = wind and swept-up shell. haloPressurePerDensity <= 0 means sisSigma^2
+    int    artificialCooling      = 0;
+    double haloPressurePerDensity = 0.0;
+
     // Wind parameters
     double windDensity, windVel, windPressure;
 

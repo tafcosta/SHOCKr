@@ -14,7 +14,7 @@ void BoundaryWindPassiveScalar::setBoundaries(double time){
 	BoundaryWind::setBoundaries(time);
 
 	for(int i = 0; i < grid.nx + 2*grid.nGhost; i++)
-		if(i < grid.minXIndex)
+		if(i < grid.minXIndex && !reflectiveInnerBoundary)
 			grid.quantities[i][EquationsEulerPassiveScalar::PASS]   = rhoWind;
 }
 

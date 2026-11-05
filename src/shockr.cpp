@@ -36,6 +36,9 @@ Boundary *boundary                     = new BoundaryWindPassiveScalar(config.wi
 Output *output                         = new OutputEulerPassiveScalar(*grid, *equations);
 RiemannSolver *riemannsolver           = new RiemannSolverHLLC(*grid, *equations);
 ShockFinder *shockfinder               = new ShockFinderEuler(*grid, *equations);
+WindInjection *injection               = new WindInjection(*grid, *equations, config.windDensity, config.windVel, config.windPressure, config.injectionCells);
+ArtificialCooling *artificial          = new ArtificialCooling(*grid, *equations, config.artificialCooling, config.windPressure / config.windDensity,
+                                                               config.haloPressurePerDensity > 0 ? config.haloPressurePerDensity : config.sisSigma * config.sisSigma);
 ComptonCooling *compton                = new ComptonCooling(*grid, *equations, config.comptonCooling, config.agnLuminosity, config.comptonTemperature, config.unitLengthInCgs, config.unitVelocityInCgs, config.comptonRelativistic != 0);
 
 void doGreeting();
@@ -80,6 +83,14 @@ int main(){
 		throw std::runtime_error("Unknown outerBoundary: " + config.outerBoundary);
 	std::cout << "outer boundary: " << config.outerBoundary << std::endl;
 
+	const bool injectWind = (config.innerBoundary == "injection");
+	if (injectWind)
+		static_cast<BoundaryWind*>(boundary)->reflectiveInnerBoundary = true;
+	else if (config.innerBoundary != "wind")
+		throw std::runtime_error("Unknown innerBoundary: " + config.innerBoundary);
+	std::cout << "inner boundary: " << config.innerBoundary
+	          << (injectWind ? " (wind injected in " + std::to_string(config.injectionCells) + " cells)" : "") << std::endl;
+
 	equations->preProcessor();
 	initialdata->setInitialData();
 
@@ -104,7 +115,10 @@ int main(){
 			throw std::runtime_error("Error: Invalid maxSpeed.");
 
 		grid->update(dt);
+		if (injectWind)
+			injection->apply(dt);
 		compton->apply(dt);
+		artificial->apply();
 
 		timeSinceLastOutput += dt;
 		time += dt;
@@ -114,6 +128,9 @@ int main(){
 	output->makeOutput(outputFilename, outputEnergy, time);
 	shockfinder->findShockZones(time, outputShock);
 	writeComptonOutput(outputCompton, time, windPower);
+
+	if (config.artificialCooling != 0)
+		std::cout << "Artificial cooling (mode " << config.artificialCooling << "): energy removed = " << artificial->energyRemoved << " (code units)" << std::endl;
 
 	if (config.comptonCooling != 0)
 		std::cout << "Compton: net thermal energy radiated = " << compton->energyRadiated << " (code units)" << std::endl;
@@ -149,6 +166,8 @@ void freeMemory(void){
 	delete riemannsolver;
 	delete shockfinder;
 	delete compton;
+	delete injection;
+	delete artificial;
 }
 
 // Time, cumulative thermal energy radiated (code units), and that energy as a

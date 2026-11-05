@@ -28,7 +28,11 @@ void BoundaryWind::setBoundaries(double time){
 	for(int i = 0; i < grid.nx + 2 * grid.nGhost; i++){
 		if (i < grid.minXIndex){
 
-			if (machNumber > 1)
+			if (reflectiveInnerBoundary){
+				grid.quantities[i] = grid.quantities[2 * grid.minXIndex - 1 - i];
+				grid.quantities[i][EquationsEuler::XMOM] *= -1.0;
+			}
+			else if (machNumber > 1)
 				doSupersonicWind(i);
 			else
 				doSubsonicWindGross(i);
